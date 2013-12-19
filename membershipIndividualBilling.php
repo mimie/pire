@@ -33,18 +33,18 @@ $(function() {
 
   session_start();
   //if the user has not logged in
-  if(!isLoggedIn())
+  /**if(!isLoggedIn())
   {
     header('Location: login.php');
     die();
   }
 
-  @$userId = $_GET["user"];
+  @$userId = $_GET["user"];**/
 
-  $logout = logoutDiv($dbh,$userId);
+  $logout = logoutDiv($dbh);
   echo $logout;
-  $header = headerDiv();
-  echo $header;
+  /**$header = headerDiv();
+  echo $header;**/
 
   $lastYear = date('Y',strtotime('-1 year'));
   $currentYear = date('Y');
@@ -212,7 +212,7 @@ $(function() {
 
 <?php
 
-  $displayBilling = displayMemberBilling($dbh,$members,$expiredDate,$userId);
+  $displayBilling = displayMemberBilling($dbh,$members,$expiredDate);
   echo $displayBilling;
   echo "</form>";
   echo "</div>";
