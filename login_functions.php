@@ -103,29 +103,29 @@ function headerDiv(){
 
 }
 
-function logoutDiv($dbh,$userId){
+function logoutDiv($dbh){
 /**  $html = "<div align='right' width='100%' height='10px' style='background-color:black;padding:6px;'>"
         . "<a href='logout.php'>Logout</a>"
         . "</div>";**/
 
-     $username = getUsername($dbh,$userId);
+     //$username = getUsername($dbh,$uiserId);
 
      $html = "<div width='100%' style='background-color:black; padding:1px;'>"
            . "<ul>"
-           . "<li><a href='events2.php?user=$userId'>Events</a></li>"
+           . "<li><a href='events2.php?'>Events</a></li>"
            . "<li><a href='#'>Membership</a>"
            . "<ul><li><a href='membershipIndividualBilling.php?user=$userId'>Membership Billing</a></li></ul>"
            . "</li>"
            . "<li><a href='#'>CIA Review</a></li>"
            . "<li><a href='#'><img src='images/settings.png' width='20' height='20' style='float:left;'>&nbsp;Settings</a>"
            . "<ul>"
-           . "<li><a href='account.php?user=$userId'><img src='images/my_account.png' width='20' height='20' style='float:left;'>&nbsp;My Account</a>"
+           . "<li><a href='account.php?user=userId'><img src='images/my_account.png' width='20' height='20' style='float:left;'>&nbsp;My Account</a>"
            . "</li>"
-           . "<li><a href='register.php?user=$userId'><img src='images/register_account.png' width='20' height='20' style='float:left;'>&nbsp;Register New Account</a>"
+           . "<li><a href='register.php?user=userId'><img src='images/register_account.png' width='20' height='20' style='float:left;'>&nbsp;Register New Account</a>"
            . "</li>"
            . "</ul>"
            . "</li>"
-           . "<li><a href='logout.php'>Logout ".$username."</a></li>"
+           . "<li><a href='logout.php'>Logout</a></li>"
            . "</ul><br><br>"
            . "</div>";
 
