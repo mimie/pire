@@ -61,7 +61,7 @@
 
   $dbh = civicrmConnect();
  
-  session_start();
+  /**session_start();
   //if the user has not logged in
   if(!isLoggedIn())
   {
@@ -70,7 +70,7 @@
   }
 
   $userId = $_GET["user"];
-  $generator = getUserFullName($dbh,$userId);
+  $generator = getUserFullName($dbh,$userId);**/
 
   @$billingId = $_GET["billingId"];
   $billingDetails = getMemberBillingDetails($dbh,$billingId);
@@ -179,7 +179,7 @@
       <tr>
        <td width="279.61px" style="vertical-align:top">
           <br><font style="font-size:13px;font-family:Arial"><b>DIRECT ALL INQUIRIES TO:</b></font><br>
-          <b><i><font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?=$generator?></i></b><br>
+          <b><i><font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?//=$generator?></i></b><br>
           <font style="font-size:13px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(+632) 940-9554</font><br>
           <font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;email: ar_finance@iia-p.org</font>
        </td>
