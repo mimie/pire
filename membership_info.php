@@ -13,15 +13,15 @@
   include 'billing_functions.php';
 
   $dbh = civicrmConnect();
-  session_start();
+  /*session_start();
   //if the user has not logged in
   if(!isLoggedIn())
   {
     header('Location: login.php');
     die();
-  }
+  }**/
 
-  $userId = $_GET["user"];
+  //$userId = $_GET["user"];
   $id = $_GET["id"];
   echo "<div style='padding:16px;' width='100%'>";  
   $logout = logoutDiv($dbh,$userId);
