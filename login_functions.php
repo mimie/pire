@@ -121,11 +121,11 @@ function logoutDiv($dbh){
            . "<ul>"
            . "<li><a href='account.php?user=userId'><img src='images/my_account.png' width='20' height='20' style='float:left;'>&nbsp;My Account</a>"
            . "</li>"
-           . "<li><a href='register.php?user=userId'><img src='images/register_account.png' width='20' height='20' style='float:left;'>&nbsp;Register New Account</a>"
+         //. "<li><a href='register.php?user=userId'><img src='images/register_account.png' width='20' height='20' style='float:left;'>&nbsp;Register New Account</a>"
            . "</li>"
            . "</ul>"
            . "</li>"
-           . "<li><a href='logout.php'>Logout</a></li>"
+         //. "<li><a href='logout.php'>Logout</a></li>"
            . "</ul><br><br>"
            . "</div>";
 
