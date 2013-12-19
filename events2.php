@@ -48,10 +48,10 @@ $(function() {
     die();
   }**/
 
-  @$userId = $_GET["user"];
+  //@$userId = $_GET["user"];
 
   echo "<div align='center' style='padding:16px;'>";  
-  $logout = logoutDiv($dbh,$userId);
+  $logout = logoutDiv($dbh);
   echo $logout;
   /**$header = headerDiv();
   echo $header;**/
@@ -95,7 +95,7 @@ $(function() {
   $endDate = date("Y-m-d",strtotime($endDate));
 
    $eventIds = getEventByDate($startDate,$endDate);
-   $eventsDisplay = displayEvents($eventIds,$userId);
+   $eventsDisplay = displayEvents($eventIds);
    echo $eventsDisplay;
   }
 
@@ -103,7 +103,7 @@ $(function() {
 
     $eventSearch = $_POST["eventName"];
     $eventIds = searchEventName($eventSearch);
-    $eventsDisplay = displayEvents($eventIds,$userId);
+    $eventsDisplay = displayEvents($eventIds);
     echo $eventsDisplay;
 
   }
@@ -112,7 +112,7 @@ $(function() {
    
     $eventTypeId = $_POST["eventType"];
     $eventIds = searchEventType($eventTypeId);
-    $eventsDisplay = displayEvents($eventIds,$userId);
+    $eventsDisplay = displayEvents($eventIds);
     echo $eventsDisplay;
   }
 
@@ -120,7 +120,7 @@ $(function() {
     $allEvents = getAllEvents();
     $eventIds = array_keys($allEvents);
 
-    $eventsDisplay = displayEvents($eventIds,$userId);
+    $eventsDisplay = displayEvents($eventIds);
     echo $eventsDisplay;
   }
 
