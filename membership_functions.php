@@ -271,7 +271,7 @@ function insertMemberBilling($dbh,array $memberInfo,$membershipYear){
   $sqlMaxBillingId->execute();
   $maxBillingId = $sqlMaxBillingId->fetch(PDO::FETCH_ASSOC);
   $maxBillingId = $maxBillingId["prevBillingId"] + 1;
-  $currentYear = date("Y");
+  $currentYear = date("y");
   $billing_no = "MEM-$currentYear-".$maxBillingId;
   $year = $membershipYear;
   
