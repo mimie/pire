@@ -24,7 +24,7 @@
   //$userId = $_GET["user"];
   $id = $_GET["id"];
   echo "<div style='padding:16px;' width='100%'>";  
-  $logout = logoutDiv($dbh,$userId);
+  $logout = logoutDiv($dbh);
   echo $logout;
 
   $currentYear = date('Y');
