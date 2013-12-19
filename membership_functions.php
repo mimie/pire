@@ -85,7 +85,7 @@ function checkMembershipBilling($dbh,$membershipId,$memberBillingYear){
 
 
 
-function displayMemberBilling($dbh,array $members,$expiredDate,$userId){
+function displayMemberBilling($dbh,array $members,$expiredDate){
   
   $expiredYear = date("Y",strtotime($expiredDate));
   $memberBillingYear = intval($expiredYear) + 1;
@@ -120,7 +120,7 @@ function displayMemberBilling($dbh,array $members,$expiredDate,$userId){
     $company = $details["company"];
     $amount = $details["fee_amount"];
     $address = mb_convert_encoding($details["address"], "UTF-8");
-    $membersLinkInfo = membersLink($membershipId,$userId);
+    $membersLinkInfo = membersLink($membershipId);
     $infoBilling = checkMembershipBilling($dbh,$membershipId,$memberBillingYear);
     $checkBillExist = $infoBilling["exist"];
     $billingNo = $infoBilling["billing_no"];
@@ -142,11 +142,11 @@ function displayMemberBilling($dbh,array $members,$expiredDate,$userId){
           $year = $memberBillingYear;
           $billingId = getBillingId($dbh,$membershipId,$year);
           $html = $html . "<td>"
-                . "<a href='memberBillingReference.php?billingId=$billingId&user=$userId' target='_blank' title='Click to print membership bill' style='text-decoration: none;'>"
+                . "<a href='memberBillingReference.php?billingId=$billingId' target='_blank' title='Click to print membership bill' style='text-decoration: none;'>"
                 . "<img src='images/printer-icon.png' width='40' height='40'><br>Print"
                 . "</a>"
                 . "</td>"
-                . "<td><a href='emails/membershipBilling/sendMemberBilling.php?billingId=$billingId&user=$userId' style='text-decoration:none;'><img src='images/email.jpg' width='40' height='40'><br>Send</a></td>"
+                . "<td><a href='emails/membershipBilling/sendMemberBilling.php?billingId=$billingId' style='text-decoration:none;'><img src='images/email.jpg' width='40' height='40'><br>Send</a></td>"
                 . "<td>Pay Later</td>"
                 . "<td>$billingNo</td>"
                 . "<td>$billingDate</td>"
@@ -160,7 +160,7 @@ function displayMemberBilling($dbh,array $members,$expiredDate,$userId){
           }
 
           else{
-             $html = $html . "<td><a href='pdf/membershipBilling/generatePDFMemberBilling.php?billingId=$billingId&user=$userId' title='Click to generate pdf'><img src='images/pdf_me.png' width='50' height='50'> </a></td>"
+             $html = $html . "<td><a href='pdf/membershipBilling/generatePDFMemberBilling.php?billingId=$billingId' title='Click to generate pdf'><img src='images/pdf_me.png' width='50' height='50'> </a></td>"
                    . "</tr>";
           }
       
@@ -185,12 +185,12 @@ function displayMemberBilling($dbh,array $members,$expiredDate,$userId){
   return $html;
 }
 
-function membersLink($membershipId,$userId){
+function membersLink($membershipId){
 
 
-  $link = "<a href=\"membership_info.php?id=$membershipId&user=$userId\""
+  $link = "<a href=\"membership_info.php?id=$membershipId\""
         . "title='Click to view membership information'"
-        . "onclick=\"javascript:void window.open('membership_info.php?id=$membershipId&user=$userId','1384398816566','width=600,height=400,toolbar=1,menubar=0,location=0,status=1,scrollbars=1,resizable=1,left=0,top=0');"
+        . "onclick=\"javascript:void window.open('membership_info.php?id=$membershipId','1384398816566','width=600,height=400,toolbar=1,menubar=0,location=0,status=1,scrollbars=1,resizable=1,left=0,top=0');"
         . "return false;\">"
         . "<img src='view_member.png'>"
         . "</a>"; 
