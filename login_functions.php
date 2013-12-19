@@ -125,7 +125,7 @@ function logoutDiv($dbh){
            . "</li>"
            . "</ul>"
            . "</li>"
-         //. "<li><a href='logout.php'>Logout</a></li>"
+           . "<li><a href='logout.php'>Logout</a></li>"
            . "</ul><br><br>"
            . "</div>";
 
