@@ -58,19 +58,19 @@
  
   $dbh = civicrmConnect();
   
-  session_start();
+  /**session_start();
   //if the user has not logged in
   if(!isLoggedIn())
   {
     header('Location: login.php');
     die();
-  }
+  }**/
 
   @$billingId = $_GET["billingId"];
   $billingDetails = getMemberBillingDetails($dbh,$billingId);
 
-  $userId = $_GET["user"];
-  $generator = getUserFullName($dbh,$userId);
+  //$userId = $_GET["user"];
+  //$generator = getUserFullName($dbh,$userId);
 
   $memberYear = $billingDetails["year"];
   $memberName = $billingDetails["member_name"];
@@ -175,7 +175,7 @@
       <tr>
        <td width="279.61px" style="vertical-align:top">
           <br><font style="font-size:13px;font-family:Arial"><b>DIRECT ALL INQUIRIES TO:</b></font><br>
-          <b><i><font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?=$generator?></i></b><br>
+          <b><i><font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?//=$generator?></i></b><br>
           <font style="font-size:13px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(+632) 940-9554</font><br>
           <font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;email: ar_finance@iia-p.org</font>
        </td>
@@ -185,10 +185,10 @@
           <font style="font-size:15px"><b><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Institute of Internal Auditors Philippines, Inc.</i></b></font><br><br>
           <font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&Oslash;&nbsp;If thru bank telegraphic transfer, include <b><u>P250 /$ 6.50,</b></u> in your 
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;payment to cover for bank charges.</font><br><br>
-          <font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&Oslash;&nbsp;If by SM Department Store Bills Payment Center,<br>
+          <!--<font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&Oslash;&nbsp;If by SM Department Store Bills Payment Center,<br>
           Please indicate the SM Department Store branch where you are transacting and present your<br>
           <b>ORIGINAL COPY</b> of the receipt of the payment.
-          </font>
+          </font>-->
           
        </td>
       </tr>
