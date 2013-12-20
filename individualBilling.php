@@ -19,17 +19,17 @@
   $dbh = civicrmConnect();
   $weberpConn = weberpConnect();
  
-  session_start();
+  /**session_start();
   //if the user has not logged in
   if(!isLoggedIn())
   {
     header('Location: login.php');
     die();
-  }
+  }**/
   
-  $userId = $_GET["user"];
+  //$userId = $_GET["user"];
   
-  $logout = logoutDiv($dbh,$userId);
+  $logout = logoutDiv($dbh);
   echo $logout;
   echo "<br>";
 
@@ -44,7 +44,7 @@
    $eventLocation = formatEventLocation($locationDetails);
    //navigation
    echo "<div id = 'navigation'>";
-   echo "<a href='events2.php?&user=$userId'><b>Event List</b></a>";
+   echo "<a href='events2.php?&user=userId'><b>Event List</b></a>";
    echo "&nbsp;&nbsp;<b>&gt;</b>&nbsp;";
    echo "<i>$eventName</i>";
    echo "</div>";
@@ -76,8 +76,8 @@
    echo "<div id='billingNav'>";
    echo "<table width='100%'>";
    echo "<tr>";
-   echo "<td align='center'><a href='individualBilling.php?eventId=$eventId&billingType=individual&user=$userId'>INDIVIDUAL BILLING</a></td>";
-   echo "<td align='center' bgcolor='#084B8A'><a href='companyBilling.php?eventId=$eventId&billingType=company&user=$userId'>COMPANY BILLING</td>";
+   echo "<td align='center'><a href='individualBilling.php?eventId=$eventId&billingType=individual&user=userId'>INDIVIDUAL BILLING</a></td>";
+   echo "<td align='center' bgcolor='#084B8A'><a href='companyBilling.php?eventId=$eventId&billingType=company&user=userId'>COMPANY BILLING</td>";
    echo "</tr>";
    echo "</table>";  
    echo "</div>";
@@ -170,17 +170,17 @@
           $billingAddress = getIndividualBillingAddress($dbh,$participantId,$eventId);
    
           if($eventTypeName == 'CON'){
-             echo "<a href='individualConvention.php?billingRef=$billingNo&eventId=$eventId&user=$userId' style='text-decoration:none;' target ='_blank'><img src='printer-icon.png' width='50' height='50'>";
+             echo "<a href='individualConvention.php?billingRef=$billingNo&eventId=$eventId&user=userId' style='text-decoration:none;' target ='_blank'><img src='printer-icon.png' width='50' height='50'>";
           }
 
 
           else{
-             echo "<a href='individualBillingReference.php?billingRef=$billingNo&eventId=$eventId&user=$userId' style='text-decoration:none;' target ='_blank'><img src='printer-icon.png' width='50' height='50'>";
+             echo "<a href='individualBillingReference.php?billingRef=$billingNo&eventId=$eventId&user=userId' style='text-decoration:none;' target ='_blank'><img src='printer-icon.png' width='50' height='50'>";
           }
           echo "<br>Print</a>";
           echo "</td>";
           echo "<td align='center'>";
-          echo "<a href='emails/individualBilling/sendIndividualBilling.php?billingRef=$billingNo&eventId=$eventId&user=$userId' style='text-decoration:none;' target ='_blank'><img src='email.jpg' width='50' height='50'>";
+          echo "<a href='emails/individualBilling/sendIndividualBilling.php?billingRef=$billingNo&eventId=$eventId&user=userId' style='text-decoration:none;' target ='_blank'><img src='email.jpg' width='50' height='50'>";
           echo "<br>Email</a>";
           echo "</td>";
 
@@ -204,7 +204,7 @@
            
           else{
        //     echo "<td><img src='images/not_available_download.png' width='40' height='40'></td>";
-             echo "<td><a href='pdf/individualBilling/generatePDFIndividualBilling.php?billingRef=$billingNo&eventId=$eventId&user=$userId' title='Click to generate pdf'><img src='images/pdf_me.png' width='50' height='50'> </a></td>";
+             echo "<td><a href='pdf/individualBilling/generatePDFIndividualBilling.php?billingRef=$billingNo&eventId=$eventId&user=userId' title='Click to generate pdf'><img src='images/pdf_me.png' width='50' height='50'> </a></td>";
           }
        }
 
