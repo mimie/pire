@@ -5,6 +5,7 @@
  *get custom group details
  */
 function getCustomGroupDetails(PDO $dbh, $groupName){
+   //die($fileName);
 
    $sql = $dbh->prepare("SELECT id, table_name, name FROM civicrm_custom_group
                           WHERE title = ?
@@ -493,7 +494,7 @@ function updateBillPosting(PDO $dbh,$contactId,$eventId){
 function updatePaidBill(PDO $dbh,$contactId,$eventId){
 
   $sql = $dbh->prepare("UPDATE
-                        billing details
+                        billing_details
                         SET paid_bill = '1'
                         WHERE contact_id = '$contactId'
                         AND event_id = '$eventId'
