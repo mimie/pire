@@ -59,18 +59,18 @@
 
   $dbh = civicrmConnect();
  
-  session_start();
+  /**session_start();
   //if the user has not logged in
   if(!isLoggedIn())
   {
     header('Location: login.php');
     die();
-  }
+  }**/
 
   @$billingNo = $_GET["billingRef"];
   @$eventId = $_GET["eventId"];
-  @$userId = $_GET["user"];
-  $generator = getUserFullName($dbh,$userId);
+  //@$userId = $_GET["user"];
+  //$generator = getUserFullName($dbh,$userId);
   //$billingNo = '3154';
   //$eventId = '233';
   $billingDetails = getIndividualBillingDetails($dbh,$billingNo,$eventId);
@@ -194,7 +194,7 @@
         </td>
       </tr>
       <tr>
-        <td colspan="2"><b><i><font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?=$generator?></i></b>
+        <td colspan="2"><b><i><font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?//=$generator?></i></b>
          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
          &Oslash;&nbsp;If by check, <font color="red"><b><u>should be</u></b></font> made payable to:</font>
         </td>
@@ -220,7 +220,7 @@
        </td>
       </tr>
       <tr><td></td></tr>
-       <tr>
+       <!--<tr>
         <td colspan="3"><font style="font-size:12px;font-family:Arial">
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -242,7 +242,7 @@
           &nbsp;&nbsp;<b>ORIGINAL COPY</b> of the receipt of the payment.
           </font>
        </td>
-      <tr>
+      <tr>-->
      </table>
     </div>
   </center>
