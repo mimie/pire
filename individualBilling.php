@@ -258,7 +258,8 @@
         $participantBillingType = $billingType[$participant_id];
         $eventTypeName = getEventTypeName($dbh,$eventId);
         $billingId = "";
-        $billingNo = $eventTypeName.$billingId.$participant_id;
+        $currentYear = date("y");
+        $billingNo = $eventTypeName."-$currentYear-".$participant_id;
 
         $sql = $dbh->prepare("INSERT INTO billing_details
                          (participant_id,contact_id,event_id,event_type,event_name,participant_name,email,participant_status,organization_name,org_contact_id,billing_type,fee_amount,subtotal,vat,billing_no,bill_address)
