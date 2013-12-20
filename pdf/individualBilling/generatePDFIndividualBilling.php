@@ -54,18 +54,21 @@ body{
 <body>
 <?php
 
-  $dbh = new PDO('mysql:host=10.110.215.92;dbname=iiap_civicrm_dev', 'iiap', 'mysqladmin');
+  //$dbh = new PDO('mysql:host=10.110.215.92;dbname=iiap_civicrm_dev', 'iiap', 'mysqladmin');
   include '../../dbcon.php';
+  include '../../pdo_conn.php';
   include '../../badges_functions.php';
   include '../../weberp_functions.php';
   include '../../billing_functions.php';
   include '../../send_functions.php';
   include '../../login_functions.php';
 
+  $dbh = civicrmConnect();
+
   @$billingNo = $_GET["billingRef"];
   @$eventId = $_GET["eventId"];
-  @$userId = $_GET["user"];
-  $generator = getUserFullName($dbh,$userId);
+  //@$userId = $_GET["user"];
+  //$generator = getUserFullName($dbh,$userId);
   //$billingNo = '3154';
   //$eventId = '233';
   $billingDetails = getIndividualBillingDetails($dbh,$billingNo,$eventId);
@@ -190,7 +193,8 @@ body{
         </td>
         </tr>
         <tr>
-          <td colspan="2"><b><i><font style="font-size:12px;font-family:Arial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?=$generator?></i></b>
+          <td colspan="2"><b><i><font style="font-size:12px;font-family:Arial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?//generator?></i></b>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             &Oslash;&nbsp;If by check, <font color="red"><b><u>should be</u></b></font> made payable to:</font>
           </td>
@@ -214,7 +218,8 @@ body{
         </td>
        </tr>
        <tr><td></td></tr>
-       <tr>
+       <!--<tr>
+        
         <td colspan="3"><font style="font-size:12px;font-family:Arial">
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -232,7 +237,8 @@ body{
           <b>ORIGINAL COPY</b> of the receipt of the payment.
           </font>
        </td>
-      <tr>
+       
+      <tr>-->
       </table>
     </div>
    </center>
