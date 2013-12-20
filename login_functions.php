@@ -117,7 +117,7 @@ function logoutDiv($dbh){
            . "<ul><li><a href='membershipIndividualBilling.php'>Membership Billing</a></li></ul>"
            . "</li>"
           //. "<li><a href='#'>CIA Review</a></li>"
-           . "<li><a href='#'><img src='images/settings.png' width='20' height='20' style='float:left;'>&nbsp;Settings</a>"
+          //. "<li><a href='#'><img src='images/settings.png' width='20' height='20' style='float:left;'>&nbsp;Settings</a>"
            . "<ul>"
            . "<li><a href='account.php?user=userId'><img src='images/my_account.png' width='20' height='20' style='float:left;'>&nbsp;My Account</a>"
            . "</li>"
