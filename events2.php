@@ -48,6 +48,7 @@ $(function() {
     die();
   }**/
 
+  @$uid = $_GET["uid"];
   //@$userId = $_GET["user"];
 
   echo "<div align='center' style='padding:16px;'>";  
