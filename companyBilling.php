@@ -203,7 +203,8 @@
       echo "<option value='select'>Select action type</option>";
       echo "<option value='Generate Bill'>Generate Bill</option>";
       echo "<option value='Send Bill'>Send Bill</option>";
-      echo "<option value='Post to Weberp'>Post to Weberp</option>";
+      //For weberp function
+      //echo "<option value='Post to Weberp'>Post to Weberp</option>";
       echo "</select>";
       echo "<input type='submit' name='process' value='Process Action'>";
 
@@ -217,7 +218,7 @@
       echo "<th>12% VAT</th>";
       echo "<th>Generate Bill</th>";
       echo "<th>Send Bill</th>";
-      echo "<th>Post Bill</th>";
+//      echo "<th>Post Bill</th>";
       echo "<th>Payment Status</th>";
       echo "<th>Billing Reference No.</th>";
       echo "<th>Billing Date</th>";
@@ -267,7 +268,8 @@
           echo "<img src='printer-icon.png' height='50' width='50'><br>Print</a></td>";
           echo "<td align='center'><a href='sendIndividualBilling.php?companyBillingRef=$companyBillingRefNo&eventId=$eventId&orgId=$companyId' style='text-decoration:none' target='_blank'>";
           echo "<img src='email.jpg' height='50' width='50'><br>Email</a></td>";
-          echo "<td align='center'><input type='checkbox' name='postIds[]' value='$companyId'></td>";
+          //for weberp function
+          //echo "<td align='center'><input type='checkbox' name='postIds[]' value='$companyId'></td>";
           echo "<td align='center'></td>";
           echo "<td align='center'>$companyBillingRefNo</td>";
           echo "<td align='center'>$companyBillingDate</td>";
@@ -279,7 +281,8 @@
          
           echo "<td align='center'><input type='checkbox' name='companyIds[]' value='$companyId'></td>";
           echo "<td align='center'><input type='checkbox' name='companyIds2[]' value='$companyId' disabled></td>";
-          echo "<td align='center'><input type='checkbox' name='postIds[]' value='$companyId' disabled></td>";
+          //for weberp function
+          //echo "<td align='center'><input type='checkbox' name='postIds[]' value='$companyId' disabled></td>";
           echo "<td align='center'>Something</td>";
           echo "<td></td>";
           echo "<td></td>";
