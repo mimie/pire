@@ -102,7 +102,7 @@
     <option value="select">Select ation type</option>
     <option value="Generate Bill">Generate Bill</option>
     <option value="Send Bill">Send Bill</option>
-    <option value="Post to Weberp">Post to Weberp</option>
+<!--    <option value="Post to Weberp">Post to Weberp</option> -->
   </select>
   <input type="submit" value="Process Action" name="processAction">
 <?
