@@ -97,6 +97,7 @@ function checkedAll(formname)
 
   $filterParticipantForm = filterParticipantForm();
   echo $filterParticipantForm;
+  $searchParticipantByName = "";
 
 
   if(isset($_POST["searchNameEmail"])){
