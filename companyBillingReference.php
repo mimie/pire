@@ -57,13 +57,13 @@
   include 'login_functions.php';
  
   $dbh = civicrmConnect();
-  session_start();
+  /**session_start();
   //if the user has not logged in
   if(!isLoggedIn())
   {
     header('Location: login.php');
     die();
-  }
+  }**/
 
   @$companyBillingNo = $_GET["companyBillingRef"];
   @$eventId = $_GET["eventId"];
