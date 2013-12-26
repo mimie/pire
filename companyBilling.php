@@ -311,7 +311,8 @@
   			    $maxBillingId = $sqlMaxBillingId->fetch(PDO::FETCH_ASSOC);
             $eventTypeName = getEventTypeName($dbh,$eventId);
   			    $companyBillingNo = $maxBillingId["prevBillingId"] + 1;
-  			    $companyBillingNo = $eventTypeName.$companyBillingNo.$companyId;
+            $currentYear = date("y");
+  			    $companyBillingNo = $eventTypeName."-".$currentYear."-".$companyBillingNo;
             
 
   			    $sqlInsertCompanyBilling = $dbh->prepare("INSERT INTO billing_company
