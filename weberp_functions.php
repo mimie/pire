@@ -445,7 +445,7 @@ function searchEventType($eventTypeId){
   return $eventIds;
 }
 
-function updateParticipantStatus($contactId,$eventId,$statusId){
+function updateParticipantStatus($dbh,$contactId,$eventId,$statusId){
 
   $contactId = mysql_real_escape_string($contactId);
   $eventId = mysql_real_escape_string($eventId);
@@ -460,7 +460,7 @@ function updateParticipantStatus($contactId,$eventId,$statusId){
   $allStatus = getParticipantStatusType();
   $statusName = $allStatus[$statusId];
 
-  $dbh = new PDO('mysql:host=10.110.215.92;dbname=iiap_civicrm_dev', 'iiap', 'mysqladmin');
+  //$dbh = new PDO('mysql:host=10.110.215.92;dbname=iiap_civicrm_dev', 'iiap', 'mysqladmin');
   $sqlUpdateBilling = $dbh->prepare("UPDATE billing_details
                                      SET participant_status = '$statusName'
                                      WHERE event_id = '$eventId'

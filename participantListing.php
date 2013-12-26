@@ -128,7 +128,7 @@ function checkedAll(formname)
     $statusId = $_POST["statusType"];
     
     foreach($contactIds as $contactId){
-      updateParticipantStatus($contactId,$eventId,$statusId);
+      updateParticipantStatus($dbh,$contactId,$eventId,$statusId);
     }
 
     if($searchParticipantByName){
