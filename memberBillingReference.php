@@ -185,10 +185,10 @@
           <font style="font-size:15px"><b><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Institute of Internal Auditors Philippines, Inc.</i></b></font><br><br>
           <font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&Oslash;&nbsp;If thru bank telegraphic transfer, include <b><u>P250 /$ 6.50,</b></u> in your 
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;payment to cover for bank charges.</font><br><br>
-          <!--<font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&Oslash;&nbsp;If by SM Department Store Bills Payment Center,<br>
+            <font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&Oslash;&nbsp;If by SM Department Store Bills Payment Center,<br>
           Please indicate the SM Department Store branch where you are transacting and present your<br>
           <b>ORIGINAL COPY</b> of the receipt of the payment.
-          </font>-->
+          </font>
           
        </td>
       </tr>
