@@ -122,7 +122,9 @@ function getParticipantsBillingType($billingType,$participants){
   $company = array();
 
   foreach($participants as $participant => $details){
+
     $participant_id = $participant;
+
     
     if($billingType[$participant_id] == 'Individual'){
       $individual[] = $participant_id;
@@ -669,20 +671,26 @@ function getEventLocation($dbh,$eventId){
 
 function formatEventLocation($locationDetails){
 
-  $location = "";
+  if($locationDetails){
+     $location = "";
 
-  foreach($locationDetails as $key => $value){
+     foreach($locationDetails as $key => $value){
 
-    if($value && $key!='country'){
-      $location = $location.$value.",&nbsp;";
-    }
+        if($value && $key!='country'){
+          $location = $location.$value.",&nbsp;";
+        }
     
-    elseif($key == 'country'){
-      $location = $location.$value;
-    }
+        elseif($key == 'country'){
+          $location = $location.$value;
+        }
+     }
+
+    return $location;
   }
 
-  return $location;
+  else{
+    return NULL;
+  }
 }
 
 /*
