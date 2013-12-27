@@ -168,6 +168,7 @@
            foreach($billingParticipantDetails as $participant => $details){
               $participantName = $details["participant_name"];
               $participantId = $details["participant_id"];
+              $participantId = formatParticipantId($participantId);
               echo "$participantName / Participant No.-$participantId<br>";
             }
            echo "</div>";
