@@ -80,8 +80,8 @@
   //$tax = round($totalAmount/9.3333,2);
   //$netVat = round($totalAmount - $tax, 2);
 
-  $tax = $billingDetails["vat"];
-  $netVat = $billingDetails["subtotal"];
+  $tax = number_format($billingDetails["vat"],2);
+  $netVat = number_format($billingDetails["subtotal"],2);
 
   $eventDetails = getEventDetails($dbh,$eventId);
   $eventName = $eventDetails["event_name"];
@@ -164,7 +164,7 @@
           On&nbsp;<?=$dueDate?>&nbsp;to&nbsp;<?=$eventEndDate?><br>
           <?=$eventLocation?><br><br>
         <?php
-           echo "<div align = 'center'>Billing for the ff. participants:<br><br>";
+           echo "<div align = 'left'>Billing for the ff. participants:<br><br>";
            foreach($billingParticipantDetails as $participant => $details){
               $participantName = $details["participant_name"];
               $participantId = $details["participant_id"];
