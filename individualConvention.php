@@ -49,22 +49,25 @@
 <body>
 <?php
 
-  $dbh = new PDO('mysql:host=10.110.215.92;dbname=iiap_civicrm_dev', 'iiap', 'mysqladmin');
-  $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  //$dbh = new PDO('mysql:host=10.110.215.92;dbname=iiap_civicrm_dev', 'iiap', 'mysqladmin');
+  //$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   include 'dbcon.php';
+  include 'pdo_conn.php';
   include 'badges_functions.php';
   include 'weberp_functions.php';
   include 'billing_functions.php';
   include 'send_functions.php';
   include 'login_functions.php';
  
-  session_start();
+  /**session_start();
   //if the user has not logged in
   if(!isLoggedIn())
   {
     header('Location: login.php');
     die();
-  }
+  }**/
+
+  $dbh = civicrmConnect();
 
   @$billingNo = $_GET["billingRef"];
   @$eventId = $_GET["eventId"];
