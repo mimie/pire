@@ -861,4 +861,24 @@ function sendMail($email,$billingNo,$body,$subject,$folder){
           echo ("<p>Message successfully sent!</p>");
          }
 }
+
+function formatParticipantId($participantId){
+
+  $count = strlen($participantId);
+
+  if($count < 6){
+     $countZeros = 6-$count;
+     $zeros = "";
+     for($i=1; $i <= $countZeros; $i++){
+        $zeros = $zeros."0";
+     }
+
+   return $zeros.$participantId;
+     
+  }
+
+  else{
+    return $participantId;
+  }
+}
 ?>
