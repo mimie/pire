@@ -280,7 +280,7 @@ function insertMemberBilling($dbh,array $memberInfo,$membershipYear){
                         (membership_id,contact_id,membership_type,member_name,email,street,city,bill_address,organization_name,org_contact_id,fee_amount,subtotal,vat,billing_no,year)
                         VALUES ('$membership_id','$contact_id','$membership_type','$member_name','$email','$street','$city','$bill_address','$organization_name','$org_contact_id','$fee_amount','$subtotal','$vat','$billing_no','$year')
                        ");
-  //var_dump($sql);
+  var_dump($sql);
   $sql->execute();
 }
 
