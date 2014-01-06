@@ -137,9 +137,16 @@ $(function() {
   }
 
   else{
-    
-    $expiredDate = $currentExpiredDate;
-    $membersToExpire = getMembersToExpire($dbh,$expiredDate);
+
+    if(isset($_GET["endDate"])){
+      $expiredDate = $_GET["endDate"];
+      $membersToExpire = getMembersToExpire($dbh,$expiredDate);
+    }
+   
+    else{    
+      $expiredDate = $currentExpiredDate;
+      $membersToExpire = getMembersToExpire($dbh,$expiredDate);
+     }
   }
 
   $members = array();
@@ -195,7 +202,7 @@ $(function() {
     $nextYear = date("Y", strtotime('+1 years'));
 ?>
 
-    <form method="POST" action="">
+    <form method="POST" action="membershipIndividualBilling.php?endDate=<?=$expiredDate?>">
      <select name="actionType" id="action">
       <option value="select">- Select actions -</option>
       <option value="" disabled>------------------------</option>
@@ -237,7 +244,6 @@ $(function() {
                              ");
         $sql->execute();
         $details = $sql->fetch(PDO::FETCH_ASSOC);
-        var_dump($sql);
     
         $membershipId = $details["id"];
         $contactId = $details["contact_id"];
@@ -280,11 +286,7 @@ $(function() {
         $memberInfo["org_contact_id"] = $orgId;
         $memberInfo["membership_id"] = $membershipId;
         $memberInfo["member_id"] = $memberId;
-        /**$billingInformation = array();
-        echo "<pre>";
-        print_r($members);
-        echo "</pre>";**/
-        //$billingInformation = $members["2919"];
+
         insertMemberBilling($dbh,$memberInfo,$membershipYear);
     }
   }
