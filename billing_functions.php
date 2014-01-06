@@ -881,4 +881,23 @@ function formatParticipantId($participantId){
     return $participantId;
   }
 }
+
+function formatBillingNo($billingNo){
+
+  $count = strlen($billingNo);
+  
+  if($count < 5){
+     $countZeros = 5-$count;
+     $zeros = "";
+     for($i=1; $i <= $countZeros; $i++){
+        $zeros = $zeros."0";
+     }
+
+    return $zeros.$billingNo;
+  }
+
+  else{
+    return $billingNo;
+  }
+}
 ?>
