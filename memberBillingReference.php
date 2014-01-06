@@ -159,15 +159,15 @@
      <!--particulars-->
      <table style="border-collapse:collapse;" border="1px">
       <tr>
-        <td colspan="2" align="center" bgcolor="#0B0B3B" style="border:2px solid #BCF5A9"><font style="font-size:13px;color:white;"><b>PARTICULARS</b></font></td>
-        <td align="center" bgcolor="#0B0B3B" style="border:2px solid #BCF5A9"><font style="font-size:13px;color:white;"><b>AMOUNT</b></font></td>
+        <td colspan="2" align="center" bgcolor="#0B0B3B" style="border:2px solid black;"><font style="font-size:13px;color:white;"><b>PARTICULARS</b></font></td>
+        <td align="center" bgcolor="#0B0B3B" style="border:2px solid black;"><font style="font-size:13px;color:white;"><b>AMOUNT</b></font></td>
       </tr>   
       <tr>
-        <td colspan="2" height="275px" style="border:2px solid #BCF5A9; vertical-align:top;">
+        <td colspan="2" height="275px" style="border:2px solid black; vertical-align:top;">
           Institute of Internal Auditors Philippines, Inc.<br>
           Membership Annual Registration&nbsp;<?=$memberYear?><br> 
         </td>
-        <td style="border:2px solid #BCF5A9; vertical-align:top;" align="center"><br><?=$currencyFormat?></td> 
+        <td style="border:2px solid black; vertical-align:top;" align="center"><br><?=$currencyFormat?></td> 
       </tr>
       <tr>
         <td height="20px" width="320.5px" align="center" style="border-bottom-width:2px"><b><i><font style="font-size:13px">VAT-EXEMPT TRANSACTION</font></i></b></td>
@@ -214,6 +214,9 @@
 <!--  </center>-->
 </div>
 </body>
+<script>
+  window.print();
+</script>
 </html>
 <?php
   /**$html = ob_get_clean();
