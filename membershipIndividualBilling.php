@@ -222,10 +222,70 @@ $(function() {
 
     $membershipIds = $_POST["membershipIds"];
     $membershipYear = $_POST["year"];
+    $prevYear = $membershipYear - 1;
+    $expirationDate = $prevYear."-12-31";
+    
+   
 
     foreach($membershipIds as $id){
-       $billingInformation = $members[$id];
-       insertMemberBilling($dbh,$billingInformation,$membershipYear);
+
+        $sql = $dbh->prepare("SELECT id,contact_id,end_date,status_id,membership_type_id,join_date,start_date,end_date
+                              FROM civicrm_membership
+                              WHERE membership_type_id = '1'
+                              AND end_date = '$expirationDate'
+                              AND id = '$id'
+                             ");
+        $sql->execute();
+        $details = $sql->fetch(PDO::FETCH_ASSOC);
+        var_dump($sql);
+    
+        $membershipId = $details["id"];
+        $contactId = $details["contact_id"];
+        $statusId = $details["status_id"];
+        $typeId = $details["membership_type_id"];
+        $joinDate = $details["join_date"];
+        $startDate = $details["start_date"];
+        $endDate = $details["end_date"];
+        $status = getMembershipStatus($dbh,$statusId);
+        $memberType = getMemberType($dbh,$typeId);
+        $memberId = getMemberId($dbh,$contactId);
+
+        $contactDetails = getContactDetails($dbh,$contactId);
+        $name = $contactDetails["name"];
+        $orgname = $contactDetails["companyName"];
+        $orgId = getOrgId($dbh,$orgname);
+        $email = getContactEmail($dbh,$contactId);
+        $feeAmount = getMemberFeeAmount($dbh,$typeId);
+        $addressDetails = getAddressDetails($dbh,$contactId);
+        $street = $addressDetails["street"];
+        $city = $addressDetails["city"];
+        $address = $street." ".$city;
+        //echo mb_convert_encoding($name, "UTF-8");
+       
+        $memberInfo = array();
+
+        $memberInfo["contact_id"] = $contactId;
+        $memberInfo["status"] = $status;
+        $memberInfo["name"] = $name;
+        $memberInfo["company"] = $orgname;
+        $memberInfo["email"] = $email;
+        $memberInfo["fee_amount"] = $feeAmount;
+        $memberInfo["address"] = $address;
+        $memberInfo["join_date"] = $joinDate;
+        $memberInfo["start_date"] = $startDate;
+        $memberInfo["end_date"] = $endDate;
+        $memberInfo["member_type"] = $memberType;
+        $memberInfo["street"] = $street;
+        $memberInfo["city"] = $city;
+        $memberInfo["org_contact_id"] = $orgId;
+        $memberInfo["membership_id"] = $membershipId;
+        $memberInfo["member_id"] = $memberId;
+        /**$billingInformation = array();
+        echo "<pre>";
+        print_r($members);
+        echo "</pre>";**/
+        //$billingInformation = $members["2919"];
+        insertMemberBilling($dbh,$memberInfo,$membershipYear);
     }
   }
 
