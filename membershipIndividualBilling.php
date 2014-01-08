@@ -31,7 +31,7 @@ $(function() {
 
   $dbh = civicrmConnect();
 
-  session_start();
+  //session_start();
   //if the user has not logged in
   /**if(!isLoggedIn())
   {
