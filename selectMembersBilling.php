@@ -1,11 +1,14 @@
 <?php
 
+  include 'login_functions.php';
   include 'pdo_conn.php';
   include 'membership_functions.php';
   include 'billing_functions.php';
   
   $dbh = civicrmConnect();
   $orgId = $_GET["orgId"];
+  $logout = logoutDiv($dbh);
+  echo $logout;
 ?>
 <html lang="en">
 <head>
