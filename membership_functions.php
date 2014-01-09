@@ -279,8 +279,11 @@ function insertMemberBilling($dbh,array $memberInfo,$membershipYear){
 
   $sql = $dbh->prepare("INSERT INTO billing_membership
                         (membership_id,contact_id,membership_type,member_name,email,street,city,bill_address,organization_name,org_contact_id,fee_amount,subtotal,vat,billing_no,year)
-                        VALUES ('$membership_id','$contact_id','$membership_type','$member_name','$email','$street','$city','$bill_address','$organization_name','$org_contact_id','$fee_amount','$subtotal','$vat','$billing_no','$year')
+                        VALUES ('$membership_id','$contact_id','$membership_type','$member_name','$email',?,'$city',?,?,'$org_contact_id','$fee_amount','$subtotal','$vat','$billing_no','$year')
                        ");
+  $sql->bindParam(1,$street,PDO::PARAM_STR,200);
+  $sql->bindParam(2,$bill_address,PDO::PARAM_STR,300);
+  $sql->bindParam(3,$organization_name,PDO::PARAM_STR,300);
   //var_dump($sql);
   $sql->execute();
 }
