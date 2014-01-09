@@ -92,6 +92,7 @@ function displayMemberBilling($dbh,array $members,$expiredDate){
 
   //$nextYear = date('Y', strtotime('+1 year'));
   $html = "<table width='100%'>"
+        . "<thead>"
         . "<tr>"
         . "<th colspan='15'>Membership Billing</th>"
         . "</tr>"
@@ -110,7 +111,9 @@ function displayMemberBilling($dbh,array $members,$expiredDate){
         . "<th>Billing Address</th>"
         . "<th>Membership Information</th>"
         . "<th>Billing PDF Download</th>"
-        . "</tr>";
+        . "</tr></thead>";
+
+  $html = $html."<tbody>";
 
   foreach($members as $membershipId => $details){
 
@@ -180,7 +183,7 @@ function displayMemberBilling($dbh,array $members,$expiredDate){
     
   }
 
-  $html = $html."</table>";
+  $html = $html."</tbody></table>";
 
   return $html;
 }
