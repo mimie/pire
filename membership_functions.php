@@ -288,6 +288,21 @@ function insertMemberBilling($dbh,array $memberInfo,$membershipYear){
   $sql->bindParam(2,$bill_address,PDO::PARAM_STR,300);
   $sql->bindParam(3,$organization_name,PDO::PARAM_STR,300);**/
   //var_dump($sql);
+  /**var_dump($membership_id);
+  var_dump($contact_id);
+  var_dump($membership_type);
+  var_dump($member_name);
+  var_dump($email);
+  var_dump($street);
+  var_dump($city);
+  var_dump($bill_address);
+  var_dump($organization_name);
+  var_dump($org_contact_id);
+  var_dump($fee_amoumt);
+  var_dump($subtotal);
+  var_dump($vat);
+  var_dump($billing_no);
+  var_dump($year);**/
   $sql = $dbh->prepare("INSERT INTO billing_membership
                         (membership_id,contact_id,membership_type,member_name,email,street,city,bill_address,organization_name,org_contact_id,fee_amount,subtotal,vat,billing_no,year)
                         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
@@ -307,7 +322,7 @@ function insertMemberBilling($dbh,array $memberInfo,$membershipYear){
   $sql->bindValue(13,$vat,PDO::PARAM_INT);
   $sql->bindValue(14,$billing_no,PDO::PARAM_STR);
   $sql->bindValue(15,$year,PDO::PARAM_INT);
- 
+
   $sql->execute();
 }
 
