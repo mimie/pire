@@ -292,21 +292,21 @@ function insertMemberBilling($dbh,array $memberInfo,$membershipYear){
                         (membership_id,contact_id,membership_type,member_name,email,street,city,bill_address,organization_name,org_contact_id,fee_amount,subtotal,vat,billing_no,year)
                         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
                        ");
-  $sql->bindParam(1,$membership_id,PDO::PARAM_INT);
-  $sql->bindParam(2,$contact_id,PDO::PARAM_INT);
-  $sql->bindParam(3,$membership_type,PDO::PARAM_STR,100);
-  $sql->bindParam(4,$member_name,PDO::PARAM_STR,250);
-  $sql->bindParam(5,$email,PDO::PARAM_STR,50);
-  $sql->bindParam(6,$street,PDO::PARAM_STR,250);
-  $sql->bindParam(7,$city,PDO::PARAM_STR,50);
-  $sql->bindParam(8,$bill_address,PDO::PARAM_STR,300);
-  $sql->bindParam(9,$organization_name,PDO::PARAM_STR,300);
-  $sql->bindParam(10,$org_contact_id,PDO::PARAM_INT);
-  $sql->bindParam(11,$fee_amount,PDO::PARAM_INT);
-  $sql->bindParam(12,$subtotal,PDO::PARAM_INT);
-  $sql->bindParam(13,$vat,PDO::PARAM_INT);
-  $sql->bindParam(14,$billing_no,PDO::PARAM_STR,300);
-  $sql->bindParam(15,$year,PDO::PARAM_INT,4);
+  $sql->bindValue(1,$membership_id,PDO::PARAM_INT);
+  $sql->bindValue(2,$contact_id,PDO::PARAM_INT);
+  $sql->bindValue(3,$membership_type,PDO::PARAM_STR);
+  $sql->bindValue(4,$member_name,PDO::PARAM_STR);
+  $sql->bindValue(5,$email,PDO::PARAM_STR);
+  $sql->bindValue(6,$street,PDO::PARAM_STR);
+  $sql->bindValue(7,$city,PDO::PARAM_STR);
+  $sql->bindParam(8,$bill_address,PDO::PARAM_STR);
+  $sql->bindValue(9,$organization_name,PDO::PARAM_STR);
+  $sql->bindValue(10,$org_contact_id,PDO::PARAM_INT);
+  $sql->bindValue(11,$fee_amount,PDO::PARAM_INT);
+  $sql->bindValue(12,$subtotal,PDO::PARAM_INT);
+  $sql->bindValue(13,$vat,PDO::PARAM_INT);
+  $sql->bindValue(14,$billing_no,PDO::PARAM_STR);
+  $sql->bindValue(15,$year,PDO::PARAM_INT);
  
   $sql->execute();
 }
