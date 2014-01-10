@@ -52,6 +52,11 @@ $(function() {
     </tr>
    </table><br>
 
+   <form method="POST" action="">
+     <input name="orgName" type="text">
+     <input type="submit" value="Search Organization"> 
+   </form>
+
 <?php
   $companies = getAllCompanies($dbh);
 
