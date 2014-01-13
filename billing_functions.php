@@ -900,4 +900,18 @@ function formatBillingNo($billingNo){
     return $billingNo;
   }
 }
+
+function getCompanyBillingAddress($dbh,$contactId){
+
+  $sql = $dbh->prepare("SELECT street_address,city FROM civicrm_address WHERE contact_id = ?");
+  $sql->bindParam(1,$contactId,PDO::PARAM_INT);
+  $sql->execute();
+
+  $result = $sql->fetch(PDO::FETCH_ASSOC);
+  $address = array();
+  $address["street"] = $result["street_address"];
+  $address["city"] = $result["city"];
+
+  return $address;
+}
 ?>
