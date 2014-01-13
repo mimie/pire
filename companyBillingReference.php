@@ -94,6 +94,9 @@
   $eventLocation = formatEventLocation($locationDetails);
 
   $billingParticipantDetails = getCompanyBillingParticipants($dbh,$companyBillingNo,$eventId);
+  $billingAddress = getCompanyBillingAddress($dbh,$companyId);
+  $street = $billingAddress["street"];
+  $city = $billingAddress["city"];
 
 ?>
 <div id="main">
@@ -134,13 +137,13 @@
       </tr>
       <tr>
          <td></td>
-         <td width="485px"><font style="font-size:13px">here is the organization name</font></td>
+         <td width="485px"><font style="font-size:13px"><?=$street?></font></td>
          <td align="right" width="165px" style="border-right:2px solid black"><font style="font-size:13px"><b>BILLING DATE</b></font></td>
          <td width="195.78px"><font style="font-size:13px"><?=$billingDate?></font></td>
       </tr>
       <tr>
          <td></td>
-         <td width="485px"><font style="font-size:13px">City, State, ZIP</font></td>
+         <td width="485px"><font style="font-size:13px"><?=$city?></font></td>
          <td align="right" width="165px" style="border-right:2px solid black"><font style="font-size:13px"><b>DUE DATE</b></font></td>
          <td width="195.78px"><font style="font-size:13px"><?=$dueDate?></font></td>
       </tr>
