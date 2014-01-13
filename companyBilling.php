@@ -311,6 +311,7 @@
   	 $maxBillingId = $sqlMaxBillingId->fetch(PDO::FETCH_ASSOC);
          $eventTypeName = getEventTypeName($dbh,$eventId);
          $companyBillingNo = $maxBillingId["prevBillingId"] + 1;
+         $companyBillingNo = formatBillingNo($companyBillingNo);
          $currentYear = date("y");
          $companyBillingNo = $eventTypeName."-".$currentYear."-".$companyBillingNo;
             
