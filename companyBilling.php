@@ -303,46 +303,45 @@
        $companiesSelected = $_POST["companyIds"];
       
        foreach($companiesSelected as $companyId){
-        		$billedParticipants = $participantPerCompanyBill[$companyId];
+         $billedParticipants = $participantPerCompanyBill[$companyId];
 
-  			    $organization_name = array_search($companyId,$orgs);
-  			    $sqlMaxBillingId = $dbh->prepare("SELECT MAX(cbid) as prevBillingId FROM billing_company");
-  			    $sqlMaxBillingId->execute();
-  			    $maxBillingId = $sqlMaxBillingId->fetch(PDO::FETCH_ASSOC);
-            $eventTypeName = getEventTypeName($dbh,$eventId);
-  			    $companyBillingNo = $maxBillingId["prevBillingId"] + 1;
-            $currentYear = date("y");
-  			    $companyBillingNo = $eventTypeName."-".$currentYear."-".$companyBillingNo;
+         $organization_name = array_search($companyId,$orgs);
+         $sqlMaxBillingId = $dbh->prepare("SELECT MAX(cbid) as prevBillingId FROM billing_company");
+         $sqlMaxBillingId->execute();
+  	 $maxBillingId = $sqlMaxBillingId->fetch(PDO::FETCH_ASSOC);
+         $eventTypeName = getEventTypeName($dbh,$eventId);
+         $companyBillingNo = $maxBillingId["prevBillingId"] + 1;
+         $currentYear = date("y");
+         $companyBillingNo = $eventTypeName."-".$currentYear."-".$companyBillingNo;
             
-
-  			    $sqlInsertCompanyBilling = $dbh->prepare("INSERT INTO billing_company
-                                            (event_id,event_name,org_contact_id,organization_name,billing_no)
-                                           VALUES('$eventId', '$eventName','$companyId','$organization_name','$companyBillingNo')
-                                           ");  
-  			    $sqlInsertCompanyBilling->execute();
-            $companyBillTotalAmount = 0;
+         $sqlInsertCompanyBilling = $dbh->prepare("INSERT INTO billing_company
+                                    (event_id,event_name,org_contact_id,organization_name,billing_no)
+                                    VALUES('$eventId', '$eventName','$companyId','$organization_name','$companyBillingNo')
+                                     ");  
+         $sqlInsertCompanyBilling->execute();
+         $companyBillTotalAmount = 0;
         
-   					foreach($billedParticipants as $participant => $billDetails){
+         foreach($billedParticipants as $participant => $billDetails){
 
-           			$participant_id = $billDetails["participant_id"];
-                $contactId = getParticipantContactId($dbh,$participant_id,$eventId);
-                $email = getContactEmail($dbh,$contactId);
-           			$participant_name = $billDetails["participant_name"];
-           			$organization_name = $billDetails["organization_name"];
-           			$orgId = $companyId;
-           			$participantBillingType = $billDetails["billing_type"];
-           			$fee_amount = $billDetails["fee_amount"];
-           			$billingNo = $companyBillingNo;
-                $status = getStatusType($dbh,$participant_id);
+            $participant_id = $billDetails["participant_id"];
+            $contactId = getParticipantContactId($dbh,$participant_id,$eventId);
+            $email = getContactEmail($dbh,$contactId);
+            $participant_name = $billDetails["participant_name"];
+            $organization_name = $billDetails["organization_name"];
+            $orgId = $companyId;
+            $participantBillingType = $billDetails["billing_type"];
+            $fee_amount = $billDetails["fee_amount"];
+            $billingNo = $companyBillingNo;
+            $status = getStatusType($dbh,$participant_id);
    
-        				$sql = $dbh->prepare("INSERT INTO billing_details
-                         (participant_id,contact_id,event_id,event_type,event_name,participant_name,email,participant_status,organization_name,org_contact_id,billing_type,fee_amount,billing_no)
-                        VALUES('$participant_id','$contactId','$eventId','$eventTypeName','$eventName','$participant_name','$email','$status','$organization_name','$orgId','$participantBillingType','$fee_amount','$billingNo')");
+            $sql = $dbh->prepare("INSERT INTO billing_details
+                   (participant_id,contact_id,event_id,event_type,event_name,participant_name,email,participant_status,organization_name,org_contact_id,billing_type,fee_amount,billing_no)
+                   VALUES('$participant_id','$contactId','$eventId','$eventTypeName','$eventName','$participant_name','$email','$status','$organization_name','$orgId','$participantBillingType','$fee_amount','$billingNo')");
 
-        				$sql->execute();
+            $sql->execute();
 
-        				$companyBillTotalAmount = $companyBillTotalAmount + $fee_amount;
-             }
+            $companyBillTotalAmount = $companyBillTotalAmount + $fee_amount;
+          }
              
               if($eventTypeName == 'CON'){
                    $subtotal = $totalBill;
@@ -355,14 +354,14 @@
 
              }
 
-       			$sqlUpdateTotalAmount = $dbh->prepare("UPDATE billing_company
-                                         SET total_amount = '$companyBillTotalAmount', subtotal = '$subtotal', vat = '$tax'
-                                         WHERE event_id = '$eventId'
-                                         AND  billing_no = '$billingNo'
-                                         AND org_contact_id = '$orgId'
-                                        ");
+         $sqlUpdateTotalAmount = $dbh->prepare("UPDATE billing_company
+                                    SET total_amount = '$companyBillTotalAmount', subtotal = '$subtotal', vat = '$tax'
+                                    WHERE event_id = '$eventId'
+                                    AND  billing_no = '$billingNo'
+                                    AND org_contact_id = '$orgId'
+                                  ");
 
-        		$sqlUpdateTotalAmount->execute();
+         $sqlUpdateTotalAmount->execute();
        }
 
      }//end if Generate Bill
