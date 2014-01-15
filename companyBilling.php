@@ -283,7 +283,7 @@
           echo "<td align='center'><input type='checkbox' name='companyIds2[]' value='$companyId' disabled></td>";
           //for weberp function
           //echo "<td align='center'><input type='checkbox' name='postIds[]' value='$companyId' disabled></td>";
-          echo "<td align='center'>Something</td>";
+          echo "<td align='center'></td>";
           echo "<td></td>";
           echo "<td></td>";
           echo "<td></td>";
