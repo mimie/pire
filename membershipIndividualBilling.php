@@ -229,10 +229,16 @@ $(function() {
 
     $membershipIds = $_POST["membershipIds"];
     $membershipYear = $_POST["year"];
-    $prevYear = $membershipYear - 1;
-    $expirationDate = $prevYear."-12-31";
-    
-   
+    /**$prevYear = $membershipYear - 1;
+    $expirationDate = $prevYear."-12-31";**/
+
+    if(isset($_GET["endDate"])){
+       $expirationDate = $_GET["endDate"];
+    }
+
+    else{
+      $expirationDate = $membershipYear."12-31";
+    }
 
     foreach($membershipIds as $id){
 
@@ -286,6 +292,8 @@ $(function() {
         $memberInfo["org_contact_id"] = $orgId;
         $memberInfo["membership_id"] = $membershipId;
         $memberInfo["member_id"] = $memberId;
+
+        //var_dump($memberInfo);
 
         insertMemberBilling($dbh,$memberInfo,$membershipYear);
     }
