@@ -175,7 +175,7 @@
         <td width="132.28px" align="center"><font style="font-size:13px"><?=$currencyFormat?>&nbsp;PHP</font></td>
       </tr>
      </table>
-     </div>
+     </div><br>
 
      <div id = "billedTo">
      <table>
