@@ -797,11 +797,22 @@ function sendMail($email,$billingNo,$body,$subject,$folder){
 
          require "Mail.php";
 
-         $pdfFilename = $billingNo.".pdf";
+         $startMessage = "This is a system generated email.<br>"
+                       . "Please do not reply to this message.<br><br>";
+
+         $body = $startMessage.$body."<br>";
+         $endMessage = "Thank you for your event registration.<br>"
+                     . "We are sincerely grateful.<br>"
+                     . "Please don't hesitate to contact us should you have any question.<br><br>";
+
+         $body = $body.$endMessage."Sincerely yours,<br>Institute of Internal Auditors Philippines";
+
+
+         /**$pdfFilename = $billingNo.".pdf";
          //File
          $file = fopen("../../pdf/$folder/".$pdfFilename, "rb");
          $data = fread($file,filesize("../../pdf/$folder/".$pdfFilename));
-         fclose($file);
+         fclose($file);**/
  
          $semi_rand = md5(time());
          $mime_boundary = "==Multipart_Boundary_x{$semi_rand}x";
@@ -843,7 +854,7 @@ function sendMail($email,$billingNo,$body,$subject,$folder){
                     "\n\n".
                     "$body";
  
-        $data = chunk_split(base64_encode($data));
+        /**$data = chunk_split(base64_encode($data));
         $message .= "--{$mime_boundary}\n" .
                     "Content-Type: {$fileatttype};\n" .
                     " name=\"{$pdfFilename}\"\n" .
@@ -851,7 +862,7 @@ function sendMail($email,$billingNo,$body,$subject,$folder){
                     " filename=\"{$pdfFilename}\"\n" .
                     "Content-Transfer-Encoding: base64\n\n" .
                     $data . "\n\n" .
-                    "-{$mime_boundary}-\n";
+                    "-{$mime_boundary}-\n";**/
  
         $mail = $smtp->send($to, $headers, $message);
         echo "Sending mail to: $to". "<br>";
