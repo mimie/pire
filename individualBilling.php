@@ -3,6 +3,12 @@
 <title>Billing List</title>
 <link rel="stylesheet" type="text/css" href="billingStyle.css">
 <link rel="stylesheet" type="text/css" href="menu.css">
+<script>
+function reloadPage()
+  {
+  location.reload();
+  }
+</script>
 </head>
 <body>
 <?php
@@ -104,7 +110,8 @@
     <option value="Send Bill">Send Bill</option>
 <!--    <option value="Post to Weberp">Post to Weberp</option> -->
   </select>
-  <input type="submit" value="Process Action" name="processAction">
+  <input type="submit" value="Process Action" name="processAction"><br><br>
+  <input type="button" value="Reload page" onclick="reloadPage()">
 <?
 
    echo "<br><br><br>";
@@ -160,6 +167,8 @@
        echo "<td align='center'>$tax</td>";
        echo "<td align='center'>";
 
+      
+
        $isBillGenerated = checkBillGenerated($dbh,$participantId,$eventId);
        if($isBillGenerated == 1){
 
@@ -180,7 +189,7 @@
           echo "<br>Print</a>";
           echo "</td>";
           echo "<td align='center'>";
-          echo "<a href='emails/individualBilling/sendIndividualBilling.php?billingRef=$billingNo&eventId=$eventId&user=userId' style='text-decoration:none;' target ='_blank'><img src='email.jpg' width='50' height='50'>";
+          echo "<a href='emails/individualBilling/sendIndividualBilling.php?billingRef=$billingNo&eventId=$eventId&user=userId' style='text-decoration:none;'><img src='email.jpg' width='50' height='50'>";
           echo "<br>Email</a>";
           echo "</td>";
 
@@ -269,7 +278,12 @@
                          (participant_id,contact_id,event_id,event_type,event_name,participant_name,email,participant_status,organization_name,org_contact_id,billing_type,fee_amount,subtotal,vat,billing_no,bill_address)
                         VALUES('$participant_id','$contact_id','$eventId','$eventTypeName','$eventName','$participant_name','$email','$status','$organization_name','$orgId','$participantBillingType','$fee_amount','$subtotal','$tax','$billingNo','$billingAddress')");
 
-       $sql->execute();
+        $sql->execute();
+?>
+<!--        <script>
+         location.reload();
+        </script>-->
+<?php        
 
       }
 
