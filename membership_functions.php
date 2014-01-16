@@ -600,6 +600,8 @@ function getNonMembers($dbh){
  $sql = $dbh->prepare("SELECT cc.id, cc.display_name, cc.organization_name, ce.email
                        FROM civicrm_email ce, civicrm_contact cc
                        WHERE ce.contact_id = cc.id
+                       AND cc.contact_type = 'Individual'
+                       AND cc.display_name <> 'Admin Mister'
                        AND ce.is_primary = '1'
                        AND NOT EXISTS(SELECT cm.contact_id
                                      FROM civicrm_membership cm
@@ -613,5 +615,41 @@ function getNonMembers($dbh){
 
 }
 
-//function getMe
+function displayNonMembers(array $nonMembers){
+
+  $html = "<div align='center'>"
+        . "<table>"
+        . "<thead>"
+        . "<tr>"
+        . "<th colspan = '4'>IIAP Nonmembers</th>"
+        . "</tr>"
+        . "<tr>"
+        . "<th>Select contact</th>"
+        . "<th>Contact Name</th>"
+        . "<th>Organization Name</th>"
+        . "<th>Email</th>" 
+        . "</tr>"
+        . "</thead>"
+        . "<tbody>";
+
+  foreach($nonMembers as $key => $contact){
+
+    $contactId = $contact["id"];
+    $name = $contact["display_name"];
+    $orgName = $contact["organization_name"];
+    $email = $contact["email"];
+
+    $html = $html."<tr>"
+          . "<td><input type='checkbox' value = $contactId name='contactIds[]'></td>"
+          . "<td>$name</td>"
+          . "<td>$orgName</td>"
+          . "<td>$email</td>"
+          . "<tr>";
+  }
+
+  $html = $html."</tbody></table></div>";
+
+  return $html;
+
+}
 ?>
