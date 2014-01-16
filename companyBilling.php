@@ -3,6 +3,12 @@
 <title>Billing List</title>
 <link rel="stylesheet" type="text/css" href="billingStyle.css">
 <link rel="stylesheet" type="text/css" href="menu.css">
+<script>
+function reloadPage()
+  {
+  location.reload();
+  }
+</script>
 </head>
 <body>
 <?php
@@ -206,7 +212,8 @@
       //For weberp function
       //echo "<option value='Post to Weberp'>Post to Weberp</option>";
       echo "</select>";
-      echo "<input type='submit' name='process' value='Process Action'>";
+      echo "<input type='submit' name='process' value='Process Action'><br><br>";
+      echo "<input type='button' value='Reload page' onclick='reloadPage()'>";
 
       echo "<br><br>";
       echo "<table border='1' width='100%'>";
