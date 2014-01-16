@@ -45,6 +45,21 @@ $(function() {
    </table><br>
 <?php
 
+    $amounttypeSql = $dbh->prepare("SELECT name,minimum_fee FROM civicrm_membership_type");
+    $amounttypeSql->execute();
+    $feeType = $amounttypeSql->fetchAll(PDO::FETCH_ASSOC);
+
+    echo "<form action='' method='POST'>"
+         . "<select name='amount'>";
+
+    foreach($feeType as $key => $fee){
+      $amount = $fee["minimum_fee"];
+      $label = $fee['name']." - ".$amount;
+      
+      echo "<option value=$amount>$label</option>";
+    }
+         
+    echo "</select>";
     $nonMembers = getNonMembers($dbh);
     $displayNonMembers = displayNonMembers($nonMembers);
     
