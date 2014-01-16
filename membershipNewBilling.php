@@ -43,5 +43,9 @@ $(function() {
      <td align='center' bgcolor='#084B8A'><a href='membershipCompanyBilling.php?&user=<?=$userId?>'>COMPANY BILLING</td>
     </tr>
    </table><br>
+<?php
+
+    $nonMembers = getNonMembers($dbh);
+?>
 </body>
 </html>
