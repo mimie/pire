@@ -595,4 +595,23 @@ function getMembersByDate(PDO $dbh,$orgId,$date){
   return $result;
 }
 
+function getNonMembers($dbh){
+
+ $sql = $dbh->prepare("SELECT cc.id, cc.display_name, cc.organization_name, ce.email
+                       FROM civicrm_email ce, civicrm_contact cc
+                       WHERE ce.contact_id = cc.id
+                       AND ce.is_primary = '1'
+                       AND NOT EXISTS(SELECT cm.contact_id
+                                     FROM civicrm_membership cm
+                                     WHERE cm.contact_id = cc.id)
+                      ");
+
+ $sql->execute();
+ $result = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+ return $result;
+
+}
+
+//function getMe
 ?>
