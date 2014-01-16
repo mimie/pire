@@ -4,8 +4,9 @@
 <style>
 #main{
   border: 3px solid #0000FF;
-  width: 896.5px;
+  width: 699.21px;
   height: 878.36px;
+  padding: 2px;
   background-image:url('images/watermark.png');
   background-repeat:no-repeat;
   background-position:center;
@@ -14,7 +15,7 @@
 }
 
 #header{
-  width: 856.44px;
+  width: 699.21px;
   height: 49.51px;
   background-color: #08088A;
   font-family: Arial;
@@ -130,22 +131,22 @@
          <td colspan="4"><b><font style="font-size:16px">BILLED TO:</font></b></td>
       </tr>
       <tr>
-         <td width="42.71px"></td>
-         <td width="485px"><font style="font-size:13px"><?=$orgName?></font></td>
-         <td align="right" width="165px" style="border-right:2px solid black"><font style="font-size:13px"><b>BILLING NUMBER</b></font></td>
-         <td width="195.78px"><font style="font-size:19px"><b><?=$companyBillingNo?></b></font></td>
+         <td width="20px"></td>
+         <td width="329.95px"><font style="font-size:13px"><?=$orgName?></font></td>
+         <td align="right" width="135.31px" style="border-right:2px solid black"><font style="font-size:13px"><b>BILLING NUMBER</b></font></td>
+         <td width="132.28px"><font style="font-size:19px"><b><?=$companyBillingNo?></b></font></td>
       </tr>
       <tr>
          <td></td>
-         <td width="485px"><font style="font-size:13px"><?=$street?></font></td>
-         <td align="right" width="165px" style="border-right:2px solid black"><font style="font-size:13px"><b>BILLING DATE</b></font></td>
-         <td width="195.78px"><font style="font-size:13px"><?=$billingDate?></font></td>
+         <td><font style="font-size:13px"><?=$street?></font></td>
+         <td align="right" style="border-right:2px solid black"><font style="font-size:13px"><b>BILLING DATE</b></font></td>
+         <td><font style="font-size:13px"><?=$billingDate?></font></td>
       </tr>
       <tr>
          <td></td>
-         <td width="485px"><font style="font-size:13px"><?=$city?></font></td>
-         <td align="right" width="165px" style="border-right:2px solid black"><font style="font-size:13px"><b>DUE DATE</b></font></td>
-         <td width="195.78px"><font style="font-size:13px"><?=$dueDate?></font></td>
+         <td><font style="font-size:13px"><?=$city?></font></td>
+         <td align="right" style="border-right:2px solid black"><font style="font-size:13px"><b>DUE DATE</b></font></td>
+         <td><font style="font-size:13px"><?=$dueDate?></font></td>
       </tr>
       <tr>
        <td colspan="4"><br></td>
@@ -153,11 +154,11 @@
      </table>
      <!--end of billed to-->
     </div>
-    <div id="billedTo">
+    <!--<div id="billedTo">-->
      <!--particulars-->
      <table align="left" style="border-collapse:collapse;">
       <tr>
-        <td colspan="2" width="692.71px" align="center" bgcolor="#D8D8D8" style="border:2px solid black;"><font style="font-size:13px"><b>PARTICULARS</b></font></td>
+        <td colspan="2" align="center" bgcolor="#D8D8D8" style="border:2px solid black;"><font style="font-size:13px"><b>PARTICULARS</b></font></td>
         <td width="195.78px" align="center" bgcolor="#D8D8D8" style="border:2px solid black"><font style="font-size:13px"><b>AMOUNT</b></font></td>
       </tr>   
       <tr>
@@ -167,12 +168,12 @@
           On&nbsp;<?=$dueDate?>&nbsp;to&nbsp;<?=$eventEndDate?><br>
           <?=$eventLocation?><br><br>
         <?php
-           echo "<div align = 'left'>Billing for the ff. participants:<br><br>";
+           echo "<div align = 'left'>&nbsp;&nbsp;Billing for the ff. participants:<br><br>";
            foreach($billingParticipantDetails as $participant => $details){
               $participantName = $details["participant_name"];
               $participantId = $details["participant_id"];
               $participantId = formatParticipantId($participantId);
-              echo "$participantName / Participant No.-$participantId<br>";
+              echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$participantName." / Participant No.-$participantId<br>";
             }
            echo "</div>";
          ?>
@@ -189,7 +190,7 @@
         </td> 
       </tr>
       <tr>
-        <td width="527.71px" style="border:2px solid black;" rowspan="2" align="center">
+        <td style="border:2px solid black;" rowspan="2" align="center">
          <font style="font-size:19px"><b><i>THANK YOU FOR YOUR BUSINESS!</b></i></font><br>
          <font style="font-size:13px"><b>(NOT VALID FOR INPUT TAX CLAIM)</b></font>
         </td>
@@ -197,19 +198,24 @@
         <td width="195.78px" height="26.84px" style="border:2px solid black;" align="center"><?=$netVat?></td>
       </tr>
       <tr>
-        <td width="195.78px" height="26.84px" style="border:2px solid black;" align="center"><?=$tax?></td>
+        <td height="26.84px" style="border:2px solid black;" align="center"><?=$tax?></td>
       </tr>
       <tr>
-        <td colspan="2" height="15px"></td>
-        <td width="195.78px" style="border:2px solid black;" rowspan="2" align="center"><?=$currencyFormat?>&nbsp;PHP</td>
+        <td height="15px"></td>
+        <td style="border:2px solid black;" align="center" bgcolor="#C8C8C8"><b><font style="font-size:12px;">TOTAL<br>AMOUNT DUE</b></td>
+        <td width="195.78px" style="border:2px solid black;" rowspan="2" align="center" bgcolor="#D8D8D8"><?=$currencyFormat?>&nbsp;PHP</td>
       </tr>
+     </table>
+
+     <!--<div id = "billedTo">
+      <table>
       <tr>
         <td colspan="2"><b><font style="font-size:13px;font-family:Arial">DIRECT ALL INQUIRIES TO:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             PAYMENT INSTRUCTION:</font></b>
         </td>
       </tr>
       <tr>
-        <td colspan="2"><b><i><font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ARTHELEI V. MENDOZA</i></b>
+        <td colspan="2"><b><i><font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</i></b>
          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
          &Oslash;&nbsp;If by check, <font color="red"><b><u>should be</u></b></font> made payable to:</font>
         </td>
@@ -283,7 +289,29 @@
        </td>
       <tr>
      </table>
-    </div>
+    </div>-->
+   <br><table align='left'>
+      <tr>
+       <td width="279.61px" style="vertical-align:top">
+          <br><font style="font-size:13px;font-family:Arial"><b>DIRECT ALL INQUIRIES TO:</b></font><br>
+          <b><i><font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?//=$generator?></i></b><br>
+          <font style="font-size:13px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(+632) 940-9554</font><br>
+          <font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;email: ar_finance@iia-p.org</font>
+       </td>
+       <td width="419.61px">
+          <br><font style="font-size:13px;font-family:Arial"><b>PAYMENT INSTRUCTION:</b></font><br>
+          <font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&Oslash;&nbsp;If by check, <font color="red"><b><u>should be</u></b></font> made payable to:</font><br>
+          <font style="font-size:15px"><b><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Institute of Internal Auditors Philippines, Inc.</i></b></font><br>
+          <font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&Oslash;&nbsp;If thru bank telegraphic transfer, include <b><u>P250 /$ 6.50,</b></u> in your 
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;payment to cover for bank charges.</font><br>
+            <font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&Oslash;&nbsp;If thru SM Department Store Bills Payment Center,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;To facilitate identification of your payment,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;Please indicate this registration\billing reference number in the 
+            &nbsp;&nbsp;&nbsp;&nbsp;payment slip form.
+         </font>
+       </td>
+      </tr>
+    </table>
   </center>
 </div>
 <script>
