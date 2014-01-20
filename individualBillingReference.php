@@ -4,8 +4,8 @@
 <style>
 #main{
   border: 3px solid #0000FF;
-  width: 699.21px;
-  height: 878.36px;
+  width:875px;
+  height: 1050px;
   padding: 4px;
   background-image:url('images/watermark.png');
   background-repeat:no-repeat;
@@ -15,7 +15,7 @@
 }
 
 #header{
-  width: 699.21px;
+  width: 860px;
   height: 49.51px;
   background-color: #08088A;
   font-family: Arial;
@@ -32,7 +32,7 @@
 }
 
 #tin{
-  width: 699.21px;
+  width: 860px;
   height: 31.75px;
   font-family: Arial;
   padding: 4px 4px 2px 2px;
@@ -132,44 +132,46 @@
     </div>
     <!--billed to-->
     <div id="billedTo">
+     <center>
      <table align="left">
       <tr>
          <td colspan="4"><b><font style="font-size:16px">BILLED TO:</font></b></td>
       </tr>
       <tr>
          <td width="20px"></td>
-         <td width="329.95px"><font style="font-size:13px"><?=$participantName?></font></td>
-         <td align="right" width="135.31px" style="border-right:2px solid black"><font style="font-size:13px"><b>BILLING NUMBER</b></font></td>
+         <td width="500px"><font style="font-size:17px"><?=$participantName?></font></td>
+         <td align="right" width="150px" style="border-right:2px solid black"><font style="font-size:17px"><b>BILLING NUMBER</b></font></td>
          <td width="132.28px"><font style="font-size:19px"><b><?=$billingNo?></b></font></td>
       </tr>
       <tr>
          <td></td>
          <!--This line for the organizatio name  and address-->
-         <td><font style="font-size:13px"><?=$orgName?></font></td>
-         <td align="right" style="border-right:2px solid black"><font style="font-size:13px"><b>BILLING DATE</b></font></td>
-         <td><font style="font-size:13px"><?=$billDate?></font></td>
+         <td><font style="font-size:17px"><?=$orgName?></font></td>
+         <td align="right" style="border-right:2px solid black"><font style="font-size:17px"><b>BILLING DATE</b></font></td>
+         <td><font style="font-size:17px"><?=$billDate?></font></td>
       </tr>
       <tr>
          <td></td>
-         <td><font width="329.95px" style="font-size:13px"><?=$billAddress?></font></td>
-         <td align="right" style="border-right:2px solid black"><font style="font-size:13px"><b>DUE DATE</b></font></td>
-         <td><font style="font-size:13px"><?=$dueDate?></font></td>
+         <td><font width="329.95px" style="font-size:17px"><?=$billAddress?></font></td>
+         <td align="right" style="border-right:2px solid black"><font style="font-size:17px"><b>DUE DATE</b></font></td>
+         <td><font style="font-size:17px"><?=$dueDate?></font></td>
       </tr>
       <tr>
        <td colspan="4"><br></td>
       </tr>
      </table>
+     </center>
      <!--end of billed to-->
     </div>
     <div id="billedTo">
      <!--particulars-->
      <table align="left" style="border-collapse:collapse;">
       <tr>
-        <td colspan="2" width="534.95px"align="center" bgcolor="#D8D8D8" style="border:2px solid black;"><font style="font-size:13px"><b>PARTICULARS</b></font></td>
+        <td colspan="2" width="580px"align="center" bgcolor="#D8D8D8" style="border:2px solid black;"><font style="font-size:13px"><b>PARTICULARS</b></font></td>
         <td align="center" bgcolor="#D8D8D8" style="border:2px solid black"><font style="font-size:13px"><b>AMOUNT</b></font></td>
       </tr>   
       <tr>
-        <td colspan="2" height="350px" width="570px" style="border:2px solid black; vertical-align:top;" align="left"><?=$eventName?>
+        <td colspan="2" height="500px" style="border:2px solid black; vertical-align:top;" align="left"><?=$eventName?>
                <br>On&nbsp;<?=$dueDate?>&nbsp;to&nbsp;<?=$eventEndDate?>
                <br>At&nbsp;<?=$eventLocation?></td>
         <td style="border:2px solid black; vertical-align:top;" align="center"><br><?=$currencyFormat?></td> 
