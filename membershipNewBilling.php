@@ -49,7 +49,9 @@ $(function() {
     $amounttypeSql->execute();
     $feeType = $amounttypeSql->fetchAll(PDO::FETCH_ASSOC);
 
-    echo "<form action='' method='POST'>"
+    echo "<div align='center' padding='3px'>"
+         . "Select membership type: "
+         . "<form action='' method='POST'>"
          . "<select name='amount'>";
 
     foreach($feeType as $key => $fee){
@@ -59,11 +61,42 @@ $(function() {
       echo "<option value=$amount>$label</option>";
     }
          
-    echo "</select>";
-    $nonMembers = getNonMembers($dbh);
-    $displayNonMembers = displayNonMembers($nonMembers);
+    echo "</select>"
+         . "<input type='submit' value='Generate New Membership Bill' name='generate'>"
+         . "</div>";
+
+    echo "<div align='center'>"
+         ."Seart contact: " 
+         . "<select name='searchType'>"
+         . "<option value='name'>Name"
+         . "<option value='email'>Email"
+         . "</select>"
+         . "<input type='text' placeholder='name or email' name='searchText'>"
+         . "<input type='submit' value='SEARCH' name='search'>"
+         . "</div>";
+    
+    if(isset($_POST["search"])){
+       if($_POST["searchType"] == 'name'){
+         $searchName = $_POST["searchText"];
+         $nonMembers = searchContactByName($dbh,$searchName);
+         $displayNonMembers = displayNonMembers($nonMembers);
+       }
+
+       else{
+         $searchEmail = $_POST["searchText"];
+         $nonMembers = searchContactByEmail($dbh,$searchEmail);
+         $displayNonMembers = displayNonMembers($nonMembers);
+       }
+
+    }
+
+    else{
+      $nonMembers = getNonMembers($dbh);
+      $displayNonMembers = displayNonMembers($nonMembers);
+    }
     
     echo $displayNonMembers;
+    echo "</form>";
 ?>
 </body>
 </html>
