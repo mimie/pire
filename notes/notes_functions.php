@@ -51,7 +51,7 @@ function displayBillingNote($dbh,array $billingNote){
         . "<table>"
         . "<tr>"
         . "<th>Note</th>"
-        . "<td><input type='text' value=$note></td>"
+        . "<td><input type='text' value=$note name='note'></td>"
         . "</tr>"
         . "<tr>"
         . "<th>Type of Billing</th>"
@@ -100,5 +100,25 @@ function displayBillingNote($dbh,array $billingNote){
 }
 
 
- 
+function updateNote($dbh,array $billingNote){
+
+  $categoryId = $billingNote["category_id"];
+  $notes = $billingNote["notes"];
+  $status = $billingNote["status"];
+  $noteId = $billingNote["note_id"];
+
+  $sql = $dbh->prepare("UPDATE FROM billing_notes
+                        notes_category_id = ?,
+                        notes = ?,
+                        notes_status = ?
+                        WHERE notes_id = ?
+                       ");
+  $sql->bindValue(1,$categoryId,PDO::PARAM_INT);
+  $sql->bindValue(2,$notes,PDO::PARAM_STR);
+  $sql->bindValue(3,$status,PDO::PARAM_INT);
+  $sql->bindValue(4,$noteId,PDO::PARAM_INT);
+
+  $sql->execute();
+
+} 
 ?>
