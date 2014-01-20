@@ -617,7 +617,7 @@ function getNonMembers($dbh){
 
 function displayNonMembers(array $nonMembers){
 
-  $html = "<div align='center'>"
+  $html = "<div align='center' padding='3px'>"
         . "<table>"
         . "<thead>"
         . "<tr>"
@@ -650,6 +650,53 @@ function displayNonMembers(array $nonMembers){
   $html = $html."</tbody></table></div>";
 
   return $html;
+
+}
+
+function searchContactByName($dbh,$name){
+
+ $sql = $dbh->prepare("SELECT cc.id, cc.display_name, cc.organization_name, ce.email
+                       FROM civicrm_email ce, civicrm_contact cc
+                       WHERE ce.contact_id = cc.id
+                       AND cc.contact_type = 'Individual'
+                       AND cc.display_name <> 'Admin Mister'
+                       AND ce.is_primary = '1'
+                       AND cc.display_name LIKE '%$name%'
+                       AND NOT EXISTS(SELECT cm.contact_id
+                                     FROM civicrm_membership cm
+                                     WHERE cm.contact_id = cc.id)
+                      ");
+
+ $sql->execute();
+ $result = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+ return $result;
+
+}
+
+function searchContactByEmail($dbh,$email){
+ 
+ $sql = $dbh->prepare("SELECT cc.id, cc.display_name, cc.organization_name, ce.email
+                       FROM civicrm_email ce, civicrm_contact cc
+                       WHERE ce.contact_id = cc.id
+                       AND cc.contact_type = 'Individual'
+                       AND cc.display_name <> 'Admin Mister'
+                       AND ce.is_primary = '1'
+                       AND ce.email LIKE '%$email%'
+                       AND NOT EXISTS(SELECT cm.contact_id
+                                     FROM civicrm_membership cm
+                                     WHERE cm.contact_id = cc.id)
+                      ");
+
+ $sql->execute();
+ $result = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+ return $result;
+
+}
+
+
+?>
 
 }
 ?>
