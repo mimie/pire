@@ -8,6 +8,11 @@
   <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
   <script src="../js/jquery-jPaginate.js"></script>
   <script src="../js/jquery.tablesorter.js"></script>
+<style type="text/css">
+    .fieldset-auto-width {
+         display: inline-block;
+    }
+</style>
 </head>
 <body>
 <?php
@@ -28,15 +33,29 @@
   <div align="center">
     Select action process:<br>
     <select name="actions">
-     <option value="select">- Select action type-</option>
+     <option value="select">- Select action type -</option>
      <option value="" disabled></option>
      <option value="edit">Edit</option>
      <option value="delete">Delete</option>
     </select>
-    <input type="submit" value="Process Action">
+    <input type="submit" value="Process Action" name="process">
   </div>
 
 <?php
+
+
+  if(isset($_POST["process"]) && $_POST["actions"] == 'edit'){
+
+    $noteId = $_POST["id"];
+    $billingNote = getNoteById($dbh,$noteId);
+    $displayNote = displayBillingNote($dbh,$billingNote);
+    echo "<center>";
+    echo "<div style = 'width:40%'>";
+    echo $displayNote;
+    echo "</div>";
+    echo "</center>";
+    
+  }
 
   echo "<br>";
   echo "<div align='center'>";
@@ -60,7 +79,7 @@
     $status = $status == 0 ? 'disabled' : 'enabled';
 
     echo "<tr>"
-         ."<td><input type='checkbox' name=ids[] value=$id></td>"
+         ."<td><input type='checkbox' name=id value=$id></td>"
          ."<td>$billingType</td>"
          ."<td>$note</td>"
          ."<td>$status</td>"
