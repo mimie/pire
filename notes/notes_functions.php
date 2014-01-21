@@ -49,9 +49,10 @@ function displayBillingNote($dbh,array $billingNote){
   $html = "<fieldset>"
         . "<legend>Edit Note</legend>"
         . "<table>"
+        . "<tr><td colspan='2'><input type=number value='$noteId' hidden name='note_id'></td></tr>"
         . "<tr>"
         . "<th>Note</th>"
-        . "<td><input type='text' value=$note name='note'></td>"
+        . "<td><input type='text' value='$note' name='note'></td>"
         . "</tr>"
         . "<tr>"
         . "<th>Type of Billing</th>"
@@ -120,5 +121,48 @@ function updateNote($dbh,array $billingNote){
 
   $sql->execute();
 
+}
+
+
+function addNoteForm($dbh){
+
+  $html = "<fieldset>"
+        . "<legend>Add Note</legend>"
+        . "<table>"
+        . "<tr>"
+        . "<th>Note</th><td><input type='text' name='note'></td>"
+        . "</tr>"
+        . "<tr>"
+        . "<th>Type of Billing</th>"
+        . "<td><select name='billingType'>"
+        . "<option>- Select type of billing -</option>"
+        . "<option disabled></option>";
+    $billingTypes = getAllTypeBilling($dbh);
+        
+  foreach($billingTypes as $type){
+
+    $id = $type["notes_category_id"];
+    $category = $type["category_name"];
+ 
+    $html = $html."<option value=$id>$category</option>";
+  }
+        
+  $html = $html. "</select></td></tr>"
+        . "<tr>"
+        . "<th>Status</th>"
+        . "<td>"
+        . "<select name='statusType'>";
+       
+ $html = $html. "<option value='0' $disabled>disabled</option>"
+       . "<option value='1' $enabled>enabled</option>"
+       . "</select>"
+       . "</td>"
+       . "</tr>"
+       . "<tr>"
+       . "<td colspan='2'><input type='submit' value='Add Note' name='add'></td>"
+       . "</table>"
+       . "</fieldset>";
+
+  return $html;
 } 
 ?>
