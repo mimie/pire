@@ -59,7 +59,7 @@ function getOrganization($dbh){
 
   $sql = $dbh->prepare("SELECT id as orgId, display_name as companyName
                         FROM civicrm_contact
-                        WHERE contact_type = 'Organization'");
+                        WHERE contact_type = 'Organization' AND is_deleted = 0");
   $sql->execute();
   $org = $sql->fetchAll(PDO::FETCH_ASSOC);
 
