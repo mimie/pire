@@ -35,6 +35,7 @@
     <select name="actions">
      <option value="select">- Select action type -</option>
      <option value="" disabled></option>
+     <option value="add">Add</option>
      <option value="edit">Edit</option>
      <option value="delete">Delete</option>
     </select>
