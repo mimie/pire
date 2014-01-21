@@ -56,10 +56,71 @@
     echo "</div>";
     echo "</center>";
     
+  
+}
+
+  elseif(isset($_POST["process"]) && $_POST["actions"] == 'delete'){
+
+   $noteId = $_POST["id"];
+   $sql = $dbh->prepare("DELETE FROM billing_notes WHERE notes_id = ?");
+   $sql->bindValue(1,$noteId,PDO::PARAM_INT);
+   $sql->execute();
+   header("Location:notes.php");
   }
 
+  elseif(isset($_POST["process"]) && $_POST["actions"] == 'add'){
+ 
+    $displayAddForm = addNoteForm($dbh);
+    echo "<center>";
+    echo "<div style = 'width:40%'>";
+    echo $displayAddForm;
+    echo "</div>";
+    echo "</center>";
+
+  }
+
+  elseif(isset($_POST["add"])){
+
+    $note = $_POST["note"];
+    $categoryId = $_POST["billingType"];
+    $status = $_POST["statusType"];
+
+    $sql = $dbh->prepare("INSERT INTO billing_notes(notes_category_id,notes,notes_status) VALUES (?,?,?)");
+
+    $sql->bindValue(1,$categoryId,PDO::PARAM_INT);
+    $sql->bindValue(2,$note,PDO::PARAM_STR);
+    $sql->bindValue(3,$status,PDO::PARAM_INT);
+
+    $sql->execute();
+    header("Location:notes.php");
+
+  }
+   elseif(isset($_POST["update"])){
+
+    $note = $_POST["note"];
+    $categoryId = $_POST["billingType"];
+    $status = $_POST["statusType"];
+    $noteId = $_POST["note_id"];
+
+    $sql = $dbh->prepare("UPDATE billing_notes
+                          SET notes_category_id = ?,
+                          notes = ?,
+                          notes_status = ?
+                          WHERE notes_id = ?
+                         ");
+
+    $sql->bindValue(1,$categoryId,PDO::PARAM_INT);
+    $sql->bindValue(2,$note,PDO::PARAM_STR);
+    $sql->bindValue(3,$status,PDO::PARAM_INT);
+    $sql->bindValue(4,$noteId,PDO::PARAM_INT);
+
+    $sql->execute();
+    header("Location:notes.php");
+  
+  }
   echo "<br>";
   echo "<div align='center'>";
+
   echo "<table>"
        ."<thead>"
        ."<tr>"
