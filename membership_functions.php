@@ -597,15 +597,16 @@ function getMembersByDate(PDO $dbh,$orgId,$date){
 
 function getNonMembers($dbh){
 
- $sql = $dbh->prepare("SELECT cc.id, cc.display_name, cc.organization_name, ce.email
+ $sql = $dbh->prepare("SELECT DISTINCT cc.id, cc.display_name, cc.organization_name, ce.email
                        FROM civicrm_email ce, civicrm_contact cc
                        WHERE ce.contact_id = cc.id
                        AND cc.contact_type = 'Individual'
+                       AND cc.is_deleted = 0
                        AND cc.display_name <> 'Admin Mister'
                        AND ce.is_primary = '1'
                        AND NOT EXISTS(SELECT cm.contact_id
                                      FROM civicrm_membership cm
-                                     WHERE cm.contact_id = cc.id)
+                                     WHERE cm.contact_id = cc.id AND cc.is_deleted = 0)
                       ");
 
  $sql->execute();
