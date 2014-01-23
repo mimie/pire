@@ -23,8 +23,9 @@
 
   $dbh = civicrmConnect();
   $notes = getAllNotes($dbh);
-  $logout = logoutDiv($dbh);
-  echo $logout;
+/**  $logout = logoutDiv($dbh);
+  echo $logout;**/
+  echo "<a href='../events2.php'>Event List</a>";
   echo "<br>";
 
 ?>
@@ -141,7 +142,7 @@
     $status = $status == 0 ? 'disabled' : 'enabled';
 
     echo "<tr>"
-         ."<td><input type='checkbox' name=id value=$id></td>"
+         ."<td><input type='checkbox' name=id value='$id'></td>"
          ."<td>$billingType</td>"
          ."<td>$note</td>"
          ."<td>$status</td>"
