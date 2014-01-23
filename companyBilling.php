@@ -252,7 +252,7 @@ function reloadPage()
         }
         $totalBill = number_format($totalBill, 2, '.', '');
         echo "<tr>";
-        echo "<td>$organization_name</td>";
+        echo "<td>$organization_name,$companyId</td>";
         echo "<td align='center'>$totalBill</td>";
         echo "<td align='center'>$subtotal</td>";
         echo "<td align='center'>$tax</td>";
