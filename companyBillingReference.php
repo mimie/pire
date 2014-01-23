@@ -179,7 +179,7 @@
          ?>
         </td>
          <!-- EACH PARTICIPANT FEE INCLUDED IN THE COMPANY BILLING -->
-        <td style="border:2px solid black; vertical-align:top;" align="center"><br><br><br><br><br><br><br>
+        <td style="border:2px solid black; vertical-align:top;" align="center"><br><br><br><br><br><br>
         <?php
            foreach($billingParticipantDetails as $participant => $details){
               $feeAmount = $details["fee_amount"];
