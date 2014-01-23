@@ -925,4 +925,16 @@ function getCompanyBillingAddress($dbh,$contactId){
 
   return $address;
 }
+
+function getEmployerId($dbh,$contactId){
+
+  $sql = $dbh->prepare("SELECT employer_id FROM civicrm_contact WHERE id = ? AND is_deleted = 0");
+  $sql->bindValue(1,$contactId,PDO::PARAM_INT);
+  $sql->execute();
+
+  $result = $sql->fetch(PDO::FETCH_ASSOC);
+  $orgId = $result["employer_id"];
+
+  return $orgId;
+}
 ?>
