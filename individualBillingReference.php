@@ -173,7 +173,23 @@
       <tr>
         <td colspan="2" height="500px" style="border:2px solid black; vertical-align:top;" align="left"><?=$eventName?>
                <br>On&nbsp;<?=$dueDate?>&nbsp;to&nbsp;<?=$eventEndDate?>
-               <br>At&nbsp;<?=$eventLocation?></td>
+               <br>At&nbsp;<?=$eventLocation?><br>
+               <div style="height:50%"></div><br>
+               <div>
+               <?php
+                 $sql = $dbh->prepare("SELECT notes FROM billing_notes bn,billing_notes_category bnc
+                                       WHERE bn.notes_category_id = bnc.notes_category_id
+                                       AND bnc.category_name = 'Individual Event Billing'
+                                       AND bn.notes_status = '1'
+                                      ");
+                 $sql->execute();
+                 $result = $sql->fetch(PDO::FETCH_ASSOC);
+                 $notes = $result["notes"];
+                 echo $notes;
+               ?>
+                
+               </div>
+        </td>
         <td style="border:2px solid black; vertical-align:top;" align="center"><br><?=$currencyFormat?></td> 
       </tr>
       <tr>
