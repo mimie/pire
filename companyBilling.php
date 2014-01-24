@@ -99,6 +99,7 @@ function reloadPage()
    $participants = getEventParticipantIds($dbh, $eventId);
    $eventBillingTypes = getParticipantsBillingType($billingType,$participants);
    $companyBillingTypes = $eventBillingTypes["Company"];
+  // var_dump($companyBillingTypes);
    $companyBillAmounts = array();
 
 //-------------------FOR COMPANY BILLING------------------------------------------------------------------------------------
@@ -118,7 +119,8 @@ function reloadPage()
            $participant_name = $contactDetails["name"];
            $email = getContactEmail($dbh,$contact_id);
        	   $organization_name = $contactDetails["companyName"];
-       	   $orgId = $orgs[$organization_name];
+       	   //$orgId = $orgs[$organization_name];
+           $orgId = getEmployerId($dbh,$contact_id);
        	   $billingId = "";
            $billingNo = $eventTypeName.$billingId.$participantId;
            $status = getStatusType($dbh,$participantId);
@@ -152,7 +154,8 @@ function reloadPage()
        $email = getContactEmail($dbh,$contact_id);
        $contact_address = getContactAddress($dbh,$contact_id);
        $organization_name = $contactDetails["companyName"];
-       $orgId = $orgs[$organization_name];
+       //$orgId = $orgs[$organization_name];
+       $orgId = getEmployerId($dbh,$contact_id);
        $billingId = "";
        $billingNo = $eventTypeName.$billingId.$participantId;
        $status = getStatusType($dbh,$participantId);
@@ -263,7 +266,7 @@ function reloadPage()
           $companyBillingRefNo = getCompanyBillingNo($dbh,$companyId,$eventId);
           $companyBillingDate = getCompanyBillingDate($dbh,$companyId,$eventId);
           $companyBillingAddress = "";
-          $participantsLink = participantsLink($companyBillingRefNo,$eventId,$userId);
+          $participantsLink = participantsLink($companyBillingRefNo,$eventId,$companyId);
         
           if($eventTypeName == 'CON'){
              echo "<td align='center'><a href='companyConvention.php?companyBillingRef=$companyBillingRefNo&eventId=$eventId&orgId=$companyId' style='text-decoration:none' target='_blank'>";
