@@ -4,8 +4,8 @@
 <style>
 #main{
   border: 3px solid #0000FF;
-  width: 699.21px;
-  height: 878.36px;
+  width: 875px;
+  height: 1050px;
   padding: 2px;
   background-image:url('images/watermark.png');
   background-repeat:no-repeat;
@@ -15,7 +15,7 @@
 }
 
 #header{
-  width: 699.21px;
+  width: 860px;
   height: 49.51px;
   background-color: #08088A;
   font-family: Arial;
@@ -32,7 +32,7 @@
 }
 
 #tin{
-  width: 856.44px;
+  width: 860px;
   height: 31.75px;
   font-family: Arial;
   padding: 4px 4px 2px 2px;
@@ -132,8 +132,8 @@
       </tr>
       <tr>
          <td width="20px"></td>
-         <td width="329.95px"><font style="font-size:13px"><?=$orgName?></font></td>
-         <td align="right" width="135.31px" style="border-right:2px solid black"><font style="font-size:13px"><b>BILLING NUMBER</b></font></td>
+         <td width="500px"><font style="font-size:13px"><?=$orgName?></font></td>
+         <td align="right" width="150px" style="border-right:2px solid black"><font style="font-size:13px"><b>BILLING NUMBER</b></font></td>
          <td width="132.28px"><font style="font-size:19px"><b><?=$companyBillingNo?></b></font></td>
       </tr>
       <tr>
@@ -163,10 +163,15 @@
       </tr>   
       <tr>
         <!--THE PARTICIPANTS INCLUDED IN THE COMPANY BILLING -->
-        <td colspan="2" height="350px" style="border:2px solid black; vertical-align:top;" align="left">
+        <td colspan="2" height="90px" style="border-right:2px solid black;border-left:2px solid black;vertical-align:top;" align="left">
           <?=$eventName?><br>
           On&nbsp;<?=$dueDate?>&nbsp;to&nbsp;<?=$eventEndDate?><br>
-          <?=$eventLocation?><br><br>
+          <?=$eventLocation?>
+        </td>
+        <td style='border-right:2px solid black;'></td>
+      </tr>
+      <tr>
+       <td colspan='2' height='430px' style="border-right:2px solid black;border-left:2px solid black;vertical-align:top;">
         <?php
            echo "<div align = 'left'>&nbsp;&nbsp;Billing for the ff. participants:<br><br>";
            foreach($billingParticipantDetails as $participant => $details){
@@ -179,7 +184,7 @@
          ?>
         </td>
          <!-- EACH PARTICIPANT FEE INCLUDED IN THE COMPANY BILLING -->
-        <td style="border:2px solid black; vertical-align:top;" align="center"><br><br><br><br><br><br>
+        <td style="border-right:2px solid black;vertical-align:top;" align="center"><br><br>
         <?php
            foreach($billingParticipantDetails as $participant => $details){
               $feeAmount = $details["fee_amount"];
@@ -203,7 +208,7 @@
       <tr>
         <td height="15px"></td>
         <td style="border:2px solid black;" align="center" bgcolor="#C8C8C8"><b><font style="font-size:12px;">TOTAL<br>AMOUNT DUE</b></td>
-        <td width="195.78px" style="border:2px solid black;" rowspan="2" align="center" bgcolor="#D8D8D8"><?=$currencyFormat?>&nbsp;PHP</td>
+        <td width="195.78px" style="border-bottom:2px solid black;" rowspan="2" align="center" bgcolor="#D8D8D8"><?=$currencyFormat?>&nbsp;PHP</td>
       </tr>
      </table>
 
