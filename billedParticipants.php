@@ -1,10 +1,11 @@
 <html>
 <head>
 <title>Billed Participants</title>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
 <link rel="stylesheet" type="text/css" href="billingStyle.css">
 <link rel="stylesheet" type="text/css" href="menu.css">
 <style type="text/css">
-body{overflow:hidden;}
+   body{overflow:hidden;}
 </style>
 </head>
 <body>
@@ -129,14 +130,61 @@ body{overflow:hidden;}
    
   }
 
-  $ids = $_POST["participantIds"];
-
-  foreach($ids as $particpantId){
-      $participantDetails = getDetailsForParticipant($dbh,4793);
-  }
 ?>
   </form>
   </table>
   </div>
+<?php
+ if(isset($_POST["add"])){
+   $ids = $_POST["participantIds"];
+    $ids = array("4793");
+
+    foreach($ids as $participantId){
+      $info = getDetailsForParticipant($dbh,$participantId);
+     
+      $sql = $dbh->prepare("INSERT INTO billing_details (participant_id, contact_id, event_id, 
+                            event_type, event_name, participant_name, email,bill_address, 
+                            organization_name, org_contact_id, billing_type,fee_amount, 
+                            billing_no,participant_status)
+                            VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+     $participantId = $info["participant_id"];
+     $contactId = $info["contact_id"];
+     $eventId = $info["event_id"];
+     $eventType = $info["event_type"];
+     $eventName = $info["event_name"];
+     $name = $info["participant_name"];
+     $email = $info["email"];
+     $billAddress = getContactAddress($dbh,$contactId);
+     $orgName = $info["organization_name"];
+     $billingType = 'Company';
+     $feeAmount = $info["fee_amount"];
+     $status = $info["participant_status"];
+
+     $sql->bindValue(1,$participantId,PDO::PARAM_INT);
+     $sql->bindValue(2,$contactId,PDO::PARAM_INT);
+     $sql->bindValue(3,$eventId,PDO::PARAM_INT);
+     $sql->bindValue(4,$eventType,PDO::PARAM_STR);
+     $sql->bindValue(5,$eventName,PDO::PARAM_STR);
+     $sql->bindValue(6,$name,PDO::PARAM_STR);
+     $sql->bindValue(7,$email,PDO::PARAM_STR);
+     $sql->bindValue(8,$billAddress,PDO::PARAM_STR);
+     $sql->bindValue(9,$orgName,PDO::PARAM_STR);
+     $sql->bindValue(10,$orgId,PDO::PARAM_INT);
+     $sql->bindValue(11,$billingType,PDO::PARAM_STR);
+     $sql->bindValue(12,$feeAmount,PDO::PARAM_INT);
+     $sql->bindValue(13,$billingNo,PDO::PARAM_STR);
+     $sql->bindValue(14,$status,PDO::PARAM_STR);
+
+     $sql->execute();
+
+    }
+
+    /**echo'<div id="dialog" title="Confirmation">';
+    echo'<p>Participant is already added to company billing.</p>';
+    echo'</div>';**/
+    
+    header("Location:billedParticipants.php?eventId=$eventId&billingNo=$billingNo&orgId=$orgId");
+ }
+?>
 </body>
 </html>
