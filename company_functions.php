@@ -25,5 +25,30 @@ function getNewlyAddedBillings($dbh,$eventId,$orgId){
 
   return $result;
 
+}
+
+function getDetailsForParticipant($dbh,$participantId){
+
+ $sql = $dbh->prepare("SELECT cp.id as participant_id,cp.contact_id,cp.event_id,
+                       cv.label as event_type,ce.title as event_name,cc.display_name as participant_name, 
+                       em.email, cp.fee_amount,cs.name as participant_status
+                       FROM civicrm_contact cc, civicrm_participant cp, civicrm_event ce, civicrm_email em,civicrm_participant_status_type cs,civicrm_option_value cv
+                       WHERE cc.id = cp.contact_id
+                       AND ce.id = cp.event_id
+                       AND cv.option_group_id = '14'
+                       AND ce.event_type_id = cv.value
+                       AND cp.status_id = cs.id
+                       AND em.contact_id = cp.contact_id
+                       AND em.location_type_id = '1'
+                       AND em.is_primary = '1'
+                       AND cp.id = ?
+  ");
+
+ $sql->bindValue(1,$participantId,PDO::PARAM_INT);
+ $sql->execute();
+ $result = $sql->fetch(PDO::FETCH_ASSOC);
+
+ return $result;
+
 }              
 ?>

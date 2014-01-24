@@ -103,11 +103,11 @@ body{overflow:hidden;}
     <th colspan='5'>Billings To Be Added</th>
    </tr>
    <tr>
+    <th>Select Participant</th>
     <th>Participant Id</th>
     <th>Participant Name</th>
     <th>Email</th>
     <th>Fee Amount</th>
-    <th>Select Participant</th>
    </tr>
 <?php
 
@@ -127,6 +127,12 @@ body{overflow:hidden;}
    echo "<td>$feeAmount</td>";
    echo "</tr>";
    
+  }
+
+  $ids = $_POST["participantIds"];
+
+  foreach($ids as $particpantId){
+      $participantDetails = getDetailsForParticipant($dbh,4793);
   }
 ?>
   </form>
