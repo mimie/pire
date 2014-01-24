@@ -30,7 +30,7 @@ function getNewlyAddedBillings($dbh,$eventId,$orgId){
 function getDetailsForParticipant($dbh,$participantId){
 
  $sql = $dbh->prepare("SELECT cp.id as participant_id,cp.contact_id,cp.event_id,
-                       cv.label as event_type,ce.title as event_name,cc.display_name as participant_name, 
+                       cv.label as event_type,ce.title as event_name,cc.display_name as participant_name, cc.organization_name,
                        em.email, cp.fee_amount,cs.name as participant_status
                        FROM civicrm_contact cc, civicrm_participant cp, civicrm_event ce, civicrm_email em,civicrm_participant_status_type cs,civicrm_option_value cv
                        WHERE cc.id = cp.contact_id
