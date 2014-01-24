@@ -121,7 +121,7 @@
    $email = getContactEmail($dbh,$contactId);
 
    echo "<tr>";
-   echo "<td><input type='checkbox' name='participantIds[]'></td>";
+   echo "<td><input type='checkbox' name='participantIds[]' value='$participantId'></td>";
    echo "<td>$participantId</td>";
    echo "<td>$name</td>";
    echo "<td>$email</td>";
@@ -136,8 +136,9 @@
   </div>
 <?php
  if(isset($_POST["add"])){
+
+   $addedAmount = 0;
    $ids = $_POST["participantIds"];
-    $ids = array("4793");
 
     foreach($ids as $participantId){
       $info = getDetailsForParticipant($dbh,$participantId);
@@ -176,12 +177,11 @@
      $sql->bindValue(14,$status,PDO::PARAM_STR);
 
      $sql->execute();
+     $addedAmount = $addedAmount + $feeAmount;
 
     }
 
-    /**echo'<div id="dialog" title="Confirmation">';
-    echo'<p>Participant is already added to company billing.</p>';
-    echo'</div>';**/
+    updateAddedAmount($dbh,$billingNo,$addedAmount);
     
     header("Location:billedParticipants.php?eventId=$eventId&billingNo=$billingNo&orgId=$orgId");
  }

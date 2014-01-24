@@ -50,5 +50,34 @@ function getDetailsForParticipant($dbh,$participantId){
 
  return $result;
 
+}
+
+function updateAddedAmount($dbh,$billingNo,$addedAmount){
+
+  $sql = $dbh->prepare("SELECT total_amount FROM billing_company
+                        WHERE billing_no = ?
+                       ");
+  $sql->bindValue(1,$billingNo,PDO::PARAM_STR);
+  $sql->execute();
+
+ $result = $sql->fetch(PDO::FETCH_ASSOC);
+ $totalAmount = $result["total_amount"];
+
+ $totalAmount = $totalAmount + $addedAmount;
+ $vat = $totalAmount/9.3333;
+ $vat = number_format($vat, 2, '.', '');
+ $subtotal = $totalAmount - $vat;
+ $subtotal = number_format($subtotal, 2, '.','');
+
+ $sqlUpdate = $dbh->prepare("UPDATE billing_company
+                             SET total_amount = ?, subtotal = ?, vat = ?
+                             WHERE billing_no = ?");
+ $sqlUpdate->bindValue(1,$totalAmount,PDO::PARAM_INT);
+ $sqlUpdate->bindValue(2,$subtotal,PDO::PARAM_INT);
+ $sqlUpdate->bindValue(3,$vat,PDO::PARAM_INT);
+ $sqlUpdate->bindValue(4,$billingNo,PDO::PARAM_STR);
+
+ $sqlUpdate->execute();
+             
 }              
 ?>
