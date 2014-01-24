@@ -696,11 +696,11 @@ function formatEventLocation($locationDetails){
 /*
  *return a link for lookup of participants under a certain company billing
  */
-function participantsLink($billingNo,$eventId,$userId){
+function participantsLink($billingNo,$eventId,$orgId){
 
-  $link = "<a href=\"billedParticipants.php?eventId=$eventId&billingNo=$billingNo&user=$userId\""
+  $link = "<a href=\"billedParticipants.php?eventId=$eventId&billingNo=$billingNo&orgId=$orgId\""
         . "title='Click to view participants under this billing no.'"
-        . "onclick=\"javascript:void window.open('billedParticipants.php?eventId=$eventId&billingNo=$billingNo&user=$userId','1384398816566','width=1000,height=900,toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=1,left=0,top=0');"
+        . "onclick=\"javascript:void window.open('billedParticipants.php?eventId=$eventId&billingNo=$billingNo&orgId=$orgId','1384398816566','width=1000,height=900,toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=1,left=0,top=0');"
         . "return false;\">"
         . "<img src='participants.png' height='50' width='50'>"
         . "</a>"; 
