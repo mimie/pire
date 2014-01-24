@@ -13,6 +13,7 @@ body{overflow:hidden;}
   include 'billing_functions.php';
   include 'login_functions.php';
   include 'pdo_conn.php';
+  include 'company_functions.php';
   $dbh = civicrmConnect();
  
   /**session_start();
@@ -23,13 +24,14 @@ body{overflow:hidden;}
     die();
   }**/
  
-  $userId = $_GET["user"]; 
+  @$userId = $_GET["user"]; 
   echo "<div id='eventDetails'>";
   $logout = logoutDiv($dbh,$userId);
   echo $logout;
 
   @$billingNo = $_GET["billingNo"];
   @$eventId = $_GET["eventId"];
+  @$orgId = $_GET["orgId"];
 
    $eventDetails = getEventDetails($dbh,$eventId);
    $eventName = $eventDetails["event_name"];
@@ -89,7 +91,42 @@ body{overflow:hidden;}
    $billedParticipants = getCompanyBilledParticipants($dbh,$billingNo,$eventId);
    $display = displayBilledParticipants($billedParticipants);
    echo $display;
-   echo "</div>";
+
+   $participants = getNewlyAddedBillings($dbh,$eventId,$orgId);
 ?>
+  <br>
+  <table width='100%'>
+   <tr>
+    <th colspan='4'>Billings To Be Added</th>
+   </tr>
+   <tr>
+    <th>Participant Id</th>
+    <th>Participant Name</th>
+    <th>Email</th>
+    <th>Fee Amount</th>
+    <th>Select Participant</th>
+   </tr>
+<?php
+
+  foreach($participants as $details){
+
+   $participantId = $details["participant_id"];
+   $name = $details["name"];
+   $contactId = $details["contact_id"];
+   $feeAmount = $details["fee_amount"];
+   $email = getContactEmail($dbh,$contactId);
+
+   echo "<tr>";
+   echo "<td><input type='checkbox' name='participantIds[]'></td>";
+   echo "<td>$participantId</td>";
+   echo "<td>$name</td>";
+   echo "<td>$email</td>";
+   echo "<td>$feeAmount</td>";
+   echo "</tr>";
+   
+  }
+?>
+  </table>
+  </div>
 </body>
 </html>
