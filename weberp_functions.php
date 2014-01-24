@@ -19,12 +19,16 @@ function displayEvents($eventIds){
 
   $allEvents = getAllEvents();
   $html = "<table align='center' border='1'>"
+        . "<thead>"
         . "<tr>"
         . "<th>Event Title</th>"
         . "<th>Event Date</th>"
         . "<th>Participant List</th>"
         . "<th>Billing</th>"
-        . "</tr>";
+        . "</tr>"
+        . "</thead>";
+
+  $html = $html."<tbody>";
 
   foreach($eventIds as $id){
 
@@ -40,6 +44,8 @@ function displayEvents($eventIds){
           ."</tr>";
 
   }
+
+  $html = $html."</tbody>";
 
   $html = $html."</table>";
   return $html;
