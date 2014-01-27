@@ -712,5 +712,106 @@ function searchContactByEmail($dbh,$email){
 
 }
 
+function getAllMembershipBillings($dbh){
+
+ $sql = $dbh->prepare("SELECT id,member_name, email, organization_name, fee_amount,billing_no
+                       FROM billing_membership");
+ $sql->execute();
+ $result = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+ return $result;
+
+}
+
+function getMembershipBillingByName($dbh,$name){
+
+ $sql = $dbh->prepare("SELECT id,member_name, email, organization_name, fee_amount,billing_no
+                       FROM billing_membership
+                       WHERE member_name LIKE '%$name%'");
+ $sql->execute();
+ $result = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+ return $result;
+
+}
+
+function getMembershipBillingByEmail($dbh,$email){
+
+ $sql = $dbh->prepare("SELECT id,member_name, email, organization_name, fee_amount,billing_no
+                       FROM billing_membership
+                       WHERE member_name LIKE '%$email%'");
+ $sql->execute();
+ $result = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+ return $result;
+
+}
+
+function getMembershipBillingByOrg($dbh,$org){
+
+ $sql = $dbh->prepare("SELECT id,member_name, email, organization_name, fee_amount,billing_no
+                       FROM billing_membership
+                       WHERE member_name LIKE '%?%'");
+ $sql->bindValue(1,$org,PDO::PARAM_STR);
+ $sql->execute();
+ $result = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+ return $result;
+
+}
+
+function getMembershipBillingByBillingNo($dbh,$billingNo){
+
+ $sql = $dbh->prepare("SELECT id,member_name, email, organization_name, fee_amount,billing_no
+                       FROM billing_membership
+                       WHERE member_name LIKE '%$billingNo%'");
+ $sql->execute();
+ $result = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+ return $result;
+
+}
+
+function displayMembershipBillings(array $billings){
+
+  $html = "<table id='billings' style='width:80%;' align='center'>"
+        . "<thead>"
+        . "<tr>"
+        . "<th>Member Name</th>"
+        . "<th>Email</th>"
+        . "<th>Organization Name</th>"
+        . "<th>Member Fee Amount</th>"
+        . "<th>Payment Status</th>"
+        . "<th>Billing Reference</th>"
+        . "<th>Print Bill</th>"
+        . "</tr>"
+        . "</thead>";
+
+  $html = $html."<tbody>";
+
+  foreach($billings as $key => $billingInfo){
+
+    $name = $billingInfo["member_name"];
+    $email = $billingInfo["email"];
+    $org = $billingInfo["organization_name"];
+    $fee = $billingInfo["fee_amount"];
+    $billingNo = $billingInfo["billing_no"];
+    $billingId = $billingInfo["id"];
+
+    $html = $html."<tr>"
+          . "<td>$name</td>"
+          . "<td>$email</td>"
+          . "<td>$org</td>"
+          . "<td>$fee</td>"
+          . "<td></td>"
+          . "<td>$billingNo</td>"
+          . "<td><a href='memberBillingReference.php?billingId=$billingId' target='_blank'><img src='printer-icon.png' height='40' width='40'></a></td>"
+          . "</tr>";
+  }
+    
+  $html = $html."</tbody></table>";
+
+  return $html;
+}
 
 ?>
