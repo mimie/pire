@@ -45,7 +45,7 @@ $(function() {
    </table><br>
 <?php
 
-    $amounttypeSql = $dbh->prepare("SELECT name,minimum_fee FROM civicrm_membership_type");
+    $amounttypeSql = $dbh->prepare("SELECT id,name,minimum_fee FROM civicrm_membership_type");
     $amounttypeSql->execute();
     $feeType = $amounttypeSql->fetchAll(PDO::FETCH_ASSOC);
 
@@ -57,14 +57,15 @@ $(function() {
          . "<th>Select membership type:</th>"
          . "<td>"
          . "<form action='' method='POST'>"
-         . "<select name='amount'>";
+         . "<select name='membershipTypeId'>";
 
 
-    foreach($feeType as $key => $fee){
+    foreach($feeType as $key => $fee){     
+      $feeId = $fee["id"];
       $amount = $fee["minimum_fee"];
       $label = $fee['name']." - ".$amount;
       
-      echo "<option value=$amount>$label</option>";
+      echo "<option value='$feeId'>$label</option>";
     }
 
     echo "</select></td></tr>";
@@ -106,22 +107,50 @@ $(function() {
          $searchName = $_POST["searchText"];
          $nonMembers = searchContactByName($dbh,$searchName);
          $displayNonMembers = displayNonMembers($nonMembers);
+         echo $displayNonMembers;
        }
 
        else{
          $searchEmail = $_POST["searchText"];
          $nonMembers = searchContactByEmail($dbh,$searchEmail);
          $displayNonMembers = displayNonMembers($nonMembers);
+         echo $displayNonMembers;
        }
 
+    }
+
+    elseif(isset($_POST["generate"])){
+
+       $membershipTypeId = $_POST["membershipTypeId"];
+       $year = $_POST["year"];
+       $contactIds = $_POST["contactIds"];
+
+       foreach($contactIds as $contactId){
+
+        $sql = $dbh->prepare("SELECT cc.id, cc.display_name, em.email, cc.organization_name, cc.employer_id
+                              FROM civicrm_contact cc, civicrm_email em
+                              WHERE cc.id = ?
+                              AND cc.id = em.contact_id
+                              AND em.is_primary = '1'
+                              AND cc.is_deleted = '0'
+                             ");
+         $sql->bindValue(1,$contactId,PDO::PARAM_INT);
+         $sql->execute();
+         $result = $sql->fetch(PDO::FETCH_ASSOC);
+
+       }
+
+      $nonMembers = getNonMembers($dbh);
+      $displayNonMembers = displayNonMembers($nonMembers);
+      echo $displayNonMembers;
     }
 
     else{
       $nonMembers = getNonMembers($dbh);
       $displayNonMembers = displayNonMembers($nonMembers);
+      echo $displayNonMembers;
     }
     
-    echo $displayNonMembers;
     echo "</form>";
 ?>
 </body>
