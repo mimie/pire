@@ -639,6 +639,7 @@ function displayNonMembers(array $nonMembers){
     $name = $contact["display_name"];
     $name = mb_convert_encoding($name,"UTF-8");
     $orgName = $contact["organization_name"];
+    $orgName = mb_convert_encoding($orgName,"UTF-8");
     $email = $contact["email"];
 
     $html = $html."<tr>"
