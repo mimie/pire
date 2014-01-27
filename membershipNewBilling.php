@@ -12,7 +12,7 @@
 $(function() {
         $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
         $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
-        $('table').jPaginate({
+        $('#memberInfo').jPaginate({
                 'max': 35,
                 'page': 1,
                 'links': 'buttons'
@@ -49,10 +49,16 @@ $(function() {
     $amounttypeSql->execute();
     $feeType = $amounttypeSql->fetchAll(PDO::FETCH_ASSOC);
 
-    echo "<div align='center' padding='3px'>"
-         . "Select membership type: "
+    echo "<div style='width:50%;margin:0 auto;padding:3px;'>"
+         . "<fieldset>"
+         . "<legend>New Membership</legend>"
+         . "<table id='generate' style='width:40%;margin:0 auto;'>"
+         . "<tr>"
+         . "<th>Select membership type:</th>"
+         . "<td>"
          . "<form action='' method='POST'>"
          . "<select name='amount'>";
+
 
     foreach($feeType as $key => $fee){
       $amount = $fee["minimum_fee"];
@@ -60,10 +66,30 @@ $(function() {
       
       echo "<option value=$amount>$label</option>";
     }
-         
-    echo "</select>"
+
+    echo "</select></td></tr>";
+
+    echo "<tr>"
+         . "<th>Select membership year:</th>";
+
+    $currentYear = date("Y");
+    $nextYear = date('Y', strtotime('+1 year'));
+    
+    echo "<td>"
+         . "<select name='year'>"
+         . "<option value='$currentYear'>$currentYear</option>"
+         . "<option value='$nextYear'>$nextYear</option>"
+         . "</select>"
+         . "</td></tr>";
+
+    echo "<tr>"
+         . "<td colspan='2' style='align:right;'>"
          . "<input type='submit' value='Generate New Membership Bill' name='generate'>"
-         . "</div>";
+         . "</td>"
+         . "</tr>";
+
+    echo "</table>"
+         . "</fieldset></div><br>";
 
     echo "<div align='center'>"
          ."Seart contact: " 
@@ -73,7 +99,7 @@ $(function() {
          . "</select>"
          . "<input type='text' placeholder='name or email' name='searchText'>"
          . "<input type='submit' value='SEARCH' name='search'>"
-         . "</div>";
+         . "</div><br>";
     
     if(isset($_POST["search"])){
        if($_POST["searchType"] == 'name'){
