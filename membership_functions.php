@@ -702,6 +702,3 @@ function searchContactByEmail($dbh,$email){
 
 
 ?>
-
-}
-?>
