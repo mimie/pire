@@ -601,13 +601,13 @@ function getNonMembers($dbh){
                        FROM civicrm_email ce, civicrm_contact cc
                        WHERE ce.contact_id = cc.id
                        AND cc.contact_type = 'Individual'
-                       AND cc.is_deleted = 0
+                       AND cc.is_deleted = '0'
                        AND cc.display_name <> 'Admin Mister'
                        AND ce.is_primary = '1'
-                       AND NOT EXISTS(SELECT cm.contact_id
+                       AND cc.id NOT IN(SELECT cm.contact_id
                                      FROM civicrm_membership cm
-                                     WHERE cm.contact_id = cc.id AND cc.is_deleted = 0)
-                      ");
+                                     WHERE cm.contact_id = cc.id)
+                       ") ;
 
  $sql->execute();
  $result = $sql->fetchAll(PDO::FETCH_ASSOC);
@@ -662,8 +662,9 @@ function searchContactByName($dbh,$name){
                        AND cc.contact_type = 'Individual'
                        AND cc.display_name <> 'Admin Mister'
                        AND ce.is_primary = '1'
+                       AND cc.is_deleted = '0'
                        AND cc.display_name LIKE '%$name%'
-                       AND NOT EXISTS(SELECT cm.contact_id
+                       AND cc.id NOT IN(SELECT cm.contact_id
                                      FROM civicrm_membership cm
                                      WHERE cm.contact_id = cc.id)
                       ");
@@ -683,8 +684,9 @@ function searchContactByEmail($dbh,$email){
                        AND cc.contact_type = 'Individual'
                        AND cc.display_name <> 'Admin Mister'
                        AND ce.is_primary = '1'
+                       AND cc.is_deleted = '0'
                        AND ce.email LIKE '%$email%'
-                       AND NOT EXISTS(SELECT cm.contact_id
+                       AND cc.id NOT IN(SELECT cm.contact_id
                                      FROM civicrm_membership cm
                                      WHERE cm.contact_id = cc.id)
                       ");
