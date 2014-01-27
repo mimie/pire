@@ -2,12 +2,16 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <title>New Membership Billing</title>
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
   <link rel="stylesheet" type="text/css" href="billingStyle.css">
   <link rel="stylesheet" type="text/css" href="menu.css">
   <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
   <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
   <script src="js/jquery-jPaginate.js"></script>
-  <script src="js/jquery.tablesorter.js"></script>
+<script src="js/jquery.tablesorter.js"></script>
+<style>
+  img.left {float: left;}
+</style>
 <script>
 $(function() {
         $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
@@ -20,6 +24,9 @@ $(function() {
 //        $("table").tablesorter( {sortList: [[0,0], [1,0]]} ); 
 });
 
+$(function() {
+    $( "#dialog" ).dialog();
+});
 </script>
 </head>
 <body>
@@ -163,7 +170,16 @@ $(function() {
          $info["org_contact_id"] = $details["employer_id"];
          $info["fee_amount"] = $membership["minimum_fee"];
 
+         insertMemberBilling($dbh,$info,$year);
+
        }
+
+      $countContacts = count($contactIds);
+
+      echo "<div id='dialog'>"
+           . "<img src='images/confirm.png' alt='confirm' class='left'/>"
+           . "<p>Successfully generated new membership billing for $countContacts contact/s.</p>"
+           . "</div>";
 
       $nonMembers = getNonMembers($dbh);
       $displayNonMembers = displayNonMembers($nonMembers);
