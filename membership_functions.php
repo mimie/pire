@@ -619,7 +619,7 @@ function getNonMembers($dbh){
 function displayNonMembers(array $nonMembers){
 
   $html = "<div align='center' padding='3px'>"
-        . "<table>"
+        . "<table id='memberInfo'>"
         . "<thead>"
         . "<tr>"
         . "<th colspan = '4'>IIAP Nonmembers</th>"
@@ -643,7 +643,7 @@ function displayNonMembers(array $nonMembers){
     $email = $contact["email"];
 
     $html = $html."<tr>"
-          . "<td><input type='checkbox' value = $contactId name='contactIds[]'></td>"
+          . "<td><input type='checkbox' value='$contactId' name='contactIds[]'></td>"
           . "<td>$name</td>"
           . "<td>$orgName</td>"
           . "<td>$email</td>"
