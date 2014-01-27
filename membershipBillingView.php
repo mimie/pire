@@ -16,8 +16,8 @@
 $(function() {
         $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
         $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
-        $('billings').jPaginate({
-                'max': 35,
+        $('#billings').jPaginate({
+                'max': 15,
                 'page': 1,
                 'links': 'buttons'
         });
@@ -47,12 +47,12 @@ $(function() {
      <td align='center' bgcolor='#084B8A'><a href='membershipCompanyBilling.php'>COMPANY BILLING</td>
      <td align='center' bgcolor='white'><a href='membershipBillingView.php'>GENERATED BILLINGS</td>
     </tr>
-   </table><br></div>
+   </table><br>
 <?php
   $billings = getAllMembershipBillings($dbh);
-  echo "<pre>";
-  print_r($billings);
-  echo "</pre>";
+  $displayBillings = displayMembershipBillings($billings);
+  echo $displayBillings;
 ?>
+ </div>
 </body>
 </html>
