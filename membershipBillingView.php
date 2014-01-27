@@ -48,10 +48,61 @@ $(function() {
      <td align='center' bgcolor='white'><a href='membershipBillingView.php'>GENERATED BILLINGS</td>
     </tr>
    </table><br>
+   
+   <div style="width:80%;margin:0 auto;padding:3px;">
+   <form method="POST" action="">
+    <fieldset>
+     <legend>Search Membership Billing</legend>
+     Search category:
+     <select name="searchType">
+      <option value="name">Name</option>
+      <option value="email">Email</option>
+      <option value="org">Organization Name</option>
+      <option value="billingno">Billing No</option>
+     </select>
+     <input type="text" name="searchValue">
+     <input type="submit" value="SEARCH" name="search">
+    </fieldset>
+   </form>
+  </div>
 <?php
-  $billings = getAllMembershipBillings($dbh);
-  $displayBillings = displayMembershipBillings($billings);
-  echo $displayBillings;
+
+  if(isset($_POST["search"])){
+
+    if($_POST["searchType"] == 'name'){
+      $searchValue = $_POST["searchValue"];
+      $billings = getMembershipBillingByName($dbh,$searchValue);
+      $displayBillings = displayMembershipBillings($billings);
+      echo $displayBillings;
+    }
+
+    elseif($_POST["searchType"] == 'email'){
+      $searchValue = $_POST["searchValue"];
+      $billings = getMembershipBillingByEmail($dbh,$searchValue);
+      $displayBillings = displayMembershipBillings($billings);
+      echo $displayBillings;
+    }
+
+    elseif($_POST["searchType"] == 'org'){
+      $searchValue = $_POST["searchValue"];
+      $billings = getMembershipBillingByOrg($dbh,$searchValue);
+      $displayBillings = displayMembershipBillings($billings);
+      echo $displayBillings;
+    }
+
+    elseif($_POST["searchType"] == 'billingno'){
+      $searchValue = $_POST["searchValue"];
+      $billings = getMembershipBillingByBillingNo($dbh,$searchValue);
+      $displayBillings = displayMembershipBillings($billings);
+      echo $displayBillings;
+    }
+  }
+
+  else{
+     $billings = getAllMembershipBillings($dbh);
+     $displayBillings = displayMembershipBillings($billings);
+     echo $displayBillings;
+  }
 ?>
  </div>
 </body>

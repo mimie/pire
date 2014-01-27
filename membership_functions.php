@@ -739,7 +739,7 @@ function getMembershipBillingByEmail($dbh,$email){
 
  $sql = $dbh->prepare("SELECT id,member_name, email, organization_name, fee_amount,billing_no
                        FROM billing_membership
-                       WHERE member_name LIKE '%$email%'");
+                       WHERE email LIKE '%$email%'");
  $sql->execute();
  $result = $sql->fetchAll(PDO::FETCH_ASSOC);
 
@@ -751,8 +751,8 @@ function getMembershipBillingByOrg($dbh,$org){
 
  $sql = $dbh->prepare("SELECT id,member_name, email, organization_name, fee_amount,billing_no
                        FROM billing_membership
-                       WHERE member_name LIKE '%?%'");
- $sql->bindValue(1,$org,PDO::PARAM_STR);
+                       WHERE organization_name LIKE '%$org%'");
+ //$sql->bindValue(1,$org,PDO::PARAM_STR);
  $sql->execute();
  $result = $sql->fetchAll(PDO::FETCH_ASSOC);
 
@@ -764,7 +764,7 @@ function getMembershipBillingByBillingNo($dbh,$billingNo){
 
  $sql = $dbh->prepare("SELECT id,member_name, email, organization_name, fee_amount,billing_no
                        FROM billing_membership
-                       WHERE member_name LIKE '%$billingNo%'");
+                       WHERE billing_no LIKE '%$billingNo%'");
  $sql->execute();
  $result = $sql->fetchAll(PDO::FETCH_ASSOC);
 
