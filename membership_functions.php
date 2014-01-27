@@ -673,6 +673,10 @@ function searchContactByName($dbh,$name){
                        AND cc.id NOT IN(SELECT cm.contact_id
                                      FROM civicrm_membership cm
                                      WHERE cm.contact_id = cc.id)
+                       AND cc.id NOT IN(SELECT cb.contact_id
+                                        FROM billing_membership cb
+                                        WHERE cb.membership_id = '0'
+                                       )
                       ");
 
  $sql->execute();
@@ -695,6 +699,10 @@ function searchContactByEmail($dbh,$email){
                        AND cc.id NOT IN(SELECT cm.contact_id
                                      FROM civicrm_membership cm
                                      WHERE cm.contact_id = cc.id)
+                       AND cc.id NOT IN(SELECT cb.contact_id
+                                        FROM billing_membership cb
+                                        WHERE cb.membership_id = '0'
+                                       )
                       ");
 
  $sql->execute();
