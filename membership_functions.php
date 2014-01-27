@@ -725,7 +725,7 @@ function getAllMembershipBillings($dbh){
 
 function getMembershipBillingByName($dbh,$name){
 
- $sql = $dbh->prepare("SELECT id,member_name, email, organization_name, fee_amount,billing_no
+ $sql = $dbh->prepare("SELECT id,member_name, email, organization_name, fee_amount,billing_no,bill_date
                        FROM billing_membership
                        WHERE member_name LIKE '%$name%'");
  $sql->execute();
@@ -737,7 +737,7 @@ function getMembershipBillingByName($dbh,$name){
 
 function getMembershipBillingByEmail($dbh,$email){
 
- $sql = $dbh->prepare("SELECT id,member_name, email, organization_name, fee_amount,billing_no
+ $sql = $dbh->prepare("SELECT id,member_name, email, organization_name, fee_amount,billing_no,bill_date
                        FROM billing_membership
                        WHERE email LIKE '%$email%'");
  $sql->execute();
@@ -749,7 +749,7 @@ function getMembershipBillingByEmail($dbh,$email){
 
 function getMembershipBillingByOrg($dbh,$org){
 
- $sql = $dbh->prepare("SELECT id,member_name, email, organization_name, fee_amount,billing_no
+ $sql = $dbh->prepare("SELECT id,member_name, email, organization_name, fee_amount,billing_no,bill_date
                        FROM billing_membership
                        WHERE organization_name LIKE '%$org%'");
  //$sql->bindValue(1,$org,PDO::PARAM_STR);
@@ -762,7 +762,7 @@ function getMembershipBillingByOrg($dbh,$org){
 
 function getMembershipBillingByBillingNo($dbh,$billingNo){
 
- $sql = $dbh->prepare("SELECT id,member_name, email, organization_name, fee_amount,billing_no
+ $sql = $dbh->prepare("SELECT id,member_name, email, organization_name, fee_amount,billing_no,bill_date
                        FROM billing_membership
                        WHERE billing_no LIKE '%$billingNo%'");
  $sql->execute();
@@ -783,6 +783,7 @@ function displayMembershipBillings(array $billings){
         . "<th>Member Fee Amount</th>"
         . "<th>Payment Status</th>"
         . "<th>Billing Reference</th>"
+        . "<th>Bill Date</th>"
         . "<th>Print Bill</th>"
         . "</tr>"
         . "</thead>";
@@ -797,6 +798,7 @@ function displayMembershipBillings(array $billings){
     $fee = $billingInfo["fee_amount"];
     $billingNo = $billingInfo["billing_no"];
     $billingId = $billingInfo["id"];
+    $billingdate = $billingInfo["date"];
 
     $html = $html."<tr>"
           . "<td>$name</td>"
@@ -805,6 +807,7 @@ function displayMembershipBillings(array $billings){
           . "<td>$fee</td>"
           . "<td></td>"
           . "<td>$billingNo</td>"
+          . "<td>$billingdate</td>"
           . "<td><a href='memberBillingReference.php?billingId=$billingId' target='_blank'><img src='printer-icon.png' height='40' width='40'></a></td>"
           . "</tr>";
   }
