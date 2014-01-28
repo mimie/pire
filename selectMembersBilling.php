@@ -23,6 +23,15 @@
   <script src="js/jquery.tablesorter.js"></script>
 </head>
 <body>
+   <br>
+   <table width='100%'>
+    <tr>
+     <td align='center' bgcolor='#084B8A'><a href='membershipNewBilling.php'>NEW MEMBERSHIP BILLING</a></td>
+     <td align='center' bgcolor="#084B8A"><a href='membershipIndividualBilling.php?&user=<?=$userId?>'>INDIVIDUAL BILLING</a></td>
+     <td align='center' bgcolor='white'><a href='membershipCompanyBilling.php?&user=<?=$userId?>'>COMPANY BILLING</td>
+     <td align='center' bgcolor='#084B8A'><a href='membershipBillingView.php'>GENERATED BILLINGS</td>
+    </tr>
+   </table><br>
 <?php
   $lastYear = date('Y',strtotime('-1 year'));
   $currentYear = date('Y');
@@ -51,6 +60,12 @@
 
    $membersList = getMembersByOrgId($dbh,$orgId);
    $members = array();
+
+   $sqlOrg = $dbh->prepare("SELECT display_name FROM civicrm_contact WHERE id = ?");
+   $sqlOrg->bindValue(1,$orgId,PDO::PARAM_INT);
+   $sqlOrg->execute();
+   $result = $sqlOrg->fetch(PDO::FETCH_ASSOC);
+   $orgName = $result["display_name"];
    
    foreach($membersList as $member){
      $memberInfo = array();
@@ -128,12 +143,12 @@
 
        $members[$membershipId] = $memberInfo;
      }
-   $billedMembers = displayBilledMembers($members);
+   $billedMembers = displayBilledMembers($dbh,$members,$orgName);
    echo $billedMembers;
 
    }
    else{
-   $billedMembers = displayBilledMembers($members);
+   $billedMembers = displayBilledMembers($dbh,$members,$orgName);
    echo $billedMembers;
    }
 
