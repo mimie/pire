@@ -57,14 +57,23 @@ $(function() {
 
    <form method="POST" action="">
      <input name="orgName" type="text">
-     <input type="submit" value="Search Organization"> 
+     <input type="submit" value="Search Organization" name="search"> 
    </form>
 
 <?php
-  $companies = getAllCompanies($dbh);
 
-  $displayCompanies = displayAllCompanies($dbh,$companies);
-  echo $displayCompanies;
+  if(isset($_POST["search"])){
+    $orgName = $_POST["orgName"];
+    $companies = searchCompanyName($dbh,$orgName);
+    $displayCompanies = displayAllCompanies($companies);
+    echo $displayCompanies;
+  }
+
+  else{
+    $companies = getAllCompanies($dbh);
+    $displayCompanies = displayAllCompanies($companies);
+    echo $displayCompanies;
+  }
 ?>
 </body>
 </html>
