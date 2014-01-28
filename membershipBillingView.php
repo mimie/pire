@@ -13,6 +13,12 @@
   img.left {float: left;}
 </style>
 <script>
+  
+$(function() {
+    $( "#datepickerStart" ).datepicker();
+    $( "#datepickerEnd" ).datepicker();
+});
+
 $(function() {
         $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
         $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
@@ -53,6 +59,7 @@ $(function() {
    <form method="POST" action="">
     <fieldset>
      <legend>Search Membership Billing</legend>
+     <br>
      Search category:
      <select name="searchType">
       <option value="name">Name</option>
@@ -60,8 +67,12 @@ $(function() {
       <option value="org">Organization Name</option>
       <option value="billingno">Billing No</option>
      </select>
-     <input type="text" name="searchValue">
-     <input type="submit" value="SEARCH" name="search">
+     <input type="text" name="searchValue" placeholder="Enter search text here...">
+     <input type="submit" value="SEARCH" name="search"><br><br>
+     Search bill date:
+     <input type="text" name="startDate" id="datepickerStart" placeholder="From">
+     <input type="text" name="endDate" id="datepickerEnd" placeholder="To">
+     <input type="submit" value="SEARC BILL DATE" name="searchDate">
     </fieldset>
    </form>
   </div>
@@ -96,6 +107,14 @@ $(function() {
       $displayBillings = displayMembershipBillings($billings);
       echo $displayBillings;
     }
+  }
+
+  elseif(isset($_POST["searchDate"])){
+    $startDate = $_POST["startDate"];
+    $endDate = $_POST["endDate"];
+    $billings = getMembershipBillingByDate($dbh,$startDate,$endDate);
+    $displayBillings = displayMembershipBillings($billings);
+    echo $displayBillings;
   }
 
   else{
