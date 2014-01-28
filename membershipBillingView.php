@@ -42,6 +42,8 @@ $(function() {
   $dbh = civicrmConnect();
   $logout = logoutDiv($dbh);
   echo $logout;
+
+  $currentYear = date("Y");
 ?>
     <br>
     <div style="background-color:#A9E2F3;">
@@ -72,7 +74,11 @@ $(function() {
      Search bill date:
      <input type="text" name="startDate" id="datepickerStart" placeholder="From">
      <input type="text" name="endDate" id="datepickerEnd" placeholder="To">
-     <input type="submit" value="SEARC BILL DATE" name="searchDate">
+     <input type="submit" value="SEARCH BILL DATE" name="searchDate">
+     <br><br>
+     Search <?=$currentYear?> New Membership Billing:
+     <input type="text" name="contactName" placeholder="Enter search text here...">
+     <input type="submit" name="searchName" value="SEARCH NEW MEMBERSHIP">
     </fieldset>
    </form>
   </div>
@@ -115,6 +121,14 @@ $(function() {
     $billings = getMembershipBillingByDate($dbh,$startDate,$endDate);
     $displayBillings = displayMembershipBillings($billings);
     echo $displayBillings;
+  }
+
+  elseif(isset($_POST["searchName"])){
+   $contactName = $_POST["contactName"];
+   $billings = getNewMembershipBillingByName($dbh,$contactName,$currentYear);
+   $displayBillings = displayMembershipBillings($billings);
+   echo $displayBillings;
+
   }
 
   else{

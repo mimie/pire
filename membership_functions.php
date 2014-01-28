@@ -838,4 +838,19 @@ function getMembershipBillingByDate($dbh,$startDate,$endDate){
   return $result;
 }
 
+function getNewMembershipBillingByName($dbh,$name,$currentYear){
+
+  $sql = $dbh->prepare("SELECT id, member_name, email,organization_name,fee_amount,billing_no,bill_date
+                        FROM billing_membership
+                        WHERE membership_id = '0'
+                        AND member_name LIKE '%$name%'
+                        AND bill_date BETWEEN '$currentYear-01-01 00:00:00' AND '$currentYear-12-31 23:59:59'
+                       ");
+  $sql->execute();
+
+  $result = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+  return $result;
+}
+
 ?>
