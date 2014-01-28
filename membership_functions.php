@@ -397,11 +397,12 @@ function getAllMembershipType(PDO $dbh){
 function getAllCompanies(PDO $dbh){
 
  $sql = $dbh->prepare("SELECT cc.id, cc.display_name, ca.street_address, ca.city
-                       FROM civicrm_contact cc, civicrm_address ca
+                       FROM civicrm_contact cc
+                       LEFT JOIN civicrm_address ca
+                       ON cc.id = ca.contact_id
                        WHERE cc.contact_type='Organization' 
                        AND cc.is_deleted = '0'
-                       AND cc.id = ca.contact_id
-                       ORDER BY display_name");
+                       ORDER BY cc.display_name");
  $sql->execute();
  $result = $sql->fetchAll(PDO::FETCH_ASSOC);
  $companies = array();
@@ -421,12 +422,13 @@ function getAllCompanies(PDO $dbh){
 function searchCompanyName(PDO $dbh,$orgName){
 
  $sql = $dbh->prepare("SELECT cc.id, cc.display_name, ca.street_address, ca.city
-                       FROM civicrm_contact cc, civicrm_address ca
+                       FROM civicrm_contact cc
+                       LEFT JOIN civicrm_address ca
+                       ON cc.id = ca.contact_id
                        WHERE cc.contact_type='Organization' 
                        AND cc.is_deleted = '0'
-                       AND cc.id = ca.contact_id
                        AND cc.display_name LIKE '%$orgName%'
-                       ORDER BY display_name");
+                       ORDER BY cc.display_name");
  $sql->execute();
  $result = $sql->fetchAll(PDO::FETCH_ASSOC);
  $companies = array();
@@ -526,9 +528,10 @@ function getIndividualMemberDetails(PDO $dbh,$contactId){
   
 }
 
-function displayBilledMembers($billedMembers){
+function displayBilledMembers($dbh,$billedMembers,$orgName){
 
   $html = "<table>"
+        . "<tr><th colspan='10'>$orgName</th></tr>"
         . "<tr>"
         . "<th>Select Members</th>"
         . "<th>Member Name</th>"
@@ -557,9 +560,21 @@ function displayBilledMembers($billedMembers){
      $endDate = $details["end_date"];
      $endDate = date("F j Y",strtotime($endDate));
 
+    $currentYear = date("Y");
+
+    $sql = $dbh->prepare("SELECT * FROM billing_membership
+                          WHERE membership_id = ?
+                          AND year = ?");
+    $sql->bindValue(1,$membershipId,PDO::PARAM_INT);
+    $sql->bindValue(2,$currentYear,PDO::PARAM_INT);
+    $sql->execute();
+    $count = $sql->rowCount();
+
+    $disabled = $count == 0 ? "" : "disabled";
+
     $html = $html."<tr>"
-          . "<td><input type='checkbox'></td>"
-          . "<td>$name</td>"
+          . "<td><input type='checkbox' $disabled></td>"
+          . "<td>$name,$membershipId</td>"
           . "<td>$email</td>"
           . "<td>$status</td>"
           . "<td>$feeAmount</td>"
