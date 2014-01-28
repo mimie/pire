@@ -817,4 +817,25 @@ function displayMembershipBillings(array $billings){
   return $html;
 }
 
+function getMembershipBillingByDate($dbh,$startDate,$endDate){
+
+  $sql = $dbh->prepare("SELECT id,member_name,email,organization_name,fee_amount,billing_no,bill_date
+                        FROM billing_membership
+                        WHERE bill_date BETWEEN ? AND ?
+                       ");
+  $startDate = date("Y-m-d",strtotime($startDate));
+  $endDate = date("Y-m-d",strtotime($endDate));
+ 
+  $startDate = $startDate." 00:00:00";
+  $endDate = $endDate." 23:59:59";
+
+  $sql->bindParam(1,$startDate,PDO::PARAM_STR);
+  $sql->bindParam(2,$endDate,PDO::PARAM_STR);
+  $sql->execute();
+
+  $result = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+  return $result;
+}
+
 ?>
