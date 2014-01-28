@@ -12,7 +12,7 @@
 $(function() {
         $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
         $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
-        $('table').jPaginate({
+        $('companies').jPaginate({
                 'max': 15,
                 'page': 1,
                 'links': 'buttons'
@@ -44,11 +44,14 @@ $(function() {
   echo $logout;
   /**$header = headerDiv();
   echo $header;**/
+  echo "<br>";
 ?>
    <table width='100%'>
     <tr>
+     <td align='center' bgcolor='#084B8A'><a href='membershipNewBilling.php'>NEW MEMBERSHIP BILLING</a></td>
      <td align='center' bgcolor="#084B8A"><a href='membershipIndividualBilling.php?&user=<?=$userId?>'>INDIVIDUAL BILLING</a></td>
      <td align='center' bgcolor='white'><a href='membershipCompanyBilling.php?&user=<?=$userId?>'>COMPANY BILLING</td>
+     <td align='center' bgcolor='#084B8A'><a href='membershipBillingView.php'>GENERATED BILLINGS</td>
     </tr>
    </table><br>
 
