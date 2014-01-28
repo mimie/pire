@@ -12,8 +12,8 @@
 $(function() {
         $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
         $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
-        $('companies').jPaginate({
-                'max': 15,
+        $('#companies').jPaginate({
+                'max': 20,
                 'page': 1,
                 'links': 'buttons'
         });
