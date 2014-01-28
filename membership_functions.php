@@ -418,7 +418,30 @@ function getAllCompanies(PDO $dbh){
 
 }
 
-function displayAllCompanies(PDO $dbh,array $companies){
+function searchCompanyName(PDO $dbh,$orgName){
+
+ $sql = $dbh->prepare("SELECT cc.id, cc.display_name, ca.street_address, ca.city
+                       FROM civicrm_contact cc, civicrm_address ca
+                       WHERE cc.contact_type='Organization' 
+                       AND cc.is_deleted = '0'
+                       AND cc.id = ca.contact_id
+                       AND cc.display_name LIKE '%$orgName%'
+                       ORDER BY display_name");
+ $sql->execute();
+ $result = $sql->fetchAll(PDO::FETCH_ASSOC);
+ $companies = array();
+
+ foreach($result as $key => $value){
+  
+   $id = $value["id"];
+   $companies[$id] = $value;
+ }
+
+ return $companies;
+
+}
+
+function displayAllCompanies(array $companies){
 
   $html = "<table id='companies' width='100%'>"
         . "<thead>"
@@ -441,7 +464,7 @@ function displayAllCompanies(PDO $dbh,array $companies){
           . "<td>$orgName,$id</td>"
           . "<td>Email</td>"
           . "<td>$billAddress</td>"
-          . "<td><a href='selectMembersBilling.php?orgId=$id' target='_blank'><img src='images/add_icon.png'></a></td>"
+          . "<td><a href='selectMembersBilling.php?orgId=$id' ><img src='images/add_icon.png'></a></td>"
           . "</tr>";
   }
 
@@ -459,6 +482,7 @@ function groupMembersByCompany(PDO $dbh){
                         FROM civicrm_contact cc, civicrm_membership cm
                         WHERE cc.id = cm.contact_id
                         AND cc.organization_name != 'NULL'
+                        AND cc.is_deleted = '0'
                        ");
   $sql->execute();
   $result = $sql->fetchAll(PDO::FETCH_ASSOC);
