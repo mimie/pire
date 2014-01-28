@@ -798,7 +798,7 @@ function displayMembershipBillings(array $billings){
     $fee = $billingInfo["fee_amount"];
     $billingNo = $billingInfo["billing_no"];
     $billingId = $billingInfo["id"];
-    $billingdate = $billingInfo["date"];
+    $billingdate = $billingInfo["bill_date"];
 
     $html = $html."<tr>"
           . "<td>$name</td>"
