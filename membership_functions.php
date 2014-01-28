@@ -396,8 +396,12 @@ function getAllMembershipType(PDO $dbh){
  */
 function getAllCompanies(PDO $dbh){
 
- $sql = $dbh->prepare("SELECT id, display_name FROM civicrm_contact 
-                       WHERE contact_type='Organization' ORDER BY display_name");
+ $sql = $dbh->prepare("SELECT cc.id, cc.display_name, ca.street_address, ca.city
+                       FROM civicrm_contact cc, civicrm_address ca
+                       WHERE cc.contact_type='Organization' 
+                       AND cc.is_deleted = '0'
+                       AND cc.id = ca.contact_id
+                       ORDER BY display_name");
  $sql->execute();
  $result = $sql->fetchAll(PDO::FETCH_ASSOC);
  $companies = array();
@@ -405,8 +409,9 @@ function getAllCompanies(PDO $dbh){
  foreach($result as $key => $value){
   
    $id = $value["id"];
-   $orgName = $value["display_name"];
-   $companies[$id] = $orgName;
+   /**$orgName = $value["display_name"];
+   $companies[$id] = $orgName;**/
+   $companies[$id] = $value;
  }
 
  return $companies;
@@ -416,37 +421,31 @@ function getAllCompanies(PDO $dbh){
 function displayAllCompanies(PDO $dbh,array $companies){
 
   $html = "<table id='companies' width='100%'>"
+        . "<thead>"
         . "<tr>"
         . "<th>Organization Name</th>"
         . "<th>Email</th>"
-        . "<th>Total Amount</th>"
-        . "<th>Print Bill</th>"
-        . "<th>Send Bill</th>"
-        . "<th>Payment Status</th>"
-        . "<th>Billing Reference No.</th>"
-        . "<th>Billing Date</th>"
         . "<th>Billing Address</th>"
         . "<th>Select Employees For Billing</th>"
-        . "<th>Billing PDF Download</th>"
-        . "</tr>";
-  foreach($companies as $id => $orgName){
+        . "</tr>"
+        . "</thead>";
+
+  $html = $html."<tbody>";
+  foreach($companies as $id => $values){
+    $orgName = $values["display_name"];
+    $street = $values["street_address"];
+    $city = $values["city"];
+    $billAddress = $street." ".$city; 
     
     $html = $html."<tr>"
-          . "<td>$orgName</td>"
+          . "<td>$orgName,$id</td>"
           . "<td>Email</td>"
-          . "<td>Total Amount</td>"
-          . "<td>Print Bill</td>"
-          . "<td>Send Bill</td>"
-          . "<td>Payment Status</td>"
-          . "<td>Billing Reference No.</td>"
-          . "<td>Billing Date</td>"
-          . "<td>Billing Address</td>"
+          . "<td>$billAddress</td>"
           . "<td><a href='selectMembersBilling.php?orgId=$id' target='_blank'><img src='images/add_icon.png'></a></td>"
-          . "<td>Billing PDF Download</td>"
           . "</tr>";
   }
 
-  $html = $html."</table>";
+  $html = $html."</tbody></table>";
   return $html;
 }
 
