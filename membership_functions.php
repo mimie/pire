@@ -714,7 +714,7 @@ function searchContactByEmail($dbh,$email){
 
 function getAllMembershipBillings($dbh){
 
- $sql = $dbh->prepare("SELECT id,member_name, email, organization_name, fee_amount,billing_no
+ $sql = $dbh->prepare("SELECT id,member_name, email, organization_name, fee_amount,billing_no,bill_date
                        FROM billing_membership");
  $sql->execute();
  $result = $sql->fetchAll(PDO::FETCH_ASSOC);
