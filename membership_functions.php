@@ -91,7 +91,7 @@ function displayMemberBilling($dbh,array $members,$expiredDate){
   $memberBillingYear = intval($expiredYear) + 1;
 
   //$nextYear = date('Y', strtotime('+1 year'));
-  $html = "<table width='100%'>"
+  $html = "<table id='memberInfo' width='100%'>"
         . "<thead>"
         . "<tr>"
         . "<th colspan='15'>Membership Billing</th>"
@@ -415,7 +415,7 @@ function getAllCompanies(PDO $dbh){
 
 function displayAllCompanies(PDO $dbh,array $companies){
 
-  $html = "<table width='100%'>"
+  $html = "<table id='companies' width='100%'>"
         . "<tr>"
         . "<th>Organization Name</th>"
         . "<th>Email</th>"
