@@ -1,5 +1,6 @@
 <?php
 
+
 function getNewlyAddedBillings($dbh,$eventId,$orgId){
 
   $sql = $dbh->prepare("SELECT cp.id as participant_id, cc.display_name as name,cc.id as contact_id, cp.fee_amount
@@ -68,14 +69,16 @@ function updateAddedAmount($dbh,$billingNo,$addedAmount){
  $vat = number_format($vat, 2, '.', '');
  $subtotal = $totalAmount - $vat;
  $subtotal = number_format($subtotal, 2, '.','');
+ $updateTime = date("Y-m-d h:i:s");
 
  $sqlUpdate = $dbh->prepare("UPDATE billing_company
-                             SET total_amount = ?, subtotal = ?, vat = ?
+                             SET total_amount = ?, subtotal = ?, vat = ?,bill_date = ?
                              WHERE billing_no = ?");
  $sqlUpdate->bindValue(1,$totalAmount,PDO::PARAM_INT);
  $sqlUpdate->bindValue(2,$subtotal,PDO::PARAM_INT);
  $sqlUpdate->bindValue(3,$vat,PDO::PARAM_INT);
- $sqlUpdate->bindValue(4,$billingNo,PDO::PARAM_STR);
+ $sqlUpdate->bindValue(4,$updateTime,PDO::PARAM_INT);
+ $sqlUpdate->bindValue(5,$billingNo,PDO::PARAM_STR);
 
  $sqlUpdate->execute();
              
