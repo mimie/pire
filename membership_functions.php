@@ -891,4 +891,21 @@ function getNewMembershipBillingByName($dbh,$name,$currentYear){
   return $result;
 }
 
+function getOnlineMembership($dbh){
+
+  $sql = $dbh->prepare("SELECT cm.id as membership_id, cc.display_name,cc.organization_name,em.email
+                        FROM civicrm_membership cm, civicrm_membership_status cs, civicrm_contact cc 
+                        LEFT JOIN civicrm_email em
+                        ON em.contact_id = cc.id
+                        WHERE cm.contact_id = cc.id
+                        AND em.is_primary = '1'
+                        AND cm.status_id = cs.id
+                        AND cs.name = 'Pending'
+                       ");
+  $sql->execute();
+
+  $result = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+  return $result;
+}
 ?>
