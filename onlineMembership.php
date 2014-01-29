@@ -16,7 +16,7 @@
 $(function() {
         $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
         $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
-        $('#billings').jPaginate({
+        $('#info').jPaginate({
                 'max': 15,
                 'page': 1,
                 'links': 'buttons'
@@ -48,12 +48,14 @@ $(function() {
      <td align='center' bgcolor='white'><a href='onlineMembership.php'>ONLINE MEMBERSHIP</td>
     </tr>
    </table>
+   <br>
+   <div align='center'>
 <?php
   $onlineMembership = getOnlineMembership($dbh);
-  echo "<pre>";
-  print_r($onlineMembership);
-  echo "</pre>";
+  $displayOnlineMembership = displayOnlineMembership($onlineMembership);
+  echo $displayOnlineMembership;
   
 ?>
+ </div>
 </body>
 </html>
