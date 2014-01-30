@@ -53,6 +53,7 @@ $(function() {
      <td align='center' bgcolor="#084B8A"><a href='membershipNewBilling.php'>NEW MEMBERSHIP BILLING</a></td>
      <td align='center' bgcolor="#084B8A"><a href='membershipIndividualBilling.php'>INDIVIDUAL BILLING</a></td>
      <td align='center' bgcolor='#084B8A'><a href='membershipCompanyBilling.php'>COMPANY BILLING</td>
+     <td align='center' bgcolor='#084B8A'><a href='onlineMembership.php'>ONLINE MEMBERSHIP</td>
      <td align='center' bgcolor='white'><a href='membershipBillingView.php'>GENERATED BILLINGS</td>
     </tr>
    </table><br>
