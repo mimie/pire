@@ -49,6 +49,7 @@ $(function() {
      <td align='center' bgcolor="#084B8A"><a href='membershipIndividualBilling.php'>INDIVIDUAL BILLING</a></td>
      <td align='center' bgcolor='#084B8A'><a href='membershipCompanyBilling.php'>COMPANY BILLING</td>
      <td align='center' bgcolor='#084B8A'><a href='membershipBillingView.php'>GENERATED BILLINGS</td>
+     <td align='center' bgcolor='#084B8A'><a href='onlineMembership.php'>ONLINE MEMBERSHIP</td>
     </tr>
    </table><br>
 <?php

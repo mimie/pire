@@ -891,4 +891,53 @@ function getNewMembershipBillingByName($dbh,$name,$currentYear){
   return $result;
 }
 
+function getOnlineMembership($dbh){
+
+  $sql = $dbh->prepare("SELECT cc.id,cm.id as membership_id, cc.display_name,cc.organization_name,em.email
+                        FROM civicrm_membership cm, civicrm_membership_status cs, civicrm_contact cc 
+                        LEFT JOIN civicrm_email em
+                        ON em.contact_id = cc.id
+                        WHERE cm.contact_id = cc.id
+                        AND em.is_primary = '1'
+                        AND cm.status_id = cs.id
+                        AND cs.name = 'Pending'
+                       ");
+  $sql->execute();
+
+  $result = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+  return $result;
+}
+
+function displayOnlineMembership(array $onlineMembership){
+
+  $html = "<table id='info' style='width:80%'>"
+        . "<thead>"
+        . "<tr>"
+        . "<th>Select contact</th>"
+        . "<th>Member Name</th>"
+        . "<th>Organization</th>"
+        . "<th>Email</th>"
+        . "</tr>"
+        . "</thead>";
+  $html = $html."<tbody>";
+
+  foreach($onlineMembership as $info){
+    $membershipId = $info["membership_id"];
+    $name = $info["display_name"];
+    $orgName = $info["organization_name"];
+    $email = $info["email"];
+
+    $html = $html."<tr>"
+          . "<td><input type='checkbox' value='$membershipId' name='membershipIds[]'></td>"
+          . "<td>$name</td>"
+          . "<td>$orgName</td>"
+          . "<td>$email</td>"
+          . "</tr>";
+  }
+
+  $html = $html."</tbody></table>";
+
+  return $html;
+}
 ?>

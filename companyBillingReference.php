@@ -156,7 +156,7 @@
     </div>
     <!--<div id="billedTo">-->
      <!--particulars-->
-     <table align="left" style="border-collapse:collapse;">
+     <table align="left" style="border-collapse:collapse;width:100%;">
       <tr>
         <td colspan="2" align="center" bgcolor="#D8D8D8" style="border:2px solid black;"><font style="font-size:13px"><b>PARTICULARS</b></font></td>
         <td width="195.78px" align="center" bgcolor="#D8D8D8" style="border:2px solid black"><font style="font-size:13px"><b>AMOUNT</b></font></td>
