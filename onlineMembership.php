@@ -1,7 +1,7 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <title>New Membership Billing</title>
+  <title>Online Membership</title>
   <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
   <link rel="stylesheet" type="text/css" href="billingStyle.css">
   <link rel="stylesheet" type="text/css" href="menu.css">
@@ -22,6 +22,9 @@ $(function() {
                 'links': 'buttons'
         });
 //        $("table").tablesorter( {sortList: [[0,0], [1,0]]} ); 
+});
+$(function() {
+    $( "#dialog" ).dialog();
 });
 
 </script>
@@ -98,10 +101,103 @@ $(function() {
       </table>
    </fieldset>
    <br>
+   <div align='center'>
+     Search contact:
+     <select name='searchType'>
+      <option value='name'>Name</option>
+      <option value='email'>Email</option>    
+     </select>
+     <input type='text' placeholder='name or email' name='searchText'>
+     <input type='submit' value='SEARCH' name='search'>
+   </div>
+   <br>
 <?php
-  $onlineMembership = getOnlineMembership($dbh);
-  $displayOnlineMembership = displayOnlineMembership($onlineMembership);
-  echo $displayOnlineMembership;
+  if(isset($_POST["search"])){
+
+    if($_POST["searchType"] == 'name'){
+      $searchValue = $_POST["searchText"];
+      $onlineMembership = getOnlineMembershipByName($dbh,$searchValue);
+      $displayOnlineMembership = displayOnlineMembership($onlineMembership);
+      echo $displayOnlineMembership;
+    }
+
+    elseif($_POST["searchType"] == 'email'){
+      $searchValue = $_POST["searchText"];
+      $onlineMembership = getOnlineMembershipByEmail($dbh,$searchValue);
+      $displayOnlineMembership = displayOnlineMembership($onlineMembership);
+      echo $displayOnlineMembership;
+    }
+
+  }
+
+  elseif(isset($_POST["generate"])){
+
+       $membershipTypeId = $_POST["membershipTypeId"];
+       $year = $_POST["year"];
+       $contactIds = $_POST["contactIds"];
+       $sqlMembership = $dbh->prepare("SELECT id,name,minimum_fee 
+                                       FROM civicrm_membership_type
+                                       WHERE id = ?");
+        $sqlMembership->bindValue(1,$membershipTypeId, PDO::PARAM_INT);
+        $sqlMembership->execute();
+        $membership = $sqlMembership->fetch(PDO::FETCH_ASSOC);
+    
+       foreach($contactIds as $contactId){
+
+        $sqlDetails = $dbh->prepare("SELECT cc.id,cm.id as membership_id,cc.display_name, em.email, cc.organization_name, cc.employer_id
+                              FROM civicrm_contact cc, civicrm_email em, civicrm_membership cm
+                              WHERE cc.id = ?
+                              AND cc.id = em.contact_id
+                              AND cm.contact_id = cc.id
+                              AND em.is_primary = '1'
+                              AND cc.is_deleted = '0'
+                             ");
+         $sqlDetails->bindValue(1,$contactId,PDO::PARAM_INT);
+         $sqlDetails->execute();
+         $details = $sqlDetails->fetch(PDO::FETCH_ASSOC);
+
+         $address = getAddressDetails($dbh,$contactId);
+         $street = $address["street"];
+         $city = $address["city"];
+         $billingAddress = $street." ".$city;
+
+         $info = array();
+         
+         $info["contact_id"] = $details["id"];
+         $info["membership_id"] = $details["membership_id"];
+         $info["member_type"] = $membership["name"];
+         $info["name"] = $details["display_name"];
+         $info["email"] = $details["email"];
+         $info["street"] = $street;
+         $info["city"] = $city;
+         $info["address"] = $billingAddress;
+         $info["company"] = $details["organization_name"];
+         $info["org_contact_id"] = $details["employer_id"];
+         $info["fee_amount"] = $membership["minimum_fee"];
+
+         insertMemberBilling($dbh,$info,$year);
+
+       }
+
+      $countContacts = count($contactIds);
+
+      echo "<div id='dialog'>"
+           . "<img src='images/confirm.png' alt='confirm' class='left'/>"
+           . "<p>Successfully generated new membership billing for $countContacts contact/s.</p>"
+           . "</div>";
+
+    $onlineMembership = getOnlineMembership($dbh);
+    $displayOnlineMembership = displayOnlineMembership($onlineMembership);
+    echo $displayOnlineMembership;
+  }
+
+  else{
+    $onlineMembership = getOnlineMembership($dbh);
+    $displayOnlineMembership = displayOnlineMembership($onlineMembership);
+    echo $displayOnlineMembership;
+
+    
+  }
   
 ?>
  </form>

@@ -893,7 +893,7 @@ function getNewMembershipBillingByName($dbh,$name,$currentYear){
 
 function getOnlineMembership($dbh){
 
-  $sql = $dbh->prepare("SELECT cc.id,cm.id as membership_id, cc.display_name,cc.organization_name,em.email
+  $sql = $dbh->prepare("SELECT cc.id as contact_id,cm.id as membership_id, cc.display_name,cc.organization_name,em.email
                         FROM civicrm_membership cm, civicrm_membership_status cs, civicrm_contact cc 
                         LEFT JOIN civicrm_email em
                         ON em.contact_id = cc.id
@@ -901,6 +901,52 @@ function getOnlineMembership($dbh){
                         AND em.is_primary = '1'
                         AND cm.status_id = cs.id
                         AND cs.name = 'Pending'
+                        AND cm.id NOT IN(SELECT membership_id FROM billing_membership bm
+                                         WHERE bm.membership_id = cm.id) 
+                       ");
+  $sql->execute();
+
+  $result = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+  return $result;
+}
+
+function getOnlineMembershipByName($dbh,$name){
+
+  $sql = $dbh->prepare("SELECT cc.id as contact_id,cm.id as membership_id, cc.display_name,cc.organization_name,em.email
+                        FROM civicrm_membership cm, civicrm_membership_status cs, civicrm_contact cc 
+                        LEFT JOIN civicrm_email em
+                        ON em.contact_id = cc.id
+                        WHERE cm.contact_id = cc.id
+                        AND em.is_primary = '1'
+                        AND cm.status_id = cs.id
+                        AND cs.name = 'Pending'
+                        AND cc.display_name LIKE '%$name%'
+                        AND cm.id NOT IN(SELECT membership_id FROM billing_membership bm
+                                         WHERE bm.membership_id = cm.id) 
+                    
+                       ");
+  $sql->execute();
+
+  $result = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+  return $result;
+}
+
+function getOnlineMembershipByEmail($dbh,$email){
+
+  $sql = $dbh->prepare("SELECT cc.id as contact_id,cm.id as membership_id, cc.display_name,cc.organization_name,em.email
+                        FROM civicrm_membership cm, civicrm_membership_status cs, civicrm_contact cc 
+                        LEFT JOIN civicrm_email em
+                        ON em.contact_id = cc.id
+                        WHERE cm.contact_id = cc.id
+                        AND em.is_primary = '1'
+                        AND cm.status_id = cs.id
+                        AND cs.name = 'Pending'
+                        AND em.email LIKE '%$email%'
+                        AND cm.id NOT IN(SELECT membership_id FROM billing_membership bm
+                                         WHERE bm.membership_id = cm.id) 
+                    
                        ");
   $sql->execute();
 
@@ -924,12 +970,14 @@ function displayOnlineMembership(array $onlineMembership){
 
   foreach($onlineMembership as $info){
     $membershipId = $info["membership_id"];
-    $name = $info["display_name"];
+    $name = strtolower($info["display_name"]);
+    $name = ucwords($name);
     $orgName = $info["organization_name"];
     $email = $info["email"];
+    $contactId = $info["contact_id"];
 
     $html = $html."<tr>"
-          . "<td><input type='checkbox' value='$membershipId' name='membershipIds[]'></td>"
+          . "<td><input type='checkbox' value='$contactId' name='contactIds[]'></td>"
           . "<td>$name</td>"
           . "<td>$orgName</td>"
           . "<td>$email</td>"
