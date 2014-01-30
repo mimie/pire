@@ -44,18 +44,67 @@ $(function() {
      <td align='center' bgcolor="#084B8A"><a href='membershipNewBilling.php'>NEW MEMBERSHIP BILLING</a></td>
      <td align='center' bgcolor="#084B8A"><a href='membershipIndividualBilling.php'>INDIVIDUAL BILLING</a></td>
      <td align='center' bgcolor='#084B8A'><a href='membershipCompanyBilling.php'>COMPANY BILLING</td>
-     <td align='center' bgcolor='#084B8A'><a href='membershipBillingView.php'>GENERATED BILLINGS</td>
      <td align='center' bgcolor='white'><a href='onlineMembership.php'>ONLINE MEMBERSHIP</td>
+     <td align='center' bgcolor='#084B8A'><a href='membershipBillingView.php'>GENERATED BILLINGS</td>
     </tr>
    </table>
    <br>
-   <div align='center'>
+   <div style='width:80%;margin:0 auto;padding:3px;'>
+   <form action="" method="POST">
+   <fieldset>
+    <legend>New Membership</legend>
+      <table id='generate' style='width:40%;margin:0 auto;'>
+       <tr>
+         <th>Select membership type:</th>
+         <td>
+           <select name='membershipTypeId'>
+<?php
+    
+    $amounttypeSql = $dbh->prepare("SELECT id,name,minimum_fee FROM civicrm_membership_type");
+    $amounttypeSql->execute();
+    $feeType = $amounttypeSql->fetchAll(PDO::FETCH_ASSOC);
+
+    foreach($feeType as $key => $fee){     
+      $feeId = $fee["id"];
+      $amount = $fee["minimum_fee"];
+      $label = $fee['name']." - ".$amount;
+      
+      echo "<option value='$feeId'>$label</option>";
+    }
+?>
+           </select>
+         </td>
+       </tr>
+       <tr>
+        <th>Select membership year:</th>
+        <td>
+           <select name='year'>
+<?php
+            $currentYear = date("Y");
+            $nextYear = date('Y', strtotime('+1 year'));
+ 
+            echo "<option value='$currentYear'>$currentYear</option>";
+            echo "<option value='$nextYear'>$nextYear</option>";
+
+?>
+           </select>
+        </td>
+       </tr>
+       <tr>
+         <td colspan='2' style='align:right;'>
+           <input type='submit' value='Generate New Membership Bill' name='generate'>
+         </td>
+       </tr>
+      </table>
+   </fieldset>
+   <br>
 <?php
   $onlineMembership = getOnlineMembership($dbh);
   $displayOnlineMembership = displayOnlineMembership($onlineMembership);
   echo $displayOnlineMembership;
   
 ?>
+ </form>
  </div>
 </body>
 </html>
