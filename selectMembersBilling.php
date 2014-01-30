@@ -21,6 +21,19 @@
   <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
   <script src="js/jquery-jPaginate.js"></script>
   <script src="js/jquery.tablesorter.js"></script>
+<script>
+$(function() {
+        $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
+        $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
+        $('#billedMembers').jPaginate({
+                'max': 20,
+                'page': 1,
+                'links': 'buttons'
+        });
+//        $("table").tablesorter( {sortList: [[0,0], [1,0]]} ); 
+});
+
+</script>
 </head>
 <body>
    <br>
