@@ -911,7 +911,7 @@ function getOnlineMembership($dbh){
 
 function displayOnlineMembership(array $onlineMembership){
 
-  $html = "<table id='info' style='width:80%'>"
+  $html = "<table id='info' style='width:100%'>"
         . "<thead>"
         . "<tr>"
         . "<th>Select contact</th>"
