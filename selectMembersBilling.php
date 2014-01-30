@@ -4,6 +4,7 @@
   include 'pdo_conn.php';
   include 'membership_functions.php';
   include 'billing_functions.php';
+  include 'company_functions.php';
   
   $dbh = civicrmConnect();
   $orgId = $_GET["orgId"];
@@ -46,6 +47,7 @@ $(function() {
     </tr>
    </table><br>
 <?php
+/**
   $lastYear = date('Y',strtotime('-1 year'));
   $currentYear = date('Y');
   $nextYear = date('Y',strtotime('+1 year'));
@@ -58,18 +60,21 @@ $(function() {
   $formatCurrent = date('F j Y',strtotime($currentExpiredDate));
   $formatLast = date('F j Y',strtotime($lastExpiredDate));
   $formatNext = date('F j Y',strtotime($nextExpiredDate));
+**/
 
 ?>
-<form method="POST" action="">
+
+<!--<form method="POST" action="">
   <select name="expiredDate">
     <option value="select">- Select date of expiration -</option>
-    <option value="<?=$lastExpiredDate?>"><?=$formatLast?></option>
-    <option value="<?=$currentExpiredDate?>"><?=$formatCurrent?></option>
-    <option value="<?=$nextExpiredDate?>"><?=$formatNext?></option>
+    <option value="<?//=$lastExpiredDate?>"><?//=$formatLast?></option>
+    <option value="<?//=$currentExpiredDate?>"><?//=$formatCurrent?></option>
+    <option value="<?//=$nextExpiredDate?>"><?//=$formatNext?></option>
   </select>&nbsp;
   <input type="submit" name="dates" value="View Members" onclick="defaultSelect(document.getElementById('expiredDate'),'Please select an expired date to view members.')">
-</form>
+</form>-->
 <?php
+/**
 
    $membersList = getMembersByOrgId($dbh,$orgId);
    $members = array();
@@ -164,7 +169,9 @@ $(function() {
    $billedMembers = displayBilledMembers($dbh,$members,$orgName);
    echo $billedMembers;
    }
+**/
 
+  $contacts = getContactsPerCompany($dbh,$orgId);
 ?>
 </body>
 </html>

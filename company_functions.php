@@ -61,26 +61,51 @@ function updateAddedAmount($dbh,$billingNo,$addedAmount){
   $sql->bindValue(1,$billingNo,PDO::PARAM_STR);
   $sql->execute();
 
- $result = $sql->fetch(PDO::FETCH_ASSOC);
- $totalAmount = $result["total_amount"];
+  $result = $sql->fetch(PDO::FETCH_ASSOC);
+  $totalAmount = $result["total_amount"];
 
- $totalAmount = $totalAmount + $addedAmount;
- $vat = $totalAmount/9.3333;
- $vat = number_format($vat, 2, '.', '');
- $subtotal = $totalAmount - $vat;
- $subtotal = number_format($subtotal, 2, '.','');
- $updateTime = date("Y-m-d h:i:s");
+  $totalAmount = $totalAmount + $addedAmount;
+  $vat = $totalAmount/9.3333;
+  $vat = number_format($vat, 2, '.', '');
+  $subtotal = $totalAmount - $vat;
+  $subtotal = number_format($subtotal, 2, '.','');
+  $updateTime = date("Y-m-d h:i:s");
 
- $sqlUpdate = $dbh->prepare("UPDATE billing_company
+  $sqlUpdate = $dbh->prepare("UPDATE billing_company
                              SET total_amount = ?, subtotal = ?, vat = ?,bill_date = ?
                              WHERE billing_no = ?");
- $sqlUpdate->bindValue(1,$totalAmount,PDO::PARAM_INT);
- $sqlUpdate->bindValue(2,$subtotal,PDO::PARAM_INT);
- $sqlUpdate->bindValue(3,$vat,PDO::PARAM_INT);
- $sqlUpdate->bindValue(4,$updateTime,PDO::PARAM_INT);
- $sqlUpdate->bindValue(5,$billingNo,PDO::PARAM_STR);
+  $sqlUpdate->bindValue(1,$totalAmount,PDO::PARAM_INT);
+  $sqlUpdate->bindValue(2,$subtotal,PDO::PARAM_INT);
+  $sqlUpdate->bindValue(3,$vat,PDO::PARAM_INT);
+  $sqlUpdate->bindValue(4,$updateTime,PDO::PARAM_INT);
+  $sqlUpdate->bindValue(5,$billingNo,PDO::PARAM_STR);
 
- $sqlUpdate->execute();
+  $sqlUpdate->execute();
              
+}
+
+function getContactsPerCompany($dbh,$orgId){
+
+  $sql = $dbh->prepare("SELECT cc.id as contact_id, cc.display_name, cc.organization_name, em.email,cm.join_date, 
+                        cm.start_date, cm.end_date,cm.id as membership_id, cmt.name as membership_type,cs.name as status
+                        FROM civicrm_contact cc 
+                        LEFT JOIN civicrm_membership cm ON cm.contact_id = cc.id
+                        LEFT JOIN civicrm_membership_type cmt
+                        ON cm.membership_type_id = cmt.id
+                        LEFT JOIN civicrm_membership_status cs
+                        ON cm.status_id = cs.id
+                        LEFT JOIN civicrm_email em
+                        ON cc.id = em.contact_id
+                        AND em.is_primary = '1'
+                        WHERE cc.employer_id = ?
+                        AND cc.is_deleted = '0'
+                        ORDER by cc.display_name
+                      ");
+
+  $sql->bindValue(1,$orgId,PDO::PARAM_INT);
+  $sql->execute();
+  $result = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+  return $result;
 }              
 ?>
