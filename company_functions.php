@@ -108,4 +108,60 @@ function getContactsPerCompany($dbh,$orgId){
 
   return $result;
 }              
+
+function displayContactsPerCompany(array $contacts,$orgName){
+
+  $html = "<table id='contacts' style='width:100%;'>"
+        . "<thead>"
+        . "<tr><th colspan='10'>$orgName</th></tr>"
+        . "<tr>"
+        . "<th>Select Contact</th>"
+        . "<th>Name</th>"
+        . "<th>Organization Name</th>"
+        . "<th>Email</th>"
+        . "<th>Join Date</th>"
+        . "<th>Start Date</th>"
+        . "<th>End Date</th>"
+        . "<th>Membership Type</th>"
+        . "<th>Membership Status</th>"
+        . "<th>Classification</th>"
+        . "</tr>"
+        . "</thead>";
+
+  $html = $html."<tbody>";
+
+  foreach($contacts as $key => $info){
+     $contactId = $info["contact_id"];
+     $name = $info["display_name"];
+     $name = mb_convert_encoding($name,"UTF-8");
+     $orgName = $info["organization_name"];
+     $orgName = mb_convert_encoding($orgName,"UTF-8");
+     $email = $info["email"];
+     $joinDate = $info["join_date"];
+     $startDate = $info["start_date"];
+     $endDate = $info["end_date"];
+     $type = $info["membership_type"];
+     $status = $info["status"];
+     $membershipId = $info["membership_id"];
+
+     $classification = $membershipId == NULL ? 'Nonmember':'Member';
+
+   $html = $html."<tr>"
+         . "<td><input type='checkbox' name='contactIds[]' value='$contactId'></td>"
+         . "<td>$name</td>"
+         . "<td>$orgName</td>"
+         . "<td>$email</td>"
+         . "<td>$joinDate</td>"
+         . "<td>$startDate</td>"
+         . "<td>$endDate</td>"
+         . "<td>$type</td>"
+         . "<td>$status</td>"
+         . "<td>$classification</td>"
+         . "</tr>";
+
+  }
+  $html = $html."</tbody></table>";
+
+  return $html;
+}
 ?>

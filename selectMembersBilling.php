@@ -15,7 +15,7 @@
 <head>
 <title>Select members for billing</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <title>Membership Billing</title>
+  <title>Company Billing</title>
   <link rel="stylesheet" type="text/css" href="billingStyle.css">
   <link rel="stylesheet" type="text/css" href="menu.css">
   <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
@@ -26,7 +26,7 @@
 $(function() {
         $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
         $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
-        $('#billedMembers').jPaginate({
+        $('#contacts').jPaginate({
                 'max': 20,
                 'page': 1,
                 'links': 'buttons'
@@ -171,7 +171,17 @@ $(function() {
    }
 **/
 
+  $sqlOrg = $dbh->prepare("SELECT organization_name FROM civicrm_contact
+                           WHERE id = ?
+                           AND contact_type = 'Organization'
+                          ");
+  $sqlOrg->bindValue(1,$orgId,PDO::PARAM_INT);
+  $sqlOrg->execute();
+  $result = $sqlOrg->fetch(PDO::FETCH_ASSOC);
+  $orgName = $result["organization_name"];
   $contacts = getContactsPerCompany($dbh,$orgId);
+  $displayContacts = displayContactsPerCompany($contacts,$orgName);
+  echo $displayContacts;
 ?>
 </body>
 </html>
