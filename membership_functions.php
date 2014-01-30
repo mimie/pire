@@ -530,7 +530,7 @@ function getIndividualMemberDetails(PDO $dbh,$contactId){
 
 function displayBilledMembers($dbh,$billedMembers,$orgName){
 
-  $html = "<table>"
+  $html = "<table id='billedMembers' style='width:100%;'>"
         . "<tr><th colspan='10'>$orgName</th></tr>"
         . "<tr>"
         . "<th>Select Members</th>"
