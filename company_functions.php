@@ -107,6 +107,34 @@ function getContactsPerCompany($dbh,$orgId){
   $result = $sql->fetchAll(PDO::FETCH_ASSOC);
 
   return $result;
+}
+
+function filterContactsByEndDate($dbh,$orgId,$endDate){
+
+  $sql = $dbh->prepare("SELECT cc.id as contact_id, cc.display_name, cc.organization_name, em.email,cm.join_date, 
+                        cm.start_date, cm.end_date,cm.id as membership_id, cmt.name as membership_type,cs.name as status
+                        FROM civicrm_contact cc 
+                        INNER JOIN civicrm_membership cm ON cm.contact_id = cc.id
+                        INNER JOIN civicrm_membership_type cmt
+                        ON cm.membership_type_id = cmt.id
+                        INNER JOIN civicrm_membership_status cs
+                        ON cm.status_id = cs.id
+                        LEFT JOIN civicrm_email em
+                        ON cc.id = em.contact_id
+                        AND em.is_primary = '1'
+                        WHERE cc.employer_id = ?
+                        AND cm.end_date = ?
+                        AND cc.is_deleted = '0'
+                        ORDER by cc.display_name
+                      ");
+
+  $sql->bindValue(1,$orgId,PDO::PARAM_INT);
+  $sql->bindValue(2,$endDate,PDO::PARAM_INT);
+  $sql->execute();
+  $result = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+  return $result;
+
 }              
 
 function displayContactsPerCompany(array $contacts,$orgName){
