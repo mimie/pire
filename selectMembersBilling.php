@@ -18,11 +18,12 @@
   <title>Company Billing</title>
   <link rel="stylesheet" type="text/css" href="billingStyle.css">
   <link rel="stylesheet" type="text/css" href="menu.css">
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
   <script src="http://code.jquery.com/jquery-1.11.0.js"></script>
   <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
   <script src="js/jquery-jPaginate.js"></script>
   <script src="js/jquery.tablesorter.js"></script>
-<script>
+<script type="text/javascript">
 $(function() {
         $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
         $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
@@ -33,6 +34,23 @@ $(function() {
         });
 //        $("table").tablesorter( {sortList: [[0,0], [1,0]]} ); 
 });
+
+/**$(function(){
+    $("#confirmation").dialog();
+});**/
+
+$(function() {
+    $( "#confirmation" ).dialog({
+      resizable: false,
+      width:500,
+      modal: true,
+      buttons: {
+        "OK": function() {
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+  });
 
 </script>
 </head>
@@ -155,6 +173,34 @@ $(function() {
       $displayContacts = displayContactsPerCompany($contacts,$orgName);
       echo $displayContacts;
     }
+  }
+
+  elseif(isset($_POST["generate"])){
+
+    echo "<div id='confirmation' title='$orgName Company Billing'>";
+    $contacts = $_POST["contactIds"];
+    $selected = count($contacts);
+
+    if($selected == 1){
+      echo "<img src='images/confirm.png' alt='confirm' style='float:left;padding:5px;' width='42' height='42'/>"
+          . "You have selected $selected contact.<br>Company successfully generated.";
+    }
+
+    elseif($selected == 0){
+      echo "<img src='images/error.png' alt='confirm' style='float:left;padding:5px;' width='42' height='42'/>"
+           . "Please select contacts to include in the company billing.";
+    }
+
+    else{
+      echo "<img src='images/confirm.png' alt='confirm' style='float:left;padding:5px;' width='42' height='42'/>"
+          . "You have selected $selected contacts.<br>Company billing successfully generated.";
+    }
+    echo "</div>";
+
+    $contacts = getContactsPerCompany($dbh,$orgId);
+    $displayContacts = displayContactsPerCompany($contacts,$orgName);
+    echo $displayContacts;
+
   }
 
   else{
