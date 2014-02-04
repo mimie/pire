@@ -79,9 +79,52 @@ $(function() {
   $formatLast = date('F j Y',strtotime($lastExpiredDate));
   $formatNext = date('F j Y',strtotime($nextExpiredDate));
 ?>
-  <div style="width:80%;margin:0 auto;padding:3px;">
+  <div style="width:70%;margin:0 auto;padding:3px;">
   <fieldset>
     <legend>Company Billing</legend>
+    <table align='center'>
+     <tr>
+      <th>Select membership type:</th>
+      <td>
+           <select name='membershipTypeId'>
+<?php
+    
+    $amounttypeSql = $dbh->prepare("SELECT id,name,minimum_fee FROM civicrm_membership_type");
+    $amounttypeSql->execute();
+    $feeType = $amounttypeSql->fetchAll(PDO::FETCH_ASSOC);
+
+    foreach($feeType as $key => $fee){     
+      $feeId = $fee["id"];
+      $amount = $fee["minimum_fee"];
+      $label = $fee['name']." - ".$amount;
+      
+      echo "<option value='$feeId'>$label</option>";
+    }
+?>
+           </select>
+      </td>
+     </tr>
+     <tr>
+      <th>Select membership year:</th>
+      <td>
+           <select name='year'>
+<?php
+            $currentYear = date("Y");
+            $nextYear = date('Y', strtotime('+1 year'));
+ 
+            echo "<option value='$currentYear'>$currentYear</option>";
+            echo "<option value='$nextYear'>$nextYear</option>";
+
+?>
+           </select>
+      </td>
+     </tr>
+     <tr>
+      <td colspan='2'>
+           <input type='submit' value='Generate New Membership Bill' name='generate'>
+      </td>
+     </tr>
+    </table>
   </fieldset>
   <br>
     <div style='text-align:center'>
