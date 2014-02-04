@@ -62,10 +62,66 @@ $(function() {
   echo "&nbsp;&nbsp;<b>&gt;</b>&nbsp;";
   echo "<i>$orgName</i>";
   echo "</div><br>";
-
-  $contacts = getContactsPerCompany($dbh,$orgId);
-  $displayContacts = displayContactsPerCompany($contacts,$orgName);
-  echo $displayContacts;
 ?>
+
+  <form action="" method="POST">
+<?php
+
+  $lastYear = date('Y',strtotime('-1 year'));
+  $currentYear = date('Y');
+  $nextYear = date('Y',strtotime('+1 year'));
+
+  $currentExpiredDate = date('Y-m-d',strtotime($currentYear.'-12-31'));
+  $lastExpiredDate = date('Y-m-d',strtotime($lastYear.'-12-31'));
+  $nextExpiredDate = date('Y-m-d',strtotime($nextYear.'-12-31'));
+
+  $formatCurrent = date('F j Y',strtotime($currentExpiredDate));
+  $formatLast = date('F j Y',strtotime($lastExpiredDate));
+  $formatNext = date('F j Y',strtotime($nextExpiredDate));
+?>
+  <div style="width:80%;margin:0 auto;padding:3px;">
+  <fieldset>
+    <legend>Company Billing</legend>
+  </fieldset>
+  <br>
+    <div style='text-align:center'>
+    Select expiration date:
+    <select name="endDate">
+      <option value='<?=$lastExpiredDate?>'><?=$formatLast?></option>
+      <option value='<?=$currentExpiredDate?>'><?=$formatCurrent?></option>
+      <option value='<?=$nextExpiredDate?>'><?=$formatNext?></option>
+      <option value='all'>All Contacts</option>
+    </select>
+    <input type="submit" value="SEARCH CONTACTS" name='search'>
+    </div>
+  <br>
+<?php
+
+  if(isset($_POST["search"])){
+    $endDate = $_POST["endDate"];
+
+    if($endDate == 'all'){
+      $contacts = getContactsPerCompany($dbh,$orgId);
+      $displayContacts = displayContactsPerCompany($contacts,$orgName);
+      echo $displayContacts;
+    }
+
+    else{
+ 
+      $contacts = filterContactsByEndDate($dbh,$orgId,$endDate);
+      $displayContacts = displayContactsPerCompany($contacts,$orgName);
+      echo $displayContacts;
+    }
+  }
+
+  else{
+    $contacts = getContactsPerCompany($dbh,$orgId);
+    $displayContacts = displayContactsPerCompany($contacts,$orgName);
+    echo $displayContacts;
+  }
+
+?>
+ </div>
+ </form>
 </body>
 </html>
