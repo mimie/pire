@@ -190,6 +190,10 @@ function displayContactsPerCompany(array $contacts,$orgName){
   }
   $html = $html."</tbody></table>";
 
+  $totalContacts = count($contacts);
+
+  $html = $html."<br><b><font color='#2B547E'>Number of Contacts: $totalContacts</font></b>";
+
   return $html;
 }
 ?>
