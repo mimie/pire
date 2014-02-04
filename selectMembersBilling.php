@@ -18,7 +18,7 @@
   <title>Company Billing</title>
   <link rel="stylesheet" type="text/css" href="billingStyle.css">
   <link rel="stylesheet" type="text/css" href="menu.css">
-  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="http://code.jquery.com/jquery-1.11.0.js"></script>
   <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
   <script src="js/jquery-jPaginate.js"></script>
   <script src="js/jquery.tablesorter.js"></script>
