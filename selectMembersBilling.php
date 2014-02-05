@@ -189,12 +189,23 @@ $(function() {
 
      $notIncludedContacts = array_diff($contacts,$includedContacts);
 
-    //insertMembershipCompanyBilling($dbh,$orgId,$year,$membershipTypeId,$contacts);
+   // insertMembershipCompanyBilling($dbh,$orgId,$year,$membershipTypeId,$contacts);
 
     echo "<div id='confirmation' title='$orgName Company Billing'>";
     if($included == 1){
       echo "<img src='images/confirm.png' alt='confirm' style='float:left;padding:5px;' width='42' height='42'/>"
-          . "$included contact is included in the billing.<br>Company billing successfully generated.";
+          . "$included contact is included in the billing.<br>Company billing successfully generated.<br>";
+
+       if(isset($notIncludedContacts)){
+         echo "The following contacts have membership billing already for $year:<br><br>";
+         $names = getNamesRemoveContacts($dbh,$notIncludedContacts);
+
+         echo "<font color='red'>";
+         foreach($names as $contactName){
+           echo "$contactName<br>";
+         }
+         echo "</font>";
+       }
     }
 
     elseif($selected == 0){
@@ -204,15 +215,37 @@ $(function() {
 
     elseif($selected > 0 && $included == 0){
       echo "<img src='images/error.png' alt='confirm' style='float:left;padding:5px;' width='42' height='42'/>"
-           . "All of the contacts selected have already generated the membership billing.  ";
-
+           . "All of the contacts selected have a generated the membership billing already.<br><br>";
+       if(isset($notIncludedContacts)){
+         echo "The following contacts have a membership billing already for $year:<br><br>";
+         $names = getNamesRemoveContacts($dbh,$notIncludedContacts);
+ 
+         echo "<font color='red'>";
+         foreach($names as $contactName){
+           echo "$contactName<br>";
+         }
+         echo "</font>";
+       }
+     
 
     }
 
     elseif($included > 0 || ($selected > 0 && $included > 0)){
       echo "<img src='images/confirm.png' alt='confirm' style='float:left;padding:5px;' width='42' height='42'/>"
-          . "$included contacts are included in the billing.<br>Company billing successfully generated.";
+          . "$included contacts are included in the billing.<br>Company billing successfully generated.<br><br>";
+
+       if(isset($notIncludedContacts)){
+         echo "The following contacts have a membership billing already for $year:<br><br>";
+         $names = getNamesRemoveContacts($dbh,$notIncludedContacts);
+
+         echo "<font color='red'>";
+         foreach($names as $contactName){
+           echo "$contactName<br>";
+         }
+         echo "</font>";
+       }
     }
+
     echo "</div>";
     $contacts = getContactsPerCompany($dbh,$orgId);
     $displayContacts = displayContactsPerCompany($contacts,$orgName);
