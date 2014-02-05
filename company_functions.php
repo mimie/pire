@@ -197,6 +197,18 @@ function displayContactsPerCompany(array $contacts,$orgName){
   return $html;
 }
 
+function getCompanyAddress($dbh,$orgId){
+
+  $sql = $dbh->prepare("SELECT street_address, city FROM civicrm_address 
+                        WHERE contact_id = ?
+                       ");
+  $sql->bindValue(1,$orgId,PDO::PARAM_INT);
+  $sql->execute();
+  $result = $sql->fetch(PDO::FETCH_ASSOC);
+ 
+  return $result;
+}
+
 function insertMembershipCompanyBilling($dbh,$orgId,$year,$membershipTypeId,$contacts){
 
     $sqlMembership = $dbh->prepare("SELECT id,name,minimum_fee 
@@ -205,7 +217,61 @@ function insertMembershipCompanyBilling($dbh,$orgId,$year,$membershipTypeId,$con
     $sqlMembership->bindValue(1,$membershipTypeId, PDO::PARAM_INT);
     $sqlMembership->execute();
     $membership = $sqlMembership->fetch(PDO::FETCH_ASSOC);
+
+    $yearPrefix = date("y",strtotime($year));
+    $billingNo = "MEM-".$yearPrefix."-$orgId";
+    $totalContacts = count($contacts);
+    $individualAmount = $membership["minimum_fee"];
+    $billingAmount = $totalContacts*$individualAmount;
     
+    $sqlOrg = $dbh->prepare("SELECT cc.id,cc.organization_name,em.email,ca.street_address,ca.city
+                             FROM civicrm_contact cc
+                             LEFT JOIN civicrm_email em ON cc.id = em.contact_id
+                             LEFT JOIN civicrm_address ca ON ca.contact_id = em.contact_id
+                             WHERE cc.contact_type = 'Organization'
+                             AND em.is_primary = '1'
+                             AND cc.is_deleted = '0'
+                             AND cc.id = ?
+                             ");
+
+    $sqlOrg->bindValue(1,$orgId, PDO::PARAM_INT);
+    $sqlOrg->execute();
+
+    $org = $sqlOrg->fetch(PDO::FETCH_ASSOC);
+    $orgName = $org["organization_name"];
+    $email = $org["email"];
+    $street = $org["street_address"];
+    $city = $org["city"];
+    $billingAddress = $street." ".$city;
+
+    $sqlInsert = $dbh->prepare("INSERT INTO billing_membership_company (org_contact_id,organization_name,email,street,city,bill_address,billing_amount,billing_no,year)
+                                VALUES(?,?,?,?,?,?,?,?,?)
+                               ");
+    $sqlInsert->bindValue(1,$orgId,PDO::PARAM_INT);
+    $sqlInsert->bindValue(2,$orgName,PDO::PARAM_STR);
+    $sqlInsert->bindValue(3,$email,PDO::PARAM_STR);
+    $sqlInsert->bindValue(4,$street,PDO::PARAM_STR);
+    $sqlInsert->bindValue(5,$city,PDO::PARAM_STR);
+    $sqlInsert->bindValue(6,$billingAddress,PDO::PARAM_STR);
+    $sqlInsert->bindValue(7,$billingAmount,PDO::PARAM_INT);
+    $sqlInsert->bindValue(8,$billingNo,PDO::PARAM_STR);
+    $sqlInsert->bindValue(9,$year,PDO::PARAM_INT);
+
+    $sqlInsert->execute();
+
+    insertIndividualMemberBilling($dbh,$contacts,$year,$billingNo,$membershipTypeId);
+
+}
+
+function insertIndividualMemberBilling($dbh,array $contacts,$year,$billingNo,$membershipTypeId){
+    
+    $sqlMembership = $dbh->prepare("SELECT id,name,minimum_fee 
+                                       FROM civicrm_membership_type
+                                       WHERE id = ?");
+    $sqlMembership->bindValue(1,$membershipTypeId, PDO::PARAM_INT);
+    $sqlMembership->execute();
+    $membership = $sqlMembership->fetch(PDO::FETCH_ASSOC);
+
     foreach($contacts as $contactId){
 
         $sqlDetails = $dbh->prepare("SELECT cc.id,cm.id as membership_id,cc.display_name, em.email, cc.organization_name, cc.employer_id
@@ -220,32 +286,69 @@ function insertMembershipCompanyBilling($dbh,$orgId,$year,$membershipTypeId,$con
          $sqlDetails->execute();
          $details = $sqlDetails->fetch(PDO::FETCH_ASSOC);
 
+         $contactId = $details["id"];
+         $membershipId = $details["membership_id"];
+         $membershipType = $membership["name"];
+         $name = $details["display_name"];
+         $email = $details["email"];
          $address = getAddressDetails($dbh,$contactId);
          $street = $address["street"];
          $city = $address["city"];
          $billingAddress = $street." ".$city;
+         $orgName = $details["organization_name"];
+         $orgId = $details["employer_id"];
+         $feeAmount = $membership["minimum_fee"];
+         $subtotal = $feeAmount;
+         $vat = 0.0;
 
-         $info = array();
-         
-         $info["contact_id"] = $details["id"];
-         $info["membership_id"] = $details["membership_id"];
-         $info["member_type"] = $membership["name"];
-         $info["name"] = $details["display_name"];
-         $info["email"] = $details["email"];
-         $info["street"] = $street;
-         $info["city"] = $city;
-         $info["address"] = $billingAddress;
-         $info["company"] = $details["organization_name"];
-         $info["org_contact_id"] = $details["employer_id"];
-         $info["fee_amount"] = $membership["minimum_fee"];
+          $sql = $dbh->prepare("INSERT INTO billing_membership
+                        (membership_id,contact_id,membership_type,member_name,email,street,city,bill_address,organization_name,org_contact_id,fee_amount,subtotal,vat,billing_no,year)
+                        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                       ");
 
-         //insertMemberBilling($dbh,$info,$year);
+         $sql->bindValue(1,$membershipId,PDO::PARAM_INT);
+         $sql->bindValue(2,$contactId,PDO::PARAM_INT);
+         $sql->bindValue(3,$membershipType,PDO::PARAM_STR);
+         $sql->bindValue(4,$name,PDO::PARAM_STR);
+         $sql->bindValue(5,$email,PDO::PARAM_STR);
+         $sql->bindValue(6,$street,PDO::PARAM_STR);
+         $sql->bindValue(7,$city,PDO::PARAM_STR);
+         $sql->bindParam(8,$billingAddress,PDO::PARAM_STR);
+         $sql->bindValue(9,$orgName,PDO::PARAM_STR);
+         $sql->bindValue(10,$orgId,PDO::PARAM_INT);
+         $sql->bindValue(11,$feeAmount,PDO::PARAM_INT);
+         $sql->bindValue(12,$subtotal,PDO::PARAM_INT);
+         $sql->bindValue(13,$vat,PDO::PARAM_INT);
+         $sql->bindValue(14,$billingNo,PDO::PARAM_STR);
+         $sql->bindValue(15,$year,PDO::PARAM_INT);
 
-        echo "<pre>";
-        print_r($info);
-        echo "</pre>";
+         $sql->execute();
 
        }
+}
+
+function removedBilledMembershipContacts($dbh,array $contacts,$year){
+
+  $billedContacts = array();
+  foreach($contacts as $contactId){
+
+   $sql = $dbh->prepare("SELECT COUNT(*) as count FROM billing_membership WHERE contact_id = ? AND year = ?");
+   $sql->bindValue(1,$contactId,PDO::PARAM_INT);
+   $sql->bindValue(2,$year,PDO::PARAM_INT);
+   $sql->execute();
+
+   $result = $sql->fetch(PDO::FETCH_ASSOC);
+   $count = $result["count"];
+
+
+   if($count == 0){
+
+     $billedContacts[] = $contactId;
+   }
+
+  }
+
+  return $billedContacts;
 
 }
 ?>
