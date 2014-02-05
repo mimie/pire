@@ -351,4 +351,23 @@ function removedBilledMembershipContacts($dbh,array $contacts,$year){
   return $billedContacts;
 
 }
+
+function getNamesRemoveContacts($dbh,$contacts){
+
+  $names = array();
+  foreach($contacts as $key => $contactId){
+
+    $sql = $dbh->prepare("SELECT display_name FROM civicrm_contact 
+                          WHERE id = ? AND is_deleted = '0'");
+    $sql->bindValue(1,$contactId,PDO::PARAM_INT);
+    $sql->execute();
+
+    $result = $sql->fetch(PDO::FETCH_ASSOC);
+    $contactName = $result["display_name"];
+
+    $names[] = $contactName;
+  }
+
+ return $names;
+}
 ?>
