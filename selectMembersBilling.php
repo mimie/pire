@@ -59,8 +59,8 @@ $(function() {
    <table width='100%'>
     <tr>
      <td align='center' bgcolor='#084B8A'><a href='membershipNewBilling.php'>NEW MEMBERSHIP BILLING</a></td>
-     <td align='center' bgcolor="#084B8A"><a href='membershipIndividualBilling.php?&user=<?=$userId?>'>INDIVIDUAL BILLING</a></td>
-     <td align='center' bgcolor='white'><a href='membershipCompanyBilling.php?&user=<?=$userId?>'>COMPANY BILLING</td>
+     <td align='center' bgcolor="#084B8A"><a href='membershipIndividualBilling.php'>INDIVIDUAL BILLING</a></td>
+     <td align='center' bgcolor='white'><a href='membershipCompanyBilling.php'>COMPANY BILLING</td>
      <td align='center' bgcolor='#084B8A'><a href='membershipBillingView.php'>GENERATED BILLINGS</td>
     </tr>
    </table><br>
@@ -177,18 +177,22 @@ $(function() {
 
   elseif(isset($_POST["generate"])){
 
-    echo "<div id='confirmation' title='$orgName Company Billing'>";
     $contacts = $_POST["contactIds"];
+    $membershipTypeId = $_POST["membershipTypeId"];
+    $year = $_POST["year"];
     $selected = count($contacts);
 
+    insertMembershipCompanyBilling($dbh,$orgId,$year,$membershipTypeId,$contacts);
+
+    echo "<div id='confirmation' title='$orgName Company Billing'>";
     if($selected == 1){
       echo "<img src='images/confirm.png' alt='confirm' style='float:left;padding:5px;' width='42' height='42'/>"
-          . "You have selected $selected contact.<br>Company successfully generated.";
+          . "You have selected $selected contact.<br>Company billing successfully generated.";
     }
 
     elseif($selected == 0){
       echo "<img src='images/error.png' alt='confirm' style='float:left;padding:5px;' width='42' height='42'/>"
-           . "Please select contacts to include in the company billing.";
+           . "Please select contacts to include in the company billing.Company billing is not generated.";
     }
 
     else{
@@ -196,12 +200,11 @@ $(function() {
           . "You have selected $selected contacts.<br>Company billing successfully generated.";
     }
     echo "</div>";
-
     $contacts = getContactsPerCompany($dbh,$orgId);
     $displayContacts = displayContactsPerCompany($contacts,$orgName);
     echo $displayContacts;
-
   }
+
 
   else{
     $contacts = getContactsPerCompany($dbh,$orgId);
