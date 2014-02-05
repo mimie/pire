@@ -177,13 +177,17 @@ $(function() {
 
   elseif(isset($_POST["generate"])){
 
-    $contacts = $_POST["contactIds"];
-    $selected = count($contacts);
-    $membershipTypeId = $_POST["membershipTypeId"];
-    $year = $_POST["year"];
+      $contacts = $_POST["contactIds"];
+      $selected = count($contacts);
+      $membershipTypeId = $_POST["membershipTypeId"];
+      $year = $_POST["year"];
 
-    $contacts = removedBilledMembershipContacts($dbh,$contacts,$year);
-    $included = count($contacts);
+      if($selected){
+        $includedContacts = removedBilledMembershipContacts($dbh,$contacts,$year);
+        $included = count($includedContacts);
+      }
+
+     $notIncludedContacts = array_diff($contacts,$includedContacts);
 
     //insertMembershipCompanyBilling($dbh,$orgId,$year,$membershipTypeId,$contacts);
 
@@ -200,12 +204,12 @@ $(function() {
 
     elseif($selected > 0 && $included == 0){
       echo "<img src='images/error.png' alt='confirm' style='float:left;padding:5px;' width='42' height='42'/>"
-           . "All of the contacts selected have already generated the membership billing";
+           . "All of the contacts selected have already generated the membership billing.  ";
 
 
     }
 
-    else{
+    elseif($included > 0 || ($selected > 0 && $included > 0)){
       echo "<img src='images/confirm.png' alt='confirm' style='float:left;padding:5px;' width='42' height='42'/>"
           . "$included contacts are included in the billing.<br>Company billing successfully generated.";
     }
