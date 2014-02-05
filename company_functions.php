@@ -196,4 +196,56 @@ function displayContactsPerCompany(array $contacts,$orgName){
 
   return $html;
 }
+
+function insertMembershipCompanyBilling($dbh,$orgId,$year,$membershipTypeId,$contacts){
+
+    $sqlMembership = $dbh->prepare("SELECT id,name,minimum_fee 
+                                       FROM civicrm_membership_type
+                                       WHERE id = ?");
+    $sqlMembership->bindValue(1,$membershipTypeId, PDO::PARAM_INT);
+    $sqlMembership->execute();
+    $membership = $sqlMembership->fetch(PDO::FETCH_ASSOC);
+    
+    foreach($contacts as $contactId){
+
+        $sqlDetails = $dbh->prepare("SELECT cc.id,cm.id as membership_id,cc.display_name, em.email, cc.organization_name, cc.employer_id
+                              FROM civicrm_contact cc, civicrm_email em, civicrm_membership cm
+                              WHERE cc.id = ?
+                              AND cc.id = em.contact_id
+                              AND cm.contact_id = cc.id
+                              AND em.is_primary = '1'
+                              AND cc.is_deleted = '0'
+                             ");
+         $sqlDetails->bindValue(1,$contactId,PDO::PARAM_INT);
+         $sqlDetails->execute();
+         $details = $sqlDetails->fetch(PDO::FETCH_ASSOC);
+
+         $address = getAddressDetails($dbh,$contactId);
+         $street = $address["street"];
+         $city = $address["city"];
+         $billingAddress = $street." ".$city;
+
+         $info = array();
+         
+         $info["contact_id"] = $details["id"];
+         $info["membership_id"] = $details["membership_id"];
+         $info["member_type"] = $membership["name"];
+         $info["name"] = $details["display_name"];
+         $info["email"] = $details["email"];
+         $info["street"] = $street;
+         $info["city"] = $city;
+         $info["address"] = $billingAddress;
+         $info["company"] = $details["organization_name"];
+         $info["org_contact_id"] = $details["employer_id"];
+         $info["fee_amount"] = $membership["minimum_fee"];
+
+         //insertMemberBilling($dbh,$info,$year);
+
+        echo "<pre>";
+        print_r($info);
+        echo "</pre>";
+
+       }
+
+}
 ?>
