@@ -218,6 +218,7 @@ function insertMembershipCompanyBilling($dbh,$orgId,$year,$membershipTypeId,$con
     $sqlMembership->execute();
     $membership = $sqlMembership->fetch(PDO::FETCH_ASSOC);
 
+
     $yearPrefix = date("y",strtotime($year));
     $billingNo = "MEM-".$yearPrefix."-$orgId";
     $totalContacts = count($contacts);
@@ -229,7 +230,6 @@ function insertMembershipCompanyBilling($dbh,$orgId,$year,$membershipTypeId,$con
                              LEFT JOIN civicrm_email em ON cc.id = em.contact_id
                              LEFT JOIN civicrm_address ca ON ca.contact_id = em.contact_id
                              WHERE cc.contact_type = 'Organization'
-                             AND em.is_primary = '1'
                              AND cc.is_deleted = '0'
                              AND cc.id = ?
                              ");
@@ -257,7 +257,7 @@ function insertMembershipCompanyBilling($dbh,$orgId,$year,$membershipTypeId,$con
     $sqlInsert->bindValue(8,$billingNo,PDO::PARAM_STR);
     $sqlInsert->bindValue(9,$year,PDO::PARAM_INT);
 
-    $sqlInsert->execute();
+    //$sqlInsert->execute();
 
     insertIndividualMemberBilling($dbh,$contacts,$year,$billingNo,$membershipTypeId);
 
@@ -285,6 +285,10 @@ function insertIndividualMemberBilling($dbh,array $contacts,$year,$billingNo,$me
          $sqlDetails->bindValue(1,$contactId,PDO::PARAM_INT);
          $sqlDetails->execute();
          $details = $sqlDetails->fetch(PDO::FETCH_ASSOC);
+
+         echo "<pre>";
+         print_r($details);
+         echo "</pre>";
 
          $contactId = $details["id"];
          $membershipId = $details["membership_id"];
