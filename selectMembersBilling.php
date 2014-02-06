@@ -245,6 +245,7 @@ $(function() {
          }
          echo "</font>";
        }
+       insertMembershipCompanyBilling($dbh,$orgId,$year,$membershipTypeId,$includedContacts);
     }
 
     echo "</div>";

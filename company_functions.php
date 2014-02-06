@@ -270,16 +270,25 @@ function insertIndividualMemberBilling($dbh,array $contacts,$year,$billingNo,$me
     $sqlMembership->execute();
     $membership = $sqlMembership->fetch(PDO::FETCH_ASSOC);
 
-    foreach($contacts as $contactId){
+    /**echo "<pre>";
+    print_r($contacts);
+    echo "</pre>";**/
 
-        $sqlDetails = $dbh->prepare("SELECT cc.id,cm.id as membership_id,cc.display_name, em.email, cc.organization_name, cc.employer_id
-                              FROM civicrm_contact cc, civicrm_email em, civicrm_membership cm
-                              WHERE cc.id = ?
-                              AND cc.id = em.contact_id
-                              AND cm.contact_id = cc.id
-                              AND em.is_primary = '1'
-                              AND cc.is_deleted = '0'
-                             ");
+    foreach($contacts as $key =>$contactId){
+
+        $sqlDetails = $dbh->prepare("SELECT cc.id as contact_id, cc.display_name, cc.organization_name, em.email,em.is_primary,cm.join_date, cc.employer_id,
+cm.start_date, cm.end_date,cm.id as membership_id, cmt.name as membership_type,cs.name as status
+FROM civicrm_contact cc   
+LEFT JOIN civicrm_membership cm ON cm.contact_id = cc.id        
+LEFT JOIN civicrm_membership_type cmt                           
+ON cm.membership_type_id = cmt.id                               
+LEFT JOIN civicrm_membership_status cs                          
+ON cm.status_id = cs.id                                         
+LEFT JOIN civicrm_email em                                      
+ON cc.id = em.contact_id     
+WHERE cc.id = ?                                  
+AND cc.is_deleted = '0' 
+                                  ");
          $sqlDetails->bindValue(1,$contactId,PDO::PARAM_INT);
          $sqlDetails->execute();
          $details = $sqlDetails->fetch(PDO::FETCH_ASSOC);
@@ -288,7 +297,7 @@ function insertIndividualMemberBilling($dbh,array $contacts,$year,$billingNo,$me
          print_r($details);
          echo "</pre>";
 
-         $contactId = $details["id"];
+         //$contactId = $details["id"];
          $membershipId = $details["membership_id"];
          $membershipType = $membership["name"];
          $name = $details["display_name"];
@@ -303,7 +312,7 @@ function insertIndividualMemberBilling($dbh,array $contacts,$year,$billingNo,$me
          $subtotal = $feeAmount;
          $vat = 0.0;
 
-          $sql = $dbh->prepare("INSERT INTO billing_membership
+         $sql = $dbh->prepare("INSERT INTO billing_membership
                         (membership_id,contact_id,membership_type,member_name,email,street,city,bill_address,organization_name,org_contact_id,fee_amount,subtotal,vat,billing_no,year)
                         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
                        ");
@@ -315,7 +324,7 @@ function insertIndividualMemberBilling($dbh,array $contacts,$year,$billingNo,$me
          $sql->bindValue(5,$email,PDO::PARAM_STR);
          $sql->bindValue(6,$street,PDO::PARAM_STR);
          $sql->bindValue(7,$city,PDO::PARAM_STR);
-         $sql->bindParam(8,$billingAddress,PDO::PARAM_STR);
+         $sql->bindValue(8,$billingAddress,PDO::PARAM_STR);
          $sql->bindValue(9,$orgName,PDO::PARAM_STR);
          $sql->bindValue(10,$orgId,PDO::PARAM_INT);
          $sql->bindValue(11,$feeAmount,PDO::PARAM_INT);
@@ -325,6 +334,24 @@ function insertIndividualMemberBilling($dbh,array $contacts,$year,$billingNo,$me
          $sql->bindValue(15,$year,PDO::PARAM_INT);
 
          $sql->execute();
+
+         var_dump($sql);
+
+         echo "$membershipId<br>";
+         echo "$contactId<br>";
+         echo "$membershipType<br>";
+         echo "$name<br>";
+         echo "$email<br>";
+         echo "$street<br>";
+         echo "$city<br>";
+         echo "$billingAddress<br>";
+         echo "$orgName<br>";
+         echo "$orgId<br>";
+         echo "$feeAmount<br>";
+         echo "$subtotal<br>";
+         echo "$vat<br>";
+         echo "$billingNo<br>";
+         echo "$year<br>";
 
        }
 }
