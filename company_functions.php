@@ -40,8 +40,6 @@ function getDetailsForParticipant($dbh,$participantId){
                        AND ce.event_type_id = cv.value
                        AND cp.status_id = cs.id
                        AND em.contact_id = cp.contact_id
-                       AND em.location_type_id = '1'
-                       AND em.is_primary = '1'
                        AND cp.id = ?
   ");
 
