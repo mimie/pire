@@ -79,9 +79,11 @@
   $eventType = getEventTypeName($dbh,$eventId);
   
   $participantId = $billingDetails["participant_id"];
+  $contactId = getParticipantContactId($dbh, $participantId, $eventId);
   $participantName = $billingDetails["participant_name"];
-  $orgName = $billingDetails["organization_name"];
-  $billAddress = $billingDetails["bill_address"];
+  $orgId = getEmployerId($dbh,$contactId);
+  $orgName = getEmployerName($dbh,$orgId);
+  $billAddress = getContactAddress($dbh,$contactId);
   $feeAmount = $billingDetails["fee_amount"];
   $currencyFormat = number_format($feeAmount,2);
 
@@ -98,7 +100,6 @@
   $locationDetails = getEventLocation($dbh,$eventId);
   $eventLocation = formatEventLocation($locationDetails);
 
-  $contactId = getParticipantContactId($dbh, $participantId, $eventId);
 
   //$tax = round($feeAmount/9.3333,2);
   //$netVat = round($feeAmount - $tax,2);
