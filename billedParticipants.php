@@ -5,7 +5,7 @@
 <link rel="stylesheet" type="text/css" href="billingStyle.css">
 <link rel="stylesheet" type="text/css" href="menu.css">
 <style type="text/css">
-   body{overflow:hidden;}
+   body{overflow:scroll;}
 </style>
 </head>
 <body>
