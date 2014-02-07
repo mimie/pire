@@ -82,6 +82,26 @@ function updateAddedAmount($dbh,$billingNo,$addedAmount){
              
 }
 
+function checkParticipantBillGenerated($dbh,$participantId,$eventId){
+
+  $sql = $dbh->prepare("SELECT * FROM billing_details
+                       WHERE participant_id = ?
+                       AND event_id = ?");
+  $sql->bindValue(1,$participantId,PDO::PARAM_INT);
+  $sql->bindValue(2,$eventId,PDO::PARAM_INT);
+  $sql->execute();
+
+  $count = $sql->rowCount();
+
+  if($count > 0){
+    $sqlDelete = $dbh->prepare("DELETE FROM billing_details WHERE participant_id = ? AND event_id = ?");
+
+    $sqlDelete->bindValue(1,$participantId,PDO::PARAM_INT);
+    $sqlDelete->bindValue(2,$eventId,PDO::PARAM_INT);
+    $sqlDelete->execute();
+  }
+}
+
 function getContactsPerCompany($dbh,$orgId){
 
   $sql = $dbh->prepare("SELECT cc.id as contact_id, cc.display_name, cc.organization_name, em.email,cm.join_date, 
