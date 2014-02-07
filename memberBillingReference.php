@@ -91,10 +91,8 @@
 
   $billDate = $billingDetails["bill_date"];
   $billDate = date("F j Y",strtotime($billDate));
-  $sql = $dbh->prepare("SELECT organization_name FROM civicrm_contact cc WHERE id='$contactId'");
-  $sql->execute();
-  $result = $sql->fetch(PDO::FETCH_ASSOC);
-  $orgName = $result["organization_name"];
+  $orgId = getEmployerId($dbh,$contactId);
+  $orgName = getEmployerName($dbh,$orgId);
   $addressDetails = getAddressDetails($dbh,$contactId);
   $street = $addressDetails["street"];
   $city = $addressDetails["city"];

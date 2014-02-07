@@ -74,7 +74,7 @@
   $billingDate = date("F j Y",strtotime($billingDate));
 
   $billingDetails = getCompanyBillingDetails($dbh,$companyBillingNo,$eventId);
-  $orgName = $billingDetails["organization_name"];
+  $orgName = getEmployerName($dbh,$companyId);
   $totalAmount = $billingDetails["total_amount"];
   $currencyFormat = number_format($totalAmount,2);
   

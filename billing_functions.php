@@ -937,4 +937,19 @@ function getEmployerId($dbh,$contactId){
 
   return $orgId;
 }
+
+function getEmployerName($dbh,$orgId){
+
+  $sql = $dbh->prepare("SELECT organization_name FROM civicrm_contact
+                        WHERE id = ?
+                        AND is_deleted = '0';
+                       ");
+  $sql->bindValue(1,$orgId,PDO::PARAM_INT);
+  $sql->execute();
+
+  $result = $sql->fetch(PDO::FETCH_ASSOC);
+  $orgName = $result["organization_name"];
+
+  return $orgName;
+}
 ?>
