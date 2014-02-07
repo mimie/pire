@@ -142,6 +142,8 @@
 
     foreach($ids as $participantId){
       $info = getDetailsForParticipant($dbh,$participantId);
+
+      checkParticipantBillGenerated($dbh,$participantId,$eventId);
      
       $sql = $dbh->prepare("INSERT INTO billing_details (participant_id, contact_id, event_id, 
                             event_type, event_name, participant_name, email,bill_address, 
