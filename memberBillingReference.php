@@ -148,7 +148,7 @@
       </tr>
       <tr>
          <td></td>
-         <td colspan="2" style="border-right:2px solid black;"><font style="font-size:13px"><?=$phone?></font></td>
+         <td colspan="2" style="border-right:2px solid black;"><font style="font-size:13px"><?//=$phone?></font></td>
          <td></td>
          <td></td>
       </tr>
