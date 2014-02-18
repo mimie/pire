@@ -611,13 +611,12 @@ function getMembersByDate(PDO $dbh,$orgId,$date){
 
 function getNonMembers($dbh){
 
- $sql = $dbh->prepare("SELECT DISTINCT cc.id, cc.display_name, cc.organization_name, ce.email
-                       FROM civicrm_email ce, civicrm_contact cc
-                       WHERE ce.contact_id = cc.id
-                       AND cc.contact_type = 'Individual'
+ $sql = $dbh->prepare("SELECT DISTINCT cc.id, cc.sort_name, cc.organization_name, ce.email
+                       FROM civicrm_contact cc 
+                       LEFT JOIN civicrm_email ce ON ce.contact_id = cc.id AND ce.is_primary = '1'
+                       WHERE cc.contact_type = 'Individual'
                        AND cc.is_deleted = '0'
                        AND cc.display_name <> 'Admin Mister'
-                       AND ce.is_primary = '1'
                        AND cc.id NOT IN(SELECT cm.contact_id
                                      FROM civicrm_membership cm
                                      WHERE cm.contact_id = cc.id)
@@ -625,6 +624,7 @@ function getNonMembers($dbh){
                                         FROM billing_membership cb
                                         WHERE cb.membership_id = '0'
                                        )
+                       ORDER by cc.sort_name
                        ") ;
 
  $sql->execute();
@@ -654,7 +654,7 @@ function displayNonMembers(array $nonMembers){
   foreach($nonMembers as $key => $contact){
 
     $contactId = $contact["id"];
-    $name = $contact["display_name"];
+    $name = $contact["sort_name"];
     $name = mb_convert_encoding($name,"UTF-8");
     $orgName = $contact["organization_name"];
     $orgName = mb_convert_encoding($orgName,"UTF-8");
@@ -676,12 +676,11 @@ function displayNonMembers(array $nonMembers){
 
 function searchContactByName($dbh,$name){
 
- $sql = $dbh->prepare("SELECT cc.id, cc.display_name, cc.organization_name, ce.email
-                       FROM civicrm_email ce, civicrm_contact cc
-                       WHERE ce.contact_id = cc.id
-                       AND cc.contact_type = 'Individual'
+ $sql = $dbh->prepare("SELECT cc.id, cc.sort_name, cc.organization_name, ce.email
+                       FROM civicrm_contact cc
+                       LEFT JOIN civicrm_email ce ON ce.contact_id = cc.id AND is_primary = '1'
+                       WHERE cc.contact_type = 'Individual'
                        AND cc.display_name <> 'Admin Mister'
-                       AND ce.is_primary = '1'
                        AND cc.is_deleted = '0'
                        AND cc.display_name LIKE '%$name%'
                        AND cc.id NOT IN(SELECT cm.contact_id
@@ -691,6 +690,7 @@ function searchContactByName($dbh,$name){
                                         FROM billing_membership cb
                                         WHERE cb.membership_id = '0'
                                        )
+                       ORDER BY sort_name
                       ");
 
  $sql->execute();
@@ -702,12 +702,11 @@ function searchContactByName($dbh,$name){
 
 function searchContactByEmail($dbh,$email){
  
- $sql = $dbh->prepare("SELECT cc.id, cc.display_name, cc.organization_name, ce.email
-                       FROM civicrm_email ce, civicrm_contact cc
-                       WHERE ce.contact_id = cc.id
-                       AND cc.contact_type = 'Individual'
+ $sql = $dbh->prepare("SELECT cc.id, cc.sort_name, cc.organization_name, ce.email
+                       FROM civicrm_contact cc
+                       LEFT JOIN civicrm_email ce ON ce.contact_id = cc.id AND ce.is_primary = '1'
+                       WHERE cc.contact_type = 'Individual'
                        AND cc.display_name <> 'Admin Mister'
-                       AND ce.is_primary = '1'
                        AND cc.is_deleted = '0'
                        AND ce.email LIKE '%$email%'
                        AND cc.id NOT IN(SELECT cm.contact_id
@@ -717,6 +716,7 @@ function searchContactByEmail($dbh,$email){
                                         FROM billing_membership cb
                                         WHERE cb.membership_id = '0'
                                        )
+                      ORDER BY sort_name
                       ");
 
  $sql->execute();
