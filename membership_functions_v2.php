@@ -49,7 +49,9 @@ function displayMembershipDetails(array $membership){
   foreach($membership as $key => $field){
     $membershipId = $field["membership_id"];
     $name = $field["sort_name"];
+    $name = mb_convert_encoding($name,"UTF-8");
     $orgName = $field["organization_name"];
+    $orgName = mb_convert_encoding($orgName,"UTF-8");
     $type = $field["membership_type"];
     $billingNo = $field["billing_no"];
     $billDate = $field["bill_date"];
@@ -67,7 +69,7 @@ function displayMembershipDetails(array $membership){
       $checkbox = $billingNo != NULL ? '' : 'class=checkbox';
       $disabled = $billingNo != NULL ? 'disabled' : '';
     }
-    $printBill = $billingNo != NULL ? "<a href='memberBillingReference.php?billingId=$billingId'><img src='images/printer-icon.png' width='30' height='30'</a>" : 'Not Available';
+    $printBill = $billingNo != NULL ? "<a href='memberBillingReference.php?billingId=$billingId' target='_blank'><img src='images/printer-icon.png' width='30' height='30'</a>" : 'Not Available';
 
     $html = $html."<tr>"
           . "<td><input type='checkbox' name='membershipIds[]' value='$membershipId' $disabled $checkbox></td>"
