@@ -26,7 +26,27 @@ $(function() {
 //        $("table").tablesorter( {sortList: [[0,0], [1,0]]} ); 
 });
 
+/**$(function() {
+    $( "#dialog" ).dialog();
+});**/
+$(function() {
+    $( "#confirmation" ).dialog({
+      resizable: false,
+      width:500,
+      modal: true,
+      buttons: {
+        "OK": function() {
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+});
+
+
 </script>
+<style>
+  img.left {float: left;}
+</style>
 </head>
 </head>
 <body>
@@ -110,13 +130,15 @@ $(function() {
       $memberInfo["org_contact_id"] = $billingInfo["employer_id"];
       $memberInfo["fee_amount"] = $billingInfo["fee_amount"];
 
-      echo "<pre>";
-      print_r($memberInfo);
-      echo "</pre>";
-
       insertMemberBilling($dbh,$memberInfo,$year);
-      
     }
+
+    $countContacts = count($ids);
+
+    echo "<div id ='confirmation'>"
+         . "<img src='images/confirm.png' alt='confirm' style='float:left;padding:5px;'i width='42' height='42'/>"
+         . "<p>Successfully generated membership billing for $countContacts contact/s.</p>"
+         . "</div>";
     $expiredDate = $currentYear."-12-31";
     $name = "";
     $membership = getMembershipByNameAndDate($dbh,$name,$expiredDate);
