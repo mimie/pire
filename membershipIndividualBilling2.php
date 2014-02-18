@@ -33,6 +33,7 @@ $(function() {
 <?php
   include 'pdo_conn.php';
   include 'membership_functions_v2.php';
+  include 'membership_functions.php';
   include 'login_functions.php';
   include 'billing_functions.php';
 
@@ -108,6 +109,10 @@ $(function() {
       $memberInfo["company"] = $billingInfo["organization_name"];
       $memberInfo["org_contact_id"] = $billingInfo["employer_id"];
       $memberInfo["fee_amount"] = $billingInfo["fee_amount"];
+
+      echo "<pre>";
+      print_r($memberInfo);
+      echo "</pre>";
 
       insertMemberBilling($dbh,$memberInfo,$year);
       
