@@ -128,7 +128,7 @@ function logoutDiv($dbh){
           // . "<li><a href='logout.php'>Logout</a></li>"
            . "<li><a href='notes/notes.php'>Notes</a></li>"
            . "<a href='#'><li>Billing Report</a>"
-           . "<ul><li><a href='#'>Individual Event Billing</a></li><li><a href='#'>Company Event Billing</a></li></ul>"
+           . "<ul><li><a href='IndividualEventBillingView.php'>Individual Event Billing</a></li><li><a href='CompanyEventBillingView.php'>Company Event Billing</a></li></ul>"
            . "</li>"
            . "</ul><br><br>"
            . "</div>";
