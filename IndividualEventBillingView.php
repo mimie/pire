@@ -20,6 +20,20 @@ $(function() {
         });
 //        $("table").tablesorter( {sortList: [[0,0], [1,0]]} ); 
 });
+
+$(function() {
+    $( "#confirmation" ).dialog({
+      resizable: false,
+      width:500,
+      modal: true,
+      buttons: {
+        "OK": function() {
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+  });
+
 </script>
 <body>
 <?php
@@ -51,9 +65,34 @@ $(function() {
        . "</fieldset><br>";
 
 
-  $billings = getAllIndividualBillings($dbh);
-  $display = displayIndividualEventBillings($billings);
-  echo $display;  
+  if(isset($_POST["search"])){
+    $searchValue = $_POST["searchText"];
+    $searchType = $_POST["searchType"];
+    $billings = searchIndividualBillings($dbh,$searchType,$searchValue);
+    $display = displayIndividualEventBillings($billings);
+    echo $display;
+  }
+
+  elseif(isset($_POST["update"])){
+    $ids = $_POST["participantIds"];
+    foreach($ids as $participantId){
+       updateChangeIndividualBilling($dbh,$participantId);
+    }
+
+    $billings = getAllIndividualBillings($dbh);
+    $display = displayIndividualEventBillings($billings);
+    echo $display;  
+    
+    echo "<div id='confirmation' title='Confirmation'>"
+         . "<img src='images/confirm.png' alt='confirm' style='float:left;padding:5px;' width='42' height='42'/><br>Billing is successfully updated."
+         . "</div>";
+  }
+
+  else{
+    $billings = getAllIndividualBillings($dbh);
+    $display = displayIndividualEventBillings($billings);
+    echo $display;  
+  }
 ?>
   </div>
   </form>
