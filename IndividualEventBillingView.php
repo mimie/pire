@@ -14,7 +14,7 @@ $(function() {
         $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
         $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
         $('#billings').jPaginate({
-                'max': 15,
+                'max': 12,
                 'page': 1,
                 'links': 'buttons'
         });
@@ -48,7 +48,7 @@ $(function() {
   echo $menu;
   echo "<br>";
 
-  echo "<div style='width:80%;margin:0 auto;padding:3px;'>";
+  echo "<div style='width:100%;margin:0 auto;padding:3px;'>";
   echo "<form action='' method='POST'>"
        . "<fieldset>"
        . "<legend>Search Individual Event Billing</legend>"
@@ -75,17 +75,23 @@ $(function() {
 
   elseif(isset($_POST["update"])){
     $ids = $_POST["participantIds"];
-    foreach($ids as $participantId){
-       updateChangeIndividualBilling($dbh,$participantId);
-    }
+    $count = count($ids);
 
-    $billings = getAllIndividualBillings($dbh);
-    $display = displayIndividualEventBillings($billings);
-    echo $display;  
+    if($count){
     
-    echo "<div id='confirmation' title='Confirmation'>"
+       foreach($ids as $participantId){
+          updateChangeIndividualBilling($dbh,$participantId);
+       }
+
+      $billings = getAllIndividualBillings($dbh);
+      $display = displayIndividualEventBillings($billings);
+      echo $display;  
+    
+      echo "<div id='confirmation' title='Confirmation'>"
          . "<img src='images/confirm.png' alt='confirm' style='float:left;padding:5px;' width='42' height='42'/><br>Billing is successfully updated."
          . "</div>";
+      }
+     
   }
 
   else{
