@@ -160,4 +160,64 @@ function updateChangeIndividualBilling($dbh,$participantId){
   $sqlUpdate->execute();
 
 }
+
+function getAllCompanyBillings($dbh){
+
+  $sql = $dbh->prepare("SELECT bc.org_contact_id, bc.event_id,ce.title as event_name,cc.organization_name,bc.billing_no,bc.total_amount,bc.subtotal,bc.vat,bc.bill_date
+                        FROM billing_company bc,civicrm_contact cc, civicrm_event ce
+                        WHERE bc.event_id = ce.id
+                        AND bc.org_contact_id = cc.id
+                        AND cc.is_deleted = '0'
+                        ORDER BY cc.organization_name
+                       ");
+  $sql->execute();
+  $result = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+  return $result;
+}
+
+function displayCompanyBillings(array $billings){
+    
+  $html = "<table id = 'billings' width='100%'>"
+        . "<thead>"
+        . "<th>Organization Name</th>"
+        . "<th>Event Name</th>"
+        . "<th>Billing No</th>"
+        . "<th>Total Amount</th>"
+        . "<th>Subtotal</th>"
+        . "<th>VAT</th>"
+        . "<th>Billing Date</th>"
+        . "<th>Print Bill</th>"
+        . "<th>Billed Participants</th>"
+        . "</thead>";
+
+   $html = $html."<tbody>";
+
+   foreach($billings as $key => $field){
+
+     $orgName = $field["organization_name"];
+     $eventName = $field["event_name"];
+     $billingNo = $field["billing_no"];
+     $total = $field["total_amount"];
+     $subtotal = $field["subtotal"];
+     $vat = $field["vat"];
+     $billingDate = $field["bill_date"];
+
+     $html = $html."<tr>"
+           . "<td>$orgName</td>"
+           . "<td>$eventName</td>"
+           . "<td>$billingNo</td>"
+           . "<td>$total</td>"
+           . "<td>$subtotal</td>"
+           . "<td>$vat</td>"
+           . "<td>$billingDate</td>"
+           . "<td></td>"
+           . "<td></td>"
+           . "<tr>";
+   }
+
+  $html = $html."</tbody></table>";
+
+  return $html;
+}
 ?>
