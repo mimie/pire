@@ -178,7 +178,7 @@ function reloadPage()
           $billingDate = getIndividualBillingDate($dbh,$participantId,$eventId);
           $billingAddress = getIndividualBillingAddress($dbh,$participantId,$eventId);
    
-          if($eventTypeName == 'CON'){
+          if($eventTypeName == 'CON' || $eventTypeName == 'MBA'){
              echo "<a href='individualConvention.php?billingRef=$billingNo&eventId=$eventId&user=userId' style='text-decoration:none;' target ='_blank'><img src='printer-icon.png' width='50' height='50'>";
           }
 

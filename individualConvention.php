@@ -4,8 +4,8 @@
 <style>
 #main{
   border: 3px solid #0000FF;
-  width: 739.28px;
-  height: 959.62px;
+  width: 875px;
+  height: 1050px;
   background-image:url('images/watermark.png');
   background-repeat:no-repeat;
   background-position:center;
@@ -14,7 +14,7 @@
 }
 
 #header{
-  width: 699.21px;
+  width: 860px;
   height: 49.51px;
   background-color: #08088A;
   font-family: Arial;
@@ -31,7 +31,7 @@
 }
 
 #tin{
-  width: 699.21px;
+  width: 860px;
   height: 57.83px;
   font-family: Arial;
   margin: margin 0 auto;
@@ -39,7 +39,7 @@
   
 }
 #billedTo{
-  width: 699.21px;
+  width: 860px;
   font-family: Arial;
   margin: margin 0 auto;
   
@@ -107,6 +107,9 @@
   //$netVat = round($feeAmount - $tax,2);
   $tax = $billingDetails["vat"];
   $netVat = $billingDetails["subtotal"];
+  $address = getAddressDetails($dbh,$contactId);
+  $street = $address["street"];
+  $city = $address["city"];
 
 ?>
 <div id="main">
@@ -136,7 +139,7 @@
     </div>
     <!--billed to-->
     <div id="billedTo">
-     <table align="left">
+     <table align="left" style='width:100%;'>
       <tr>
          <td width="101.67px"><font style="font-size:16px"><b>BILLED TO:</b></font></td>
          <td width="329.95px"><font style="font-size:13px"><b><?=$participantName?></b></font></td>
@@ -151,7 +154,7 @@
       </tr>
       <tr>
          <td></td>
-         <td><font style="font-size:13px"><?=$billAddress?></font></td>
+         <td><font style="font-size:13px"><?=$street?><br><?=$city?></font></td>
          <td style="border-right:2px solid black;"><font style="font-size:13px"><b>Member ID:</b></font></td>
          <td><font style="font-size:13px"><?=$memberId?></font></td>
       </tr>
@@ -170,18 +173,22 @@
     </div>
     <div id="billedTo">
      <!--particulars-->
-     <table align="left" style="border-collapse:collapse;" border="1px">
+     <table align="left" style="border-collapse:collapse; width:100%;" border="1px">
       <tr>
-        <td colspan="2" width="566.93px" align="center" bgcolor="#0B0B3B" style="border:2px solid #BCF5A9"><font style="font-size:13px;color:white;"><b>PARTICULARS</b></font></td>
-        <td width="132.28px" align="center" bgcolor="#0B0B3B" style="border:2px solid #BCF5A9"><font style="font-size:13px;color:white;"><b>AMOUNT</b></font></td>
+        <td colspan="2" width="566.93px" align="center" bgcolor="#0B0B3B" style="border:2px solid black"><font style="font-size:13px;color:white;"><b>PARTICULARS</b></font></td>
+        <td width="132.28px" align="center" bgcolor="#0B0B3B" style="border:2px solid black"><font style="font-size:13px;color:white;"><b>AMOUNT</b></font></td>
       </tr>   
       <tr>
-        <td colspan="2" height="350px" style="border:2px solid #BCF5A9; vertical-align:top;">
+        <td colspan="2" height="550px" style="border:2px solid black; vertical-align:top;">
           <?=$eventName?><br>
-          On&nbsp;<?=$dueDate?>&nbsp;to&nbsp;<?=$eventEndDate?><br>
-          At&nbsp;<?=$eventLocation?> 
+          <?php
+            $dates = $dueDate==$eventEndDate ? "On $dueDate<br>" : "On $dueDate to $eventEndDate<br>";
+            echo $dates;
+            $location = $locaction == NULL ? '<br><br>' : "At $eventLocation><br><br>";
+            echo $location; 
+          ?>
         </td>
-        <td style="border:2px solid #BCF5A9; vertical-align:top;" align="center"><br><?=$currencyFormat?></td> 
+        <td style="border:2px solid black; vertical-align:top;" align="center"><br><?=$currencyFormat?></td> 
       </tr>
       <tr>
         <td height="20px" width="320.5px" align="center" style="border-bottom-width:2px"><b><i><font style="font-size:13px">VAT-EXEMPT TRANSACTION</font></i></b></td>
@@ -192,28 +199,24 @@
      </div>
 
      <div id = "billedTo">
-     <table align="left">
+     <table align="left" width='100%'>
       <tr>
-       <td width="279.61px" style="vertical-align:top">
+       <td style="vertical-align:top;width:30%;">
           <br><font style="font-size:13px;font-family:Arial"><b>DIRECT ALL INQUIRIES TO:</b></font><br>
-          <b><i><font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ARTHELEI V. MENDOZA</i></b><br>
+          <b><i><font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&nbsp;&nbsp;<br>
           <font style="font-size:13px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(+632) 940-9554</font><br>
           <font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;email: ar_finance@iia-p.org</font>
        </td>
-       <td width="419.61px">
+       <td style='width:70%;'>
           <br><font style="font-size:13px;font-family:Arial"><b>PAYMENT INSTRUCTION:</b></font><br>
           <font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&Oslash;&nbsp;If by check, <font color="red"><b><u>should be</u></b></font> made payable to:</font><br>
           <font style="font-size:15px"><b><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Institute of Internal Auditors Philippines, Inc.</i></b></font><br><br>
           <font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&Oslash;&nbsp;If thru bank telegraphic transfer, include <b><u>P250 /$ 6.50,</b></u> in your 
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;payment to cover for bank charges.</font><br><br>
-          <font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&Oslash;&nbsp;By direct deposit to:</font><br>
-          <font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Institute of Intenal Auditors Philippines, Inc.</b></font><br>
-          <font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Acct No. 691-005-4066</b></font><br>
-          <font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Banco de Oro - Rufino Branch</b></font><br><br>
-         <font style="font-size:13px;font-family:Arial">
-           Please indicate the BDO branch where you are transacting and<br>
-           present your <b>ORIGINAL COPY</b> of the bank validated deposit slip<br>
-           to claim your OFFICIAL RECEIPT. 
+            payment to cover for bank charges.</font><br><br>
+            <font style="font-size:13px;font-family:Arial">&nbsp;&nbsp;&Oslash;&nbsp;If thru SM Department Store Bills Payment Center,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;To facilitate identification of your payment,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;Please indicate this registration\billing reference number in the 
+            payment slip form.
          </font>
        </td>
       </tr>
