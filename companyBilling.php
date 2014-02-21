@@ -226,7 +226,7 @@ function reloadPage()
       echo "<th>Total Billing Amount</th>";
       echo "<th>Subtotal</th>";
       echo "<th>12% VAT</th>";
-      echo "<th>Generate Bill</th>";
+      echo "<th><input type='checkbox' id='check'>Generate Bill</th>";
       echo "<th>Send Bill</th>";
 //      echo "<th>Post Bill</th>";
       echo "<th>Payment Status</th>";
@@ -242,7 +242,7 @@ function reloadPage()
   	$organization_name = array_search($companyId,$orgs);
         $totalBill = $companyBillAmounts[$companyId];
 
-        if($eventTypeName == 'CON'){
+        if($eventTypeName == 'CON' || $eventTypeName == 'MBA'){
            $subtotal = $totalBill;
            $subtotal = number_format($subtotal, 2, '.', '');
            $tax = 0.0;
@@ -268,7 +268,7 @@ function reloadPage()
           $companyBillingAddress = "";
           $participantsLink = participantsLink($companyBillingRefNo,$eventId,$companyId);
         
-          if($eventTypeName == 'CON'){
+          if($eventTypeName == 'CON' || $eventTypeName == 'MBA'){
              echo "<td align='center'><a href='companyConvention.php?companyBillingRef=$companyBillingRefNo&eventId=$eventId&orgId=$companyId' style='text-decoration:none' target='_blank'>";
           }
 
@@ -289,7 +289,7 @@ function reloadPage()
 
         elseif($isCompanyBillGenerated == 0){
          
-          echo "<td align='center'><input type='checkbox' name='companyIds[]' value='$companyId'></td>";
+          echo "<td align='center'><input type='checkbox' name='companyIds[]' value='$companyId' class=checkbox></td>";
           echo "<td align='center'><input type='checkbox' name='companyIds2[]' value='$companyId' disabled></td>";
           //for weberp function
           //echo "<td align='center'><input type='checkbox' name='postIds[]' value='$companyId' disabled></td>";
@@ -405,4 +405,15 @@ function reloadPage()
 
 ?>
 </body>
+<script type="text/javascript">
+  $("#check").click(function(){
+
+    if($(this).is(":checked")){
+      $("body input[type=checkbox][class=checkbox]").prop("checked",true);
+    }else{
+      $("body input[type=checkbox][class=checkbox]").prop("checked",false);
+    }
+
+  });
+</script>
 </html>

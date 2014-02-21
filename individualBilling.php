@@ -146,7 +146,7 @@ function reloadPage()
        $email = getContactEmail($dbh,$contact_id);
        $status = getStatusType($dbh,$participantId);
        
-       if($eventTypeName == 'CON'){
+       if($eventTypeName == 'CON' || $eventTypeName == 'MBA'){
           $subtotal = $fee_amount;
           $tax = 0.0;
        }
