@@ -129,16 +129,30 @@ function displayIndividualEventBillings(array $billings){
 
 function updateChangeIndividualBilling($dbh,$participantId){
 
-  $sqlNewAmount = $dbh->prepare("SELECT fee_amount FROM civicrm_participant
-                                 WHERE id = ?
+  $sqlNewAmount = $dbh->prepare("SELECT bd.event_type,cp.fee_amount FROM civicrm_participant cp,billing_details bd
+                                 WHERE cp.id = ?
+                                 AND bd.participant_id = cp.id
                                 ");
   $sqlNewAmount->bindValue(1,$participantId,PDO::PARAM_INT);
   $sqlNewAmount->execute();
 
   $result = $sqlNewAmount->fetch(PDO::FETCH_ASSOC);
   $newAmount = $result["fee_amount"];
+  $eventType = $result["event_type"];
 
-  $sqlUpdate = $dbh->prepare("UPDATE billing_details SET fee_amount = ?
+  if($eventType == 'CON'){
+    $taxQuery = '';
+  }
+
+   else{
+     $tax = $newAmount/9.3333;
+     $tax = number_format($tax, 2, '.', '');
+     $subtotal = $newAmount - $tax;
+     $taxQuery = ", subtotal=".$subtotal.",vat="."$tax";
+
+   }
+
+  $sqlUpdate = $dbh->prepare("UPDATE billing_details SET fee_amount = ? $taxQuery
                               WHERE participant_id = ?
                              ");
   $sqlUpdate->bindValue(1,$newAmount,PDO::PARAM_INT);

@@ -347,9 +347,10 @@ function reloadPage()
    
             $sql = $dbh->prepare("INSERT INTO billing_details
                    (participant_id,contact_id,event_id,event_type,event_name,participant_name,email,participant_status,organization_name,org_contact_id,billing_type,fee_amount,billing_no)
-                   VALUES('$participant_id','$contactId','$eventId','$eventTypeName','$eventName','$participant_name','$email','$status','$organization_name','$orgId','$participantBillingType','$fee_amount','$billingNo')");
+                   VALUES('$participant_id','$contactId','$eventId','$eventTypeName','$eventName','$participant_name','$email','$status',?,'$orgId','$participantBillingType','$fee_amount','$billingNo')");
 
-            $sql->execute();
+             $sql->bindValue(1,$organization_name,PDO::PARAM_INT);
+             $sql->execute();
 
             $companyBillTotalAmount = $companyBillTotalAmount + $fee_amount;
           }
