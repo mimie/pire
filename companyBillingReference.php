@@ -69,6 +69,7 @@
   @$companyBillingNo = $_GET["companyBillingRef"];
   @$eventId = $_GET["eventId"];
   @$companyId = $_GET["orgId"];
+  $eventTypeName = getEventTypeName($dbh,$eventId);
 
   $billingDate = getCompanyBillingDate($dbh,$companyId,$eventId);
   $billingDate = date("F j Y",strtotime($billingDate));
@@ -168,11 +169,22 @@
           On&nbsp;<?=$dueDate?>&nbsp;to&nbsp;<?=$eventEndDate?><br>
           <?=$eventLocation?>
         </td>
-        <td style='border-right:2px solid black;'></td>
+        <td align='center' style='border-right:2px solid black;'>
+        <?php
+         if($eventTypeName == 'SIH'){
+           foreach($billingParticipantDetails as $participant => $details){
+              $feeAmount = $details["fee_amount"];
+              $feeAmount = number_format($feeAmount,2);
+              echo "$feeAmount<br>";
+           }
+          }
+        ?>
+        </td>
       </tr>
       <tr>
        <td colspan='2' height='430px' style="border-right:2px solid black;border-left:2px solid black;vertical-align:top;">
         <?php
+          if($eventTypeName != 'SIH'){
            echo "<div align = 'left'>&nbsp;&nbsp;Billing for the ff. participants:<br><br>";
            foreach($billingParticipantDetails as $participant => $details){
               $participantName = $details["participant_name"];
@@ -181,16 +193,20 @@
               echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$participantName." / Participant No.-$participantId<br>";
             }
            echo "</div>";
+          }
          ?>
         </td>
          <!-- EACH PARTICIPANT FEE INCLUDED IN THE COMPANY BILLING -->
-        <td style="border-right:2px solid black;vertical-align:top;" align="center"><br><br>
+        <td style="border-right:2px solid black;vertical-align:top;" align="center">
+        <br><br>
         <?php
+         if($eventTypeName != 'SIH'){
            foreach($billingParticipantDetails as $participant => $details){
               $feeAmount = $details["fee_amount"];
               $feeAmount = number_format($feeAmount,2);
               echo "$feeAmount<br>";
            }
+          }
         ?>
         </td> 
       </tr>

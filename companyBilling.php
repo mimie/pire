@@ -21,6 +21,7 @@ function reloadPage()
   include '../weberpdev/postFunction.php';
   include 'send_functions.php';
   include 'login_functions.php';
+  include 'company_functions.php';
 
    $dbh = civicrmConnect();
    $weberpConn = weberpConnect();
@@ -99,7 +100,7 @@ function reloadPage()
    $participants = getEventParticipantIds($dbh, $eventId);
    $eventBillingTypes = getParticipantsBillingType($billingType,$participants);
    $companyBillingTypes = $eventBillingTypes["Company"];
-  // var_dump($companyBillingTypes);
+   //var_dump($companyBillingTypes);
    $companyBillAmounts = array();
 
 //-------------------FOR COMPANY BILLING------------------------------------------------------------------------------------
@@ -113,14 +114,14 @@ function reloadPage()
 	if(!$participantPerCompanyBill){
        	   $contact = $participants[$participantId];
        	   $contact_id = $contact["contact_id"];
-           $contact_address = getContactAddress($dbh,$contact_id);
+           $contact_address = $eventTypeName == 'SIH' ? getCompleteCompanyAddress($dbh,$contact_id) : getContactAddress($dbh,$contact_id);
        	   $fee_amount = $contact["fee_amount"];
        	   $contactDetails = getContactDetails($dbh, $contact_id);
            $participant_name = $contactDetails["name"];
            $email = getContactEmail($dbh,$contact_id);
        	   $organization_name = $contactDetails["companyName"];
        	   //$orgId = $orgs[$organization_name];
-           $orgId = getEmployerId($dbh,$contact_id);
+           $orgId = $eventTypeName == 'SIH' ? $contact_id : getEmployerId($dbh,$contact_id);
        	   $billingId = "";
            $billingNo = $eventTypeName.$billingId.$participantId;
            $status = getStatusType($dbh,$participantId);
@@ -152,10 +153,10 @@ function reloadPage()
        $contactDetails = getContactDetails($dbh, $contact_id);
        $participant_name = $contactDetails["name"];
        $email = getContactEmail($dbh,$contact_id);
-       $contact_address = getContactAddress($dbh,$contact_id);
+       $contact_address = $eventTypeName == 'SIH' ? getCompleteCompanyAddress($dbh,$contact_id) : getContactAddress($dbh,$contact_id);
        $organization_name = $contactDetails["companyName"];
        //$orgId = $orgs[$organization_name];
-       $orgId = getEmployerId($dbh,$contact_id);
+       $orgId = $eventTypeName == 'SIH' ? $contact_id : getEmployerId($dbh,$contact_id);
        $billingId = "";
        $billingNo = $eventTypeName.$billingId.$participantId;
        $status = getStatusType($dbh,$participantId);

@@ -227,6 +227,18 @@ function getCompanyAddress($dbh,$orgId){
   return $result;
 }
 
+function getCompleteCompanyAddress($dbh,$orgId){
+  $sql = $dbh->prepare("SELECT street_address, city FROM civicrm_address 
+                        WHERE contact_id = ?
+                       ");
+  $sql->bindValue(1,$orgId,PDO::PARAM_INT);
+  $sql->execute();
+  $result = $sql->fetch(PDO::FETCH_ASSOC);
+  $completeAddress = $result['street_address']." ".$result['city'];
+  return $completeAddress;
+
+}
+
 function insertMembershipCompanyBilling($dbh,$orgId,$year,$membershipTypeId,$contacts){
 
     $sqlMembership = $dbh->prepare("SELECT id,name,minimum_fee 
