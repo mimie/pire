@@ -236,6 +236,7 @@ function displayCompanyBillings(array $billings){
      $billingDate = $field["bill_date"];
      $eventId = $field["event_id"];
      $orgId = $field["org_contact_id"];
+     $participantsLink = participantsLink($billingNo,$eventId,$orgId);
 
      $html = $html."<tr>"
            . "<td>$orgName</td>"
@@ -246,7 +247,7 @@ function displayCompanyBillings(array $billings){
            . "<td>$vat</td>"
            . "<td>$billingDate</td>"
            . "<td><a href='companyBillingReference.php?companyBillingRef=$billingNo&eventId=$eventId&orgId=$orgId' target='_blank'><img src='images/printer-icon.png' height='40' width='40'></a></td>"
-           . "<td></td>"
+           . "<td>$participantsLink</td>"
            . "<tr>";
    }
 
