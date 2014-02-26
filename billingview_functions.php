@@ -234,6 +234,8 @@ function displayCompanyBillings(array $billings){
      $subtotal = $field["subtotal"];
      $vat = $field["vat"];
      $billingDate = $field["bill_date"];
+     $eventId = $field["event_id"];
+     $orgId = $field["org_contact_id"];
 
      $html = $html."<tr>"
            . "<td>$orgName</td>"
@@ -243,7 +245,7 @@ function displayCompanyBillings(array $billings){
            . "<td>$subtotal</td>"
            . "<td>$vat</td>"
            . "<td>$billingDate</td>"
-           . "<td></td>"
+           . "<td><a href='companyBillingReference.php?companyBillingRef=$billingNo&eventId=$eventId&orgId=$orgId' target='_blank'><img src='images/printer-icon.png' height='40' width='40'></a></td>"
            . "<td></td>"
            . "<tr>";
    }
