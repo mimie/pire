@@ -57,17 +57,27 @@ $(function() {
        . "<legend>Search Company Billing</legend>"
        . "Search category:&nbsp;"
        . "<select name='searchType'>"
-       . "<option name='name'>Name</option>"
-       . "<option name='eventname'>Event Name</option>"
-       . "<option name='billingno'>Billing No</option>"
+       . "<option value='name'>Name</option>"
+       . "<option value='eventname'>Event Name</option>"
+       . "<option value='billingno'>Billing No</option>"
        . "</select>"
-       . "<input type='text' lenght='15' placeholder='Enter search text here...'>"
+       . "<input type='text' name='searchText' lenght='15' placeholder='Enter search text here...'>"
        . "<input type='submit' name='search' value='SEARCH'>"
        . "</fieldset><br>";
 
-  $billings = getAllCompanyBillings($dbh);
-  $display = displayCompanyBillings($billings);
-  echo $display;
+  if(isset($_POST["search"])){
+    $searchType = $_POST["searchType"];
+    $searchText = $_POST["searchText"];
+    $billings = searchCompanyBillings($dbh,$searchType,$searchText);
+    $display = displayCompanyBillings($billings);
+    echo $display;
+  }
+  
+  else{
+    $billings = getAllCompanyBillings($dbh);
+    $display = displayCompanyBillings($billings);
+    echo $display;
+  }
 ?>
   </form>
  </div>
