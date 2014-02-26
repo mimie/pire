@@ -62,6 +62,7 @@ $(function() {
        . "<option name='billingno'>Billing No</option>"
        . "</select>"
        . "<input type='text' lenght='15' placeholder='Enter search text here...'>"
+       . "<input type='submit' name='search' value='SEARCH'>"
        . "</fieldset><br>";
 
   $billings = getAllCompanyBillings($dbh);
