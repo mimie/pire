@@ -140,7 +140,7 @@ function updateChangeIndividualBilling($dbh,$participantId){
   $newAmount = $result["fee_amount"];
   $eventType = $result["event_type"];
 
-  if($eventType == 'CON'){
+  if($eventType == 'CON' && $eventType == 'MBA'){
     $taxQuery = '';
   }
 
@@ -168,11 +168,43 @@ function getAllCompanyBillings($dbh){
                         WHERE bc.event_id = ce.id
                         AND bc.org_contact_id = cc.id
                         AND cc.is_deleted = '0'
+                        AND bc.total_amount != '0'
                         ORDER BY cc.organization_name
                        ");
   $sql->execute();
   $result = $sql->fetchAll(PDO::FETCH_ASSOC);
 
+  return $result;
+}
+
+function searchCompanyBillings($dbh,$searchType,$searchText){
+
+  switch($searchType){
+
+    case 'name' :
+         $searchQuery = 'AND cc.organization_name LIKE ?';
+         break;
+    case 'eventname':
+         $searchQuery = 'AND ce.title LIKE ?';
+         break;
+    case 'billingno':
+         $searchQuery = 'AND bc.billing_no LIKE ?';
+         break;
+   
+  }
+
+  $sql = $dbh->prepare("SELECT bc.org_contact_id, bc.event_id,ce.title as event_name,cc.organization_name,bc.billing_no,bc.total_amount,bc.subtotal,bc.vat,bc.bill_date
+                        FROM billing_company bc,civicrm_contact cc, civicrm_event ce
+                        WHERE bc.event_id = ce.id
+                        AND bc.org_contact_id = cc.id
+                        AND cc.is_deleted = '0'
+                        AND bc.total_amount != '0'
+                        $searchQuery
+                        ORDER BY cc.organization_name
+                       ");
+  $sql->bindValue(1,"%".$searchText."%",PDO::PARAM_STR);
+  $sql->execute();
+  $result = $sql->fetchAll(PDO::FETCH_ASSOC);
   return $result;
 }
 
