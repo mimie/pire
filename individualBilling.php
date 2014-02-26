@@ -220,7 +220,8 @@ function reloadPage()
        }
 
        elseif($isBillGenerated == 0){
-          echo "<input type='checkbox' name='participantIds[]' value='$participantId'>";
+          $disabled = $fee_amount == 0 ? 'disabled' : '';
+          echo "<input type='checkbox' name='participantIds[]' value='$participantId' $disabled>";
           echo "</td>";
           echo "<td align='center'><input type='checkbox' name='sendIds[]' value='$contact_id' disabled></td>";
          //for posting
