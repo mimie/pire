@@ -758,9 +758,10 @@ function displayBilledParticipants($billedParticipants){
      $civicrm_amount = $details["civicrm_amount"];
      $civicrm_amount = number_format($civicrm_amount,2);
      $civicrm_amount = $civicrm_amount == $amount ? '' : $civicrm_amount;
+     $disabled = $amount == $civicrm_amount ? 'disabled' : '';
 
      $html = $html."<tr>"
-           . "<td><input type='checkbox' name='participant_ids[]' value='$participantId'></td>"
+           . "<td><input type='checkbox' name='participant_ids[]' value='$participantId' $disabled></td>"
            . "<td>$participantId</td>"
            . "<td>$name</td>"
            . "<td>$email</td>"
