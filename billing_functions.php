@@ -714,9 +714,10 @@ function participantsLink($billingNo,$eventId,$orgId){
  */
 function getCompanyBilledParticipants(PDO $dbh,$billingNo,$eventId){
 
-  $sql = $dbh->prepare("SELECT participant_id, participant_name, email, fee_amount
-                        FROM billing_details
-                        WHERE billing_no = :billingNo AND event_id = :eventId
+  $sql = $dbh->prepare("SELECT bd.participant_id, bd.participant_name, bd.email, bd.fee_amount, cp.fee_amount as civicrm_amount
+                        FROM billing_details bd, civicrm_participant cp
+                        WHERE bd.billing_no = :billingNo AND bd.event_id = :eventId
+                        AND cp.id = bd.participant_id
                        ");
 
   $sql->execute(array(':billingNo'=>$billingNo,':eventId'=>$eventId));
@@ -734,13 +735,14 @@ function displayBilledParticipants($billedParticipants){
 
   $html = "<table border='1' width='100%'>"
         . "<tr>"
-        . "<th colspan='4'>LIST OF BILLED PARTICIPANTS</th>"
+        . "<th colspan='5'>LIST OF BILLED PARTICIPANTS</th>"
         . "</tr>"
         . "<tr>"
         . "<th>Participant Id</th>"
         . "<th>Participant Name</th>"
         . "<th>Email</th>"
         . "<th>Fee Amount</th>"
+        . "<th>Amount Change</th>"
         . "</tr>";
 
   foreach($billedParticipants as $key => $details){
@@ -749,12 +751,16 @@ function displayBilledParticipants($billedParticipants){
      $email = $details["email"];
      $amount = $details["fee_amount"];
      $amount = number_format($amount,2);
+     $civicrm_amount = $details["civicrm_amount"];
+     $civicrm_amount = number_format($civicrm_amount,2);
+     $civicrm_amount = $civicrm_amount == $amount ? '' : $civicrm_amount;
 
      $html = $html."<tr>"
            . "<td>$participantId</td>"
            . "<td>$name</td>"
            . "<td>$email</td>"
            . "<td>$amount</td>"
+           . "<td>$civicrm_amount</td>"
            . "</tr>";
   }
 
