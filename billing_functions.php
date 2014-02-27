@@ -735,9 +735,10 @@ function displayBilledParticipants($billedParticipants){
 
   $html = "<table border='1' width='100%'>"
         . "<tr>"
-        . "<th colspan='5'>LIST OF BILLED PARTICIPANTS</th>"
+        . "<th colspan='6'>LIST OF BILLED PARTICIPANTS</th>"
         . "</tr>"
         . "<tr>"
+        . "<th>Select Participant</th>"
         . "<th>Participant Id</th>"
         . "<th>Participant Name</th>"
         . "<th>Email</th>"
@@ -756,6 +757,7 @@ function displayBilledParticipants($billedParticipants){
      $civicrm_amount = $civicrm_amount == $amount ? '' : $civicrm_amount;
 
      $html = $html."<tr>"
+           . "<td><input type='checkbox' name='participantIds[]' value='$participantId'></td>"
            . "<td>$participantId</td>"
            . "<td>$name</td>"
            . "<td>$email</td>"
