@@ -95,11 +95,13 @@
 
    $participants = getNewlyAddedBillings($dbh,$eventId,$orgId);
 ?>
-  <br>
+  <br><br>
 
  <form action="" method="POST">
-  <input type="submit" value="Add Missing Billings" name="add"><br><br>
   <table width='100%'>
+   <tr>
+   <td bgcolor='#2c4f85' colspan='5'><input type="submit" value="Add Missing Billings" name="add"></td>
+   </tr>
    <tr>
     <th colspan='5'>Billings To Be Added</th>
    </tr>
