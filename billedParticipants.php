@@ -89,15 +89,18 @@
    echo "</tr>";
    echo "</table><br><br>";
 
+   echo "<form action='' method='POST'>";
+
    $billedParticipants = getCompanyBilledParticipants($dbh,$billingNo,$eventId);
    $display = displayBilledParticipants($billedParticipants);
    echo $display;
 
    $participants = getNewlyAddedBillings($dbh,$eventId,$orgId);
+   $countNewParticipants = count($participants);
 ?>
   <br><br>
 
- <form action="" method="POST">
+  <?php if($countNewParticipants){ ?>
   <table width='100%'>
    <tr>
    <td bgcolor='#2c4f85' colspan='5'><input type="submit" value="Add Missing Billings" name="add"></td>
@@ -133,8 +136,9 @@
   }
 
 ?>
-  </form>
   </table>
+  <?php }//end if there is existing new participants ?>
+  </form>
   </div>
 <?php
  if(isset($_POST["add"])){
@@ -188,6 +192,13 @@
     updateAddedAmount($dbh,$billingNo,$addedAmount);
     
     header("Location:billedParticipants.php?eventId=$eventId&billingNo=$billingNo&orgId=$orgId");
+ }
+
+ elseif(isset($_POST["update"])){
+  $ids = $_POST["participant_ids"];
+  foreach($ids as $participantId){
+    echo "$participantId";
+  }
  }
 ?>
 </body>
