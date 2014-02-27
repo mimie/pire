@@ -735,6 +735,9 @@ function displayBilledParticipants($billedParticipants){
 
   $html = "<table border='1' width='100%'>"
         . "<tr>"
+        . "<td bgcolor='#2c4f85' colspan='6'><input type='submit' name='update' value='UPDATE BILLING'></td>"
+        . "<tr>"
+        . "<tr>"
         . "<th colspan='6'>LIST OF BILLED PARTICIPANTS</th>"
         . "</tr>"
         . "<tr>"
