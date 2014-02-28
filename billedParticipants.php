@@ -7,6 +7,13 @@
 <style type="text/css">
    body{overflow:scroll;}
 </style>
+<script type='text/javascript'>
+
+function reloadPage(){
+   location.reload();
+}
+
+</script>
 </head>
 <body>
 <?php
@@ -15,6 +22,7 @@
   include 'login_functions.php';
   include 'pdo_conn.php';
   include 'company_functions.php';
+  include 'billingview_functions.php';
   $dbh = civicrmConnect();
  
   /**session_start();
@@ -197,8 +205,12 @@
  elseif(isset($_POST["update"])){
   $ids = $_POST["participant_ids"];
   foreach($ids as $participantId){
-    echo "$participantId";
+    updateChangeIndividualBilling($dbh,$participantId);    
   }
+
+  echo "<script type='text/javascript'>";
+  echo "reloadPage()";
+  echo "</script>";
  }
 ?>
 </body>
