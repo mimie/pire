@@ -208,6 +208,8 @@ function reloadPage(){
     updateChangeIndividualBilling($dbh,$participantId);    
   }
 
+  updateCompanyTotalAmount($dbh,$billingNo);
+
   echo "<script type='text/javascript'>";
   echo "reloadPage()";
   echo "</script>";

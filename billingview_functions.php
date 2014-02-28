@@ -129,7 +129,7 @@ function displayIndividualEventBillings(array $billings){
 
 function updateChangeIndividualBilling($dbh,$participantId){
 
-  $sqlNewAmount = $dbh->prepare("SELECT bd.event_type,cp.fee_amount FROM civicrm_participant cp,billing_details bd
+  $sqlNewAmount = $dbh->prepare("SELECT bd.event_type,bd.billing_type,cp.fee_amount FROM civicrm_participant cp,billing_details bd
                                  WHERE cp.id = ?
                                  AND bd.participant_id = cp.id
                                 ");
@@ -139,8 +139,9 @@ function updateChangeIndividualBilling($dbh,$participantId){
   $result = $sqlNewAmount->fetch(PDO::FETCH_ASSOC);
   $newAmount = $result["fee_amount"];
   $eventType = $result["event_type"];
+  $billingType = $result["billing_type"];
 
-  if($eventType == 'CON' && $eventType == 'MBA'){
+  if($eventType == 'CON' || $eventType == 'MBA' || $billingType == 'Company' ){
     $taxQuery = '';
   }
 
@@ -254,5 +255,42 @@ function displayCompanyBillings(array $billings){
   $html = $html."</tbody></table>";
 
   return $html;
+}
+
+function updateCompanyTotalAmount($dbh,$billingNo){
+
+  $sql = $dbh->prepare("SELECT fee_amount FROM billing_details WHERE billing_no = ?");
+  $sql->bindValue(1,$billingNo,PDO::PARAM_STR);
+  $sql->execute();
+  $participant = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+  $totalAmount = 0;
+
+  foreach($participant as $key => $field){
+    $amount = $field["fee_amount"];
+    $totalAmount = $totalAmount + $amount;
+  }
+
+  $eventType = substr($billingNo,0,3);
+
+  if($eventType == 'CON' || $eventType == 'MBA'){
+    $taxQuery = '';
+  }
+
+   else{
+     $tax = $totalAmount/9.3333;
+     $tax = number_format($tax, 2, '.', '');
+     $subtotal = $totalAmount - $tax;
+     $taxQuery = ", subtotal=".$subtotal.",vat="."$tax";
+
+   }
+
+  $sqlUpdate = $dbh->prepare("UPDATE billing_company SET total_amount = ? $taxQuery
+                              WHERE billing_no = ?
+                             ");
+  $sqlUpdate->bindValue(1,$totalAmount,PDO::PARAM_INT);
+  $sqlUpdate->bindValue(2,$billingNo,PDO::PARAM_INT);
+  $sql->execute();
+  
 }
 ?>
