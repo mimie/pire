@@ -3,6 +3,7 @@
 <title>Billing List</title>
 <link rel="stylesheet" type="text/css" href="billingStyle.css">
 <link rel="stylesheet" type="text/css" href="menu.css">
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
   <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
   <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
   <script src="js/jquery-jPaginate.js"></script>
@@ -22,6 +23,18 @@ $(function() {
         });
 //        $("table").tablesorter( {sortList: [[0,0], [1,0]]} ); 
 });
+$(function() {
+    $( "#confirmation" ).dialog({
+      resizable: false,
+      width:500,
+      modal: true,
+      buttons: {
+        "OK": function() {
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+  });
 
 </script>
 </head>
@@ -397,10 +410,15 @@ $(function() {
 
          $sqlUpdateTotalAmount->execute();
        }
-
      echo "<script type='text/javascript'>";
      echo "reloadPage()";
      echo "</script>";
+       
+    echo'<div id="confirmation" title="Confirmation">';
+    echo "<img src='images/confirm.png' alt='confirm' style='float:left;padding:5px;'i width='42' height='42'/>";
+    echo'<p>Billing is successfully generated.</p>';
+    echo'</div>';
+
 
      }//end if Generate Bill
 
