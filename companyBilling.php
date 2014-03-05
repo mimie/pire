@@ -3,11 +3,26 @@
 <title>Billing List</title>
 <link rel="stylesheet" type="text/css" href="billingStyle.css">
 <link rel="stylesheet" type="text/css" href="menu.css">
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+  <script src="js/jquery-jPaginate.js"></script>
+  <script src="js/jquery.tablesorter.js"></script>
 <script>
 function reloadPage()
   {
   location.reload();
   }
+$(function() {
+        $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
+        $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
+        $('#billings').jPaginate({
+                'max': 5,
+                'page': 1,
+                'links': 'buttons'
+        });
+//        $("table").tablesorter( {sortList: [[0,0], [1,0]]} ); 
+});
+
 </script>
 </head>
 <body>
@@ -220,7 +235,8 @@ function reloadPage()
       echo "<input type='button' value='Reload page' onclick='reloadPage()'>";
 
       echo "<br><br>";
-      echo "<table border='1' width='100%'>";
+      echo "<table id='billings' border='1' width='100%'>";
+      echo "<thead>";
       echo "<tr><th colspan='12'>Company Billing</th></tr>";
       echo "<tr>";
       echo "<th>Organization Name</th>";
@@ -236,6 +252,9 @@ function reloadPage()
       echo "<th>Billing Address</th>";
       echo "<th>Billed Participants</th>";
       echo "</tr>";
+      echo "</thead>";
+
+      echo "<tbody>";
 
       foreach($participantPerCompanyBill as $orgIdKey => $participant){
          
@@ -301,6 +320,7 @@ function reloadPage()
           echo "<td></td>";
         }
         echo "</tr>";
+        echo "</tbody>";
 
       }
       echo "</form>";
@@ -328,8 +348,9 @@ function reloadPage()
             
          $sqlInsertCompanyBilling = $dbh->prepare("INSERT INTO billing_company
                                     (event_id,event_name,org_contact_id,organization_name,billing_no)
-                                    VALUES('$eventId', '$eventName','$companyId','$organization_name','$companyBillingNo')
-                                     ");  
+                                    VALUES('$eventId', '$eventName','$companyId',?,'$companyBillingNo')
+                                     ");
+         $sqlInsertCompanyBilling->bindValue(1,$organization_name,PDO::PARAM_STR);  
          $sqlInsertCompanyBilling->execute();
          $companyBillTotalAmount = 0;
         
@@ -350,7 +371,7 @@ function reloadPage()
                    (participant_id,contact_id,event_id,event_type,event_name,participant_name,email,participant_status,organization_name,org_contact_id,billing_type,fee_amount,billing_no)
                    VALUES('$participant_id','$contactId','$eventId','$eventTypeName','$eventName','$participant_name','$email','$status',?,'$orgId','$participantBillingType','$fee_amount','$billingNo')");
 
-             $sql->bindValue(1,$organization_name,PDO::PARAM_INT);
+             $sql->bindValue(1,$organization_name,PDO::PARAM_STR);
              $sql->execute();
 
             $companyBillTotalAmount = $companyBillTotalAmount + $fee_amount;
@@ -376,6 +397,10 @@ function reloadPage()
 
          $sqlUpdateTotalAmount->execute();
        }
+
+     echo "<script type='text/javascript'>";
+     echo "reloadPage()";
+     echo "</script>";
 
      }//end if Generate Bill
 
@@ -403,6 +428,7 @@ function reloadPage()
 
      }//end if Post to Weberp
    }//end elseif company processor type
+
 
 ?>
 </body>
