@@ -3,11 +3,39 @@
 <title>Billing List</title>
 <link rel="stylesheet" type="text/css" href="billingStyle.css">
 <link rel="stylesheet" type="text/css" href="menu.css">
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+  <script src="js/jquery-jPaginate.js"></script>
+  <script src="js/jquery.tablesorter.js"></script>
 <script>
 function reloadPage()
   {
   location.reload();
   }
+$(function() {
+        $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
+        $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
+        $('#billings').jPaginate({
+                'max': 10,
+                'page': 1,
+                'links': 'buttons'
+        });
+//        $("table").tablesorter( {sortList: [[0,0], [1,0]]} ); 
+});
+$(function() {
+    $( "#confirmation" ).dialog({
+      resizable: false,
+      width:500,
+      modal: true,
+      buttons: {
+        "OK": function() {
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+  });
+
 </script>
 </head>
 <body>
@@ -115,7 +143,8 @@ function reloadPage()
 <?
 
    echo "<br><br><br>";
-   echo "<table border='1' width='100%'>";
+   echo "<table border='1' id='billings' width='100%'>";
+   echo "<thead>";
    echo "<tr><th colspan='14'>Individual Billing</th></tr>";
    echo "<tr>";
    echo "<th>Participant Name</th>";
@@ -134,6 +163,9 @@ function reloadPage()
    echo "<th>Billing Address</th>";
    echo "<th>Billing PDF Download</th>";
    echo "</tr>";
+   echo "</thead>";
+
+   echo "<tbody>";
    
 
    foreach($individualBillingTypes as $participantId){
@@ -237,6 +269,7 @@ function reloadPage()
       
     }    
    
+    echo "</tbody>";
     echo "</table>";
     echo "</form>";
 
@@ -280,12 +313,10 @@ function reloadPage()
                         VALUES('$participant_id','$contact_id','$eventId','$eventTypeName','$eventName','$participant_name','$email','$status','$organization_name','$orgId','$participantBillingType','$fee_amount','$subtotal','$tax','$billingNo','$billingAddress')");
 
         $sql->execute();
-?>
-<!--        <script>
-         location.reload();
-        </script>-->
-<?php        
 
+        echo "<script type='text/javascript'>";
+        echo "reloadPage()";
+        echo "</script>";
       }
 
      }
