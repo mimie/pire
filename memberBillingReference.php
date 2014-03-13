@@ -77,7 +77,7 @@
   $billingDetails = getMemberBillingDetails($dbh,$billingId);
 
   $memberYear = $billingDetails["year"];
-  $memberName = $billingDetails["member_name"];
+ //$memberName = $billingDetails["member_name"];
  // $orgName = $billingDetails["organization_name"];
  // $street = $billingDetails["street"];
  // $city = $billingDetails["city"];
@@ -96,6 +96,11 @@
   $addressDetails = getAddressDetails($dbh,$contactId);
   $street = $addressDetails["street"];
   $city = $addressDetails["city"];
+
+  $sql = $dbh->prepare("SELECT display_name FROM civicrm_contact WHERE id='$contactId'");
+  $sql->execute();
+  $result = $sql->fetch(PDO::FETCH_ASSOC);
+  $memberName = $result["display_name"];
 
 ?>
 <div id="main">
