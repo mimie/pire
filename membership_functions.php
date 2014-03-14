@@ -300,6 +300,9 @@ function insertMemberBilling($dbh,array $memberInfo,$membershipYear){
   $sql->bindValue(15,$year,PDO::PARAM_INT);
 
 
+/**  echo "$membership_id,$contact_id,$membership_type,$member_name,$email,$street,$city,$bill_address,$organization_name,$org_contact_id,$fee_amount,$subtotal,$vat,$billing_no,$year";**/
+
+
   $sql->execute();
 }
 

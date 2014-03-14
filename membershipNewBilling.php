@@ -143,10 +143,10 @@ $(function() {
        foreach($contactIds as $contactId){
 
         $sqlDetails = $dbh->prepare("SELECT cc.id, cc.display_name, em.email, cc.organization_name, cc.employer_id
-                              FROM civicrm_contact cc, civicrm_email em
+                              FROM civicrm_contact cc
+                              LEFT JOIN civicrm_email em
+                              ON cc.id = em.contact_id
                               WHERE cc.id = ?
-                              AND cc.id = em.contact_id
-                              AND em.is_primary = '1'
                               AND cc.is_deleted = '0'
                              ");
          $sqlDetails->bindValue(1,$contactId,PDO::PARAM_INT);
