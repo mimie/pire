@@ -32,6 +32,21 @@ $(function() {
     });
   });
 </script>
+<style type="text/css" media="screen">
+.container {
+  width: 100%;
+  display: table;
+  background: whitel;
+  border-spacing: 10px;
+}
+.left, .right {
+  display: table-cell;
+  width: 50%;
+  border-style:solid;
+  border-color:#0080FF;
+  padding: 5px;
+}
+</style>
 </head>
 <body>
 <?php
@@ -41,9 +56,33 @@ $(function() {
   $logout = logoutDiv($dbh);
   echo $logout;
   echo "<br>";
-  
+  echo "<form action='' method='POST'>";
 ?>
+  
+  <div class="container">
+    <div class="left">
+     <select name='bill'>
+      <option value='select'>- Select billing category -</option>
+      <option value=''></option>
+      <option value='Event'>Event Billing</option>
+      <option value='Membership'>Membership Billing</option>
+     </select>
+     <input type='text' name='name' placeholder='Enter search name here..' size='50'>
+    </div>
+    <div class="right">
+<?php
 
+  $eventContacts = getAllBilledEventContacts($dbh,"");
+  $billedContacts = displayBilledContacts($eventContacts);
+  echo $billedContacts;
+
+  
+
+?>
+    </div>
+  </div>
+
+  </form>
 </body>
 
 </html>
