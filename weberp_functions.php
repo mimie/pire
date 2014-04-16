@@ -277,7 +277,8 @@ function getParticipantStatusType(){
   $status = array();
   
   $sql = "SELECT id,label FROM civicrm_participant_status_type\n"
-       . "WHERE id NOT IN(5,6,7,8,9,10,11,12,13)";
+       . "WHERE id NOT IN(5,6,7,8,9,10,11,12,13)"
+       . "AND is_active = '1'";
   $result = mysql_query($sql) or die(mysql_error());
  
   while($row = mysql_fetch_assoc($result)){
