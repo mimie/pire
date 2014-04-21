@@ -173,6 +173,7 @@ function searchedParticipantListByName(array $contactIds,$eventId){
   
   $statusId = getParticipantStatusId($id,$eventId);
   $statusName = $status[$statusId];
+  $feeAmount = $statusName == 'Void' ? '' : $feeAmount;
   //$statusTypeSelectForm = statusTypeSelectForm($statusId);
 
   $html = $html."<tr>"
