@@ -184,8 +184,10 @@ $(function() {
        }
 
        else{
-         $tax = round($fee_amount/9.3333,2);
-         $subtotal = round($fee_amount - $tax,2);
+         //$tax = round($fee_amount/9.3333,2);
+         //$subtotal = round($fee_amount - $tax,2);
+         $subtotal = round($fee_amount/1.12,2);
+         $tax = $fee_amount - $subtotal;
          
        }
 
@@ -289,8 +291,10 @@ $(function() {
          }
 
         else{
-           $tax = round($fee_amount/9.3333,2);
-           $subtotal = round($fee_amount - $tax,2);
+           //$tax = round($fee_amount/9.3333,2);
+           //$subtotal = round($fee_amount - $tax,2);
+           $subtotal = round($fee_amount/1.12,2);
+           $tax = $fee_amount - $subtotal;
 
         }
 
