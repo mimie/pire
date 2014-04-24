@@ -282,8 +282,10 @@ $(function() {
          }
 
         else{
-           $tax = round($totalBill/9.3333,2);
-           $subtotal = round($totalBill - $tax,2);;
+           //$tax = round($totalBill/9.3333,2);
+           //$subtotal = round($totalBill - $tax,2);
+           $subtotal = round($totalBill/1.12,2);
+           $tax = $totalBill - $subtotal;
 
         }
         $totalBill = number_format($totalBill, 2, '.', '');
@@ -396,8 +398,10 @@ $(function() {
               }
 
               else{
-                $tax = round($companyBillTotalAmount/9.3333,2);
-                $subtotal = round($companyBillTotalAmount - $tax,2);;
+                //$tax = round($companyBillTotalAmount/9.3333,2);
+                //$subtotal = round($companyBillTotalAmount - $tax,2);
+                $subtotal = round($companyBillTotalAmount/1.12,2);
+                $tax = $companyBillTotalAmount - $subtotal;
 
              }
 
