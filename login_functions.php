@@ -110,21 +110,47 @@ function logoutDiv($dbh){
 
      //$username = getUsername($dbh,$uiserId);
 
+     $ciafile_dir = 'cia/ManageCIA.php';
+     $ciafile_dir = file_exists($ciafile_dir) ? $ciafile_dir : '../cia/ManageCIA.php';
+     $ciafile_dir = file_exists($ciafile_dir) ? $ciafile_dir : 'ManageCIA.php';
+
+     $events_dir = 'events2.php';
+     $events_dir = file_exists($events_dir) ? $events_dir : '../events2.php';
+
+     $mem_dir = 'membershipIndividualBilling2.php';
+     $mem_dir = file_exists($mem_dir) ? $mem_dir: '../membershipIndividualBilling2.php';
+
+     $individualBill_dir = 'IndividualEventBillingView.php';
+     $individualBill_dir = file_exists($individualBill_dir) ? $individualBill_dir : '../IndividualEventBillingView.php';
+
+
+     $companyBill_dir = 'CompanyEventBillingView.php';
+     $companyBill_dir = file_exists($companyBill_dir) ? $companyBill_dir : '../CompanyEventBillingView.php';
+ 
+     $manageBill_dir = 'manageBilling.php';
+     $manageBill_dir = file_exists($manageBill_dir) ? $manageBill_dir: '../manageBilling.php';
+
+     $notes_dir = 'notes/notes.php';
+     $notes_dir = file_exists($notes_dir) ? $notes_dir : '../notes/notes.php';
+     $notes_dir = file_exists($notes_dir) ? $notes_dir : basename($_SERVER['PHP_SELF']);
+
+     
+
      $html = "<div width='100%' style='background-color:black; padding:1px;'>"
            . "<ul>"
-           . "<li><a href='events2.php'>Events</a></li>"
+           . "<li><a href='".$events_dir."'>Events</a></li>"
            . "<li><a href='#'>Membership</a>"
-           . "<ul><li><a href='membershipIndividualBilling2.php'>Membership Billing</a></li></ul>"
+           . "<ul><li><a href='".$mem_dir."'>Membership Billing</a></li></ul>"
            . "</li>"
-           . "<li><a href='notes/notes.php'>Notes</a></li>"
+           . "<li><a href='".$notes_dir."'>Notes</a></li>"
            . "<a href='#'><li>Billing Report</a>"
-           . "<ul><li><a href='IndividualEventBillingView.php'>Individual Event Billing</a></li>"
-           . "<li><a href='CompanyEventBillingView.php'>Company Event Billing</a></li>"
-           . "<li><a href='manageBilling.php'>Update Billed Participants</a></li>"
+           . "<ul><li><a href='".$invidualBill_dir."'>Individual Event Billing</a></li>"
+           . "<li><a href='".$companyBill_dir."'>Company Event Billing</a></li>"
+           . "<li><a href='".$manageBill_dir."'>Update Billed Participants</a></li>"
            . "</ul>"
            . "</li>"
            . "<li><a href='#'>CIA Review</a>"
-           . "<ul><li><a href='#'>Manage CIA Events</a></li><li><a href='#'>Generate CIA Bill</a></li></ul>"
+           . "<ul><li><a href='".$ciafile_dir."'>Manage CIA Events</a></li><li><a href='#'>Generate CIA Bill</a></li></ul>"
            . "</li>"
            . "</ul><br><br>"
            . "</div>";
