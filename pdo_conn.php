@@ -14,6 +14,16 @@
    $weberpConn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
    return $weberpConn;
 
-  }  
+  } 
+
+  function civicrmDB($sql){
+    $dbh = new PDO('mysql:host=10.110.215.92;dbname=webapp_civicrm', 'iiap', 'mysqladmin');
+    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $sql = $dbh->prepare($sql);
+   
+     return $sql;
+
+
+  } 
 
 ?>
