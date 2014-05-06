@@ -110,9 +110,9 @@ function logoutDiv($dbh){
 
      //$username = getUsername($dbh,$uiserId);
 
-     $ciafile_dir = 'cia/ManageCIA.php';
-     $ciafile_dir = file_exists($ciafile_dir) ? $ciafile_dir : '../cia/ManageCIA.php';
-     $ciafile_dir = file_exists($ciafile_dir) ? $ciafile_dir : 'ManageCIA.php';
+     $ciafile_dir = 'packages/ManagePackages.php';
+     $ciafile_dir = file_exists($ciafile_dir) ? $ciafile_dir : '../packages/ManagePackages.php';
+     $ciafile_dir = file_exists($ciafile_dir) ? $ciafile_dir : 'ManagePackages.php';
 
      $events_dir = 'events2.php';
      $events_dir = file_exists($events_dir) ? $events_dir : '../events2.php';
