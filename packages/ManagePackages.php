@@ -8,6 +8,7 @@
  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 
 <script>
+
 $(function() {
   $( "#confirmation" ).dialog({
     resizable: false,
@@ -15,12 +16,15 @@ $(function() {
     modal: true,
     buttons: {
        "OK": function(){
-           $( this ).dialog("close");
+           //$( this ).dialog("close");
+           location.reload();
        }
     }
     
   });
-})
+});
+
+
 </script>
 <style>
 #package
@@ -41,15 +45,29 @@ $(function() {
    $menu = logoutDiv($dbh);
 
    echo $menu;
+   @$pid = $_GET["pid"];
 ?>
-  <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST">
+  <form action="ManagePackages.php" method="POST">
   <div id='package'>
     <input type='text' name='package' placeholder='Package name here...' required>
     <input type='submit' name='create' value='Create Event Package'>
   </div>
+<?php
+
+  if($pid){
+     echo "<div id='package'>";
+     echo "<input type='text' name='package' value='' required/>";
+     echo "<input type='submit' name='update' value='Update Event Package'/>";
+     echo "</div>";
+  }
+?>
   </form>
 
 <?php
+
+  $packages = getPackages();
+  $display = displayPackages($packages);
+  echo $display;
 
   if($_POST['create']){
      $package = $_POST["package"];
@@ -62,5 +80,16 @@ $(function() {
   }
 
 ?>
+<script>
+/**$('.edit:checkbox').on("click",function(){
+    alert($(this).val());
+  $( "#test" ).dialog({
+    resizable: false,
+    width: 500,
+    modal: true
+    
+  });
+});**/
+</script>
 </body>
 </html>
