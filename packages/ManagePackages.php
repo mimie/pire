@@ -49,19 +49,24 @@ $(function() {
 ?>
   <form action="ManagePackages.php" method="POST">
   <div id='package'>
-    <input type='text' name='package' placeholder='Package name here...' required>
-    <input type='submit' name='create' value='Create Event Package'>
+    <input type='text' name='package' placeholder='Package name here...'/>
+    <input type='submit' name='create' value='Create Event Package'/>
   </div>
+  </form>
 <?php
 
   if($pid){
+     $packageName = getPackageName($pid);
+     echo "<form action='ManagePackages.php' method='POST'>";
      echo "<div id='package'>";
-     echo "<input type='text' name='package' value='' required/>";
+     echo "<input type='text' name='package_edit' value='$packageName' required/>";
+     echo "<input type='text' name='pid' value='$pid' hidden/>";
      echo "<input type='submit' name='update' value='Update Event Package'/>";
+     echo "<a href='ManagePackages.php'><input type='button' name='cancel' value='Cancel'/></a>";
      echo "</div>";
+     echo "</form>";
   }
 ?>
-  </form>
 
 <?php
 
@@ -77,6 +82,16 @@ $(function() {
      echo "<img src='../images/confirm.png' alt='confirm'  style='float:left;padding:5px;'i width='42' height='42'/>";
      echo "<p><b>$package</b> successfully created.</p>";
      echo "</div>";
+  }
+
+  elseif($_POST['update']){
+    $package = $_POST["package_edit"];
+    $pid = $_POST["pid"];
+    editPackage($pid,$package);
+    echo "<div id='confirmation' title='confirmation'>";
+    echo "<img src='../images/confirm.png' alt='confirm'  style='float:left;padding:5px;'i width='42' height='42'/>";
+    echo "<p>Package name successfully updated.</p>";
+    echo "</div>";
   }
 
 ?>
