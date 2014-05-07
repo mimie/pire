@@ -7,8 +7,24 @@ function createPackage($packageName){
   $sql->execute(array(':package' => $packageName));
 }
 
-function editPackage($dbh,$packageId){
+function editPackage($packageId,$packageName){
 
+  $sql = civicrmDB("UPDATE billing_package SET package_name=? WHERE pid=?");
+  $sql->bindValue(1,$packageName,PDO::PARAM_STR);
+  $sql->bindValue(2,$packageId,PDO::PARAM_INT);
+  $sql->execute();
+
+}
+
+function getPackageName($packageId){
+
+  $sql = civicrmDB("SELECT package_name FROM billing_package WHERE pid=?");
+  $sql->bindValue(1,$packageId,PDO::PARAM_STR);
+  $sql->execute();
+  $result = $sql->fetch(PDO::FETCH_ASSOC);
+  $packageName = $result["package_name"];
+
+  return $packageName;
 }
 
 function getPackages(){
