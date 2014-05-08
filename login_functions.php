@@ -149,7 +149,7 @@ function logoutDiv($dbh){
            . "<li><a href='".$manageBill_dir."'>Update Billed Participants</a></li>"
            . "</ul>"
            . "</li>"
-           . "<li><a href='#'>CIA Review</a>"
+           . "<li><a href='#'>Package Events</a>"
            . "<ul><li><a href='".$ciafile_dir."'>Manage Package Events</a></li><li><a href='#'>Generate CIA Bill</a></li></ul>"
            . "</li>"
            . "</ul><br><br>"
