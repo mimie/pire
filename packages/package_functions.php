@@ -61,4 +61,26 @@ function displayPackages($packages){
    $html = $html."</tbody></table>";
    return $html;
 }
+
+function getEventCategory(){
+
+   $stmt = civicrmDB("SELECT label,value FROM civicrm_option_value WHERE option_group_id='14'");
+   $stmt->execute();
+   $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+   return $result;
+}
+
+function getEventsForPackages($eventId){
+
+   $stmt = civicrmDB("SELECT ce.id as event_id, ce.title as event_name,ce.event_id,ce.start_date,ce.end_date
+                      FROM civicrm_event ce
+                      WHERE ce.event_id = ?");
+   $stmt->bindValue(1,$eventId,PDO::PARAM_INT);
+   $stmt->execute();
+   $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+   return $result;
+
+}
 ?>
