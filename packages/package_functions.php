@@ -71,16 +71,65 @@ function getEventCategory(){
    return $result;
 }
 
-function getEventsForPackages($eventId){
+function getEventTypeName($eventTypeId){
 
-   $stmt = civicrmDB("SELECT ce.id as event_id, ce.title as event_name,ce.event_id,ce.start_date,ce.end_date
+  $stmt = civicrmDB("SELECT label FROM civicrm_option_value WHERE option_group_id='14' AND value = ?");
+  $stmt->bindValue(1,$eventTypeId,PDO::PARAM_INT);
+  $stmt->execute();
+  $result = $stmt->fetch(PDO::FETCH_ASSOC);
+  $eventType = $result["label"];
+
+  return $eventType;
+}
+
+function getEventsForPackages($eventTypeId,$eventName){
+
+   $stmt = civicrmDB("SELECT ce.id as event_id, ce.title as event_name,ce.event_type_id,ce.start_date,ce.end_date
                       FROM civicrm_event ce
-                      WHERE ce.event_id = ?");
-   $stmt->bindValue(1,$eventId,PDO::PARAM_INT);
+                      WHERE ce.event_type_id = ?
+                      AND ce.title LIKE ?
+                      ORDER BY ce.start_date DESC");
+   $stmt->bindValue(1,$eventTypeId,PDO::PARAM_INT);
+   $stmt->bindValue(2,"%".$eventName."%",PDO::PARAM_STR);
    $stmt->execute();
    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
    return $result;
 
+}
+
+function displayEventPackages(array $eventPackages){
+
+   $html = "<table id='events'>"
+         . "<thead>"
+         . "<th>Select Event</th>"
+         . "<th>Event Id</th>"
+         . "<th>Event Name</th>"
+         . "<th>Start Date</th>"
+         . "<th>End Date</th>"
+         . "<thead>";
+
+  $html = $html."<tbody>";
+
+  foreach($eventPackages as $field=>$key){
+     $eventId = $key["event_id"];
+     $eventName = $key["event_name"];
+     $startDate = date("F j, Y",strtotime($key["start_date"]));
+     $endDate = date("F j, Y",strtotime($key["end_date"]));
+
+     $html = $html."<tr>"
+           . "<td><input type='checkbox' value='$eventId'/></td>"
+           . "<td>$eventId</td>"
+           . "<td>$eventName</td>"
+           . "<td>$startDate</td>"
+           . "<td>$endDate</td>"
+           . "</tr>";
+  }
+
+  $html = $html."</tbody></table>";
+
+  return $html;
+
+  
 }
 ?>
