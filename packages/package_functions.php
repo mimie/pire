@@ -39,7 +39,7 @@ function getPackages(){
 
 function displayPackages($packages){
 
-   $html = "<table id='' align='center'>"
+   $html = "<table id='packages' align='center'>"
          . "<thead>"
          . "<th>Edit</th>"
          . "<th>View</th>"
