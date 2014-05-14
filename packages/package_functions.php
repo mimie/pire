@@ -129,7 +129,51 @@ function displayEventPackages(array $eventPackages){
   $html = $html."</tbody></table>";
 
   return $html;
+}
 
-  
+function getEventsPerPackage($packageId){
+
+  $stmt = civicrmDB("SELECT bpe.event_id,ce.title as event_name,ce.start_date,ce.end_date
+                     FROM billing_package_events bpe, civicrm_event ce
+                     WHERE ce.id = bpe.event_id
+                     AND bpe.pid = ?");
+  $stmt->bindValue(1,$packageId,PDO::PARAM_INT);
+  $stmt->execute();
+  $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+  return $result;
+}
+
+function displayEventsPerPackage($packageId){
+
+  $packageName = getPackageName($packageId);
+  $events = getEventsPerPackage($packageId);
+
+  $html = "<table>"
+        . "<tr><th colspan='4'></th></tr>"
+        . "<tr>"
+        . "<th>Event Id</th>"
+        . "<th>Event Name</th>"
+        . "<th>Start Date</th>"
+        . "<th>End Date</th>"
+        . "</tr>";
+
+ foreach($events as $key => $field){
+
+    $eventId = $field["event_id"];
+    $eventName = $field["event_name"];
+    $startDate = date("F j, Y",strtotime($field["start_date"]));
+    $endDate = date("F j, Y",strtotime($field["end_date"]));
+    $html = $html."<tr>"
+          . "<td>$eventId</td>"
+          . "<td>$eventName</td>"
+          . "<td>$startDate</td>"
+          . "<td>$endDate</td>";
+ }
+
+ $html = $html."</table>";
+
+ return $html;
+
 }
 ?>
