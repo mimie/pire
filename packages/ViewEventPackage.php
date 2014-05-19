@@ -79,6 +79,11 @@ $(function() {
 </form>
 <?php
 
+  echo "<div align='center' style='padding: 8px 8px 8px 8px'>";
+  $eventsPerPackage = displayEventsPerPackage($pid);
+  echo $eventsPerPackage;
+  echo "</div>";
+
   echo "<div align='center'>";
   if($_POST["search"]){
      $eventTypeId = $_POST["eventTypeId"];
