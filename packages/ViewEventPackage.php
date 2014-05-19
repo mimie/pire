@@ -59,7 +59,7 @@ $(function() {
 
 
 ?>
-<form action="ViewEventPackage.php" method="POST">
+<form action="ViewEventPackage.php?pid=<?=$pid?>" method="POST">
 <div id='package'>
   <select name="eventTypeId">
 <?php
@@ -76,7 +76,6 @@ $(function() {
   <input type="text" name="event" placeholder="Type the search event.."/>
   <input type="submit" name="search" value="Search Event"/>
 </div>
-</form>
 <?php
 
   echo "<div align='center' style='padding: 8px 8px 8px 8px'>";
@@ -96,6 +95,13 @@ $(function() {
 
   }
 
+  elseif($_POST["add"]){
+
+    $selectedIds = $_POST["eventIds"];
+    var_dump($selectedIds);
+    insertPackageEvents($selectedIds,$pid);    
+  }
+
   else{
     $eventPackages = getEventsForPackages(2,"");
     $eventType = getEventTypeName(2);
@@ -103,8 +109,10 @@ $(function() {
     $display = displayEventPackages($eventPackages);
     echo $display;
   }
+
   echo "</div>";
 
 ?>
+</form>
 </body>
 </html>

@@ -102,11 +102,14 @@ function displayEventPackages(array $eventPackages){
 
    $html = "<table id='events'>"
          . "<thead>"
+         . "<tr><td colspan='5' bgcolor='#084B8A'><input type='submit' value='ADD PACKAGE' name='add'></td></tr>"
+         . "<tr>"
          . "<th>Select Event</th>"
          . "<th>Event Id</th>"
          . "<th>Event Name</th>"
          . "<th>Start Date</th>"
          . "<th>End Date</th>"
+         . "</tr>"
          . "<thead>";
 
   $html = $html."<tbody>";
@@ -118,7 +121,7 @@ function displayEventPackages(array $eventPackages){
      $endDate = date("F j, Y",strtotime($key["end_date"]));
 
      $html = $html."<tr>"
-           . "<td><input type='checkbox' value='$eventId'/></td>"
+           . "<td><input type='checkbox' value='$eventId' name='eventIds[]'/></td>"
            . "<td>$eventId</td>"
            . "<td>$eventName</td>"
            . "<td>$startDate</td>"
@@ -180,6 +183,7 @@ function displayEventsPerPackage($packageId){
 function insertPackageEvents(array $eventIds,$packageId){
 
   foreach($eventIds as $id){
+   
     $stmt = civicrmDB("INSERT INTO billing_package_events(pid,event_id) VALUES (:event_id,:package_id)");
     $stmt->execute(array(':event_id'=>$id,
                          ':package_id'=>$packageId));
