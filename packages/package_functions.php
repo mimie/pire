@@ -150,7 +150,7 @@ function displayEventsPerPackage($packageId){
   $events = getEventsPerPackage($packageId);
 
   $html = "<table>"
-        . "<tr><th colspan='4'></th></tr>"
+        . "<tr><th colspan='4'>$packageName</th></tr>"
         . "<tr>"
         . "<th>Event Id</th>"
         . "<th>Event Name</th>"
@@ -175,5 +175,14 @@ function displayEventsPerPackage($packageId){
 
  return $html;
 
+}
+
+function insertPackageEvents(array $eventIds,$packageId){
+
+  foreach($eventIds as $id){
+    $stmt = civicrmDB("INSERT INTO billing_package_events(pid,event_id) VALUES (:event_id,:package_id)");
+    $stmt->execute(array(':event_id'=>$id,
+                         ':package_id'=>$packageId));
+  }
 }
 ?>
