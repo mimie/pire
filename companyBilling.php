@@ -46,13 +46,11 @@ $(function() {
   include 'badges_functions.php';
   include 'weberp_functions.php';
   include 'billing_functions.php';
-  include '../weberpdev/postFunction.php';
   include 'send_functions.php';
   include 'login_functions.php';
   include 'company_functions.php';
 
    $dbh = civicrmConnect();
-   $weberpConn = weberpConnect();
  
    /**session_start();
    //if the user has not logged in
