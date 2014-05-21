@@ -39,23 +39,13 @@ $(function() {
   include 'login_functions.php';
  
   $dbh = civicrmConnect();
+  $userId = $_GET["user_id"];
  
-  /**session_start();
-  //if the user has not logged in
-  if(!isLoggedIn())
-  {
-    header('Location: login.php');
-    die();
-  }**/
-
   @$uid = $_GET["uid"];
-  //@$userId = $_GET["user"];
 
   echo "<div align='center' style='padding:16px;'>";  
   $logout = logoutDiv($dbh);
   echo $logout;
-  /**$header = headerDiv();
-  echo $header;**/
   echo "</div>";
 
 ?>
