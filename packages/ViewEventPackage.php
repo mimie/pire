@@ -57,10 +57,9 @@ $(function() {
 
    echo $menu;
    @$pid = $_GET["pid"];
-
+   echo "<form action='".$_SERVER['PHP_SELF']."?pid=".$pid."' method='post'>";
 
 ?>
-<form action="ViewEventPackage.php?pid=<?=$pid?>" method="POST">
 <div id='package'>
   <select name="eventTypeId">
 <?php
@@ -100,6 +99,7 @@ $(function() {
 
     $selectedIds = $_POST["eventIds"];
     insertPackageEvents($selectedIds,$pid);    
+    header("Location: ViewEventPackage.php?pid=".$pid);
   }
 
   else{
