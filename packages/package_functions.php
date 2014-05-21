@@ -102,7 +102,7 @@ function displayEventPackages(array $eventPackages){
 
    $html = "<table id='events'>"
          . "<thead>"
-         . "<tr><td colspan='5' bgcolor='#084B8A'><input type='submit' value='ADD PACKAGE' name='add'></td></tr>"
+	 . "<tr><td colspan='5' bgcolor='#084B8A'><input type='submit' value='ADD PACKAGE' name='add'></td></tr>"
          . "<tr>"
          . "<th>Select Event</th>"
          . "<th>Event Id</th>"
@@ -183,10 +183,9 @@ function displayEventsPerPackage($packageId){
 function insertPackageEvents(array $eventIds,$packageId){
 
   foreach($eventIds as $id){
-   
-    $stmt = civicrmDB("INSERT INTO billing_package_events(pid,event_id) VALUES (:event_id,:package_id)");
-    $stmt->execute(array(':event_id'=>$id,
-                         ':package_id'=>$packageId));
+
+   $stmt = civicrmDB("INSERT INTO billing_package_events(pid,event_id) VALUES (?,?)");
+   $stmt->execute(array($packageId,$id));
   }
 }
 ?>
