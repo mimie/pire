@@ -18,6 +18,7 @@
 }
 </style>
 <script>
+
 $(function() {
         $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
         $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
@@ -98,7 +99,6 @@ $(function() {
   elseif($_POST["add"]){
 
     $selectedIds = $_POST["eventIds"];
-    var_dump($selectedIds);
     insertPackageEvents($selectedIds,$pid);    
   }
 
