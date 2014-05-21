@@ -82,15 +82,19 @@ function getEventTypeName($eventTypeId){
   return $eventType;
 }
 
-function getEventsForPackages($eventTypeId,$eventName){
+function getEventsForPackages($eventTypeId,$eventName,$packageId){
 
    $stmt = civicrmDB("SELECT ce.id as event_id, ce.title as event_name,ce.event_type_id,ce.start_date,ce.end_date
                       FROM civicrm_event ce
                       WHERE ce.event_type_id = ?
                       AND ce.title LIKE ?
+                      AND NOT EXISTS(SELECT * FROM billing_package_events bpe
+                                     WHERE pid = ?
+                                     AND ce.id = bpe.event_id) 
                       ORDER BY ce.start_date DESC");
    $stmt->bindValue(1,$eventTypeId,PDO::PARAM_INT);
    $stmt->bindValue(2,"%".$eventName."%",PDO::PARAM_STR);
+   $stmt->bindValue(3,$packageId,PDO::PARAM_INT);
    $stmt->execute();
    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

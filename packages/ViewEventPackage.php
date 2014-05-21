@@ -87,7 +87,7 @@ $(function() {
   if($_POST["search"]){
      $eventTypeId = $_POST["eventTypeId"];
      $eventName = $_POST["event"];
-     $eventPackages = getEventsForPackages($eventTypeId,$eventName);
+     $eventPackages = getEventsForPackages($eventTypeId,$eventName,$pid);
      $eventType = getEventTypeName($eventTypeId);
      echo "<div align='center'>$eventType</div>";
      $display = displayEventPackages($eventPackages);
@@ -103,7 +103,7 @@ $(function() {
   }
 
   else{
-    $eventPackages = getEventsForPackages(2,"");
+    $eventPackages = getEventsForPackages(2,"",$pid);
     $eventType = getEventTypeName(2);
     echo "<div align='center' style='padding: 8px 8px 8px 8px;'>".$eventType." EVENT TYPE</div>";
     $display = displayEventPackages($eventPackages);
