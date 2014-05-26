@@ -124,7 +124,6 @@ $(function() {
     <option value="select">Select ation type</option>
     <option value="Generate Bill">Generate Bill</option>
     <option value="Send Bill">Send Bill</option>
-<!--    <option value="Post to Weberp">Post to Weberp</option> -->
   </select>
   <input type="submit" value="Process Action" name="processAction"><br><br>
   <input type="button" value="Reload page" onclick="reloadPage()">
@@ -172,8 +171,6 @@ $(function() {
        }
 
        else{
-         //$tax = round($fee_amount/9.3333,2);
-         //$subtotal = round($fee_amount - $tax,2);
          $subtotal = round($fee_amount/1.12,2);
          $tax = $fee_amount - $subtotal;
          
