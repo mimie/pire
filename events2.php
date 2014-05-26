@@ -40,7 +40,6 @@ $(function() {
  
   $dbh = civicrmConnect();
   @$uid = $_GET["uid"];
-  @$civicrmId = getCivicrmId($uid);
 
   echo "<div align='center' style='padding:16px;'>";  
   $logout = logoutDiv($dbh);
