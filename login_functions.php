@@ -171,4 +171,18 @@ function getUserDetailsById(PDO $dbh,$userId){
   
   return $userDetails;
 }
+
+/*
+ * get the equivalent civicrm id from drupal user id
+ */
+function getCivicrmId($drupalId){
+
+  $stmt = civicrmDB("SELECT contact_id FROM civicrm_uf_match WHERE uf_id = ?");
+  $stmt->bindValue(1,$drupalId,PDO::PARAM_INT);
+  $stmt->execute();
+  $result = $stmt->fetch(PDO::FETCH_ASSOC);
+  $contact_id = $result["contact_id"];
+
+  return $contact_id;
+}
 ?>

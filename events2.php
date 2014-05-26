@@ -39,9 +39,8 @@ $(function() {
   include 'login_functions.php';
  
   $dbh = civicrmConnect();
-  $userId = $_GET["user_id"];
- 
   @$uid = $_GET["uid"];
+  @$civicrmId = getCivicrmId($uid);
 
   echo "<div align='center' style='padding:16px;'>";  
   $logout = logoutDiv($dbh);
