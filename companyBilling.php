@@ -60,7 +60,7 @@ $(function() {
      die();
    }**/
 
-   @$userId = $_GET["user"];
+   @$uid = $_GET["uid"];
   
    $logout = logoutDiv($dbh,$userId);
    echo $logout;
@@ -76,7 +76,7 @@ $(function() {
    $eventLocation = formatEventLocation($locationDetails);
    //navigation
    echo "<div id = 'navigation'>";
-   echo "<a href='events2.php?&user=$userId'><b>Event List</b></a>";
+   echo "<a href='events2.php?&uid=".$uid."'><b>Event List</b></a>";
    echo "&nbsp;&nbsp;<b>&gt;</b>&nbsp;";
    echo "<i>$eventName</i>";
    echo "</div>";
@@ -108,8 +108,8 @@ $(function() {
    echo "<div id='billingNav'>";
    echo "<table width='100%'>";
    echo "<tr>";
-   echo "<td align='center' bgcolor='#084B8A'><a href='individualBilling.php?eventId=$eventId&billingType=individual&user=$userId'>INDIVIDUAL BILLING</a></td>";
-   echo "<td align='center'><a href='companyBilling.php?eventId=$eventId&billingType=company&user=$userId'>COMPANY BILLING</td>";
+   echo "<td align='center' bgcolor='#084B8A'><a href='individualBilling.php?eventId=$eventId&billingType=individual&uid=".$uid."'>INDIVIDUAL BILLING</a></td>";
+   echo "<td align='center'><a href='companyBilling.php?eventId=$eventId&billingType=company&uid=".$uid."'>COMPANY BILLING</td>";
    echo "</tr>";
    echo "</table>";
    echo "</div>";
