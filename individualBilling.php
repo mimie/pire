@@ -129,20 +129,23 @@ $(function() {
    $billedParticipants = getIndividualBilledParticipantsByEventId($eventId);
 
    foreach($participants as $key => $field){
+        //status = 4 = Cancelled - Strike the column if the participant status is cancelled.
+        $strike = $field['status_id'] == 4 ? '<strike>' : '';
+        $endstrike = $field['status_id'] == 4 ? '</strike>' : '';
 	$display = $display."<tr>"
-                 . "<td><input type='checkbox' class='checkbox' name='ids[]' value='".$field['participant_id']."'>".$field['sort_name']."</td>"
-                 . "<td>".$field['status']."</td>"
-                 . "<td>".$field['organization_name']."</td>"
-                 . "<td>".$field['fee_amount']."</td>";
+                 . "<td>$strike<input type='checkbox' class='checkbox' name='ids[]' value='".$field['participant_id']."'>".$field['sort_name']."$endstrike</td>"
+                 . "<td>$strike".$field['status']."$endstrike</td>"
+                 . "<td>$strike".$field['organization_name']."$endstrike</td>"
+                 . "<td>$strike".$field['fee_amount']."$endstrike</td>";
         if(array_key_exists($field['participant_id'],$billedParticipants)){
             $bill = array();
             $bill = $billedParticipants[$field['participant_id']];
-            $display = $display. "<td>".$bill['subtotal']."</td>"
-                     . "<td>".$bill['vat']."</td>"
+            $display = $display. "<td>$strike".$bill['subtotal']."$endstrike</td>"
+                     . "<td>$strike".$bill['vat']."$endstrike</td>"
                      . "<td><a href='BIRForm/BIRForm.php?event_id=$eventId&billing_no=".$bill['billing_no']."&uid=$uid' target='_blank'><img src='printer-icon.png' width='50' height='50'></a></td>"
-                     . "<td>".number_format($bill['amount_paid'],2)."</td>"
-                     . "<td>".$bill['billing_no']."</td>"
-                     . "<td>".date("F j, Y",strtotime($bill['bill_date']))."</td>";
+                     . "<td>$strike".number_format($bill['amount_paid'],2)."$endstrike</td>"
+                     . "<td>$strike".$bill['billing_no']."$endstrike</td>"
+                     . "<td>$strike".date("F j, Y",strtotime($bill['bill_date']))."$endstrike</td>";
          }else{
            $display = $display. "<td></td>"
                  . "<td></td>"
@@ -152,7 +155,7 @@ $(function() {
                  . "<td></td>";
           }
 
-           $display = $display. "<td>".$field['street_address']." ".$field['city_address']."</td>"
+           $display = $display. "<td>$strike".$field['street_address']." ".$field['city_address']."$endstrike</td>"
                  . "</tr>";	
    }
    $display = $display."</tbody></table>";
