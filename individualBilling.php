@@ -137,7 +137,7 @@ $(function() {
             $bill = $billedParticipants[$field['participant_id']];
             $display = $display. "<td>".$bill['subtotal']."</td>"
                      . "<td>".$bill['vat']."</td>"
-                     . "<td><img src='printer-icon.png' width='50' height='50'></td>"
+                     . "<td><a href='BIRForm/BIRForm.php'><img src='printer-icon.png' width='50' height='50'></a></td>"
                      . "<td>".$bill['amount_paid']."</td>"
                      . "<td>".$bill['billing_no']."</td>"
                      . "<td>".date("F j, Y",strtotime($bill['bill_date']))."</td>";
