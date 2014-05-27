@@ -2,7 +2,7 @@
 
 function getIndividualParticipantsByEventId($eventId){
 
-	$stmt = civicrmDB("SELECT cc.id as contact_id, cc.sort_name,cc.organization_name, cp.fee_amount,cp.id as participant_id, 
+	$stmt = civicrmDB("SELECT cc.id as contact_id, cp.status_id,cc.sort_name,cc.organization_name, cp.fee_amount,cp.id as participant_id, 
                      billing_type.billing_45 as bill_type,cps.label as status,
                      bd. street_address__company__3 as street_address, city__company__5 as city_address
                      FROM civicrm_participant cp, civicrm_value_billing_17 as billing_type, civicrm_participant_status_type cps, civicrm_contact cc
@@ -25,7 +25,7 @@ function getIndividualParticipantsByEventId($eventId){
 
 function getIndividualBilledParticipantsByEventId($eventId){
 
-	$stmt = civicrmDB("SELECT participant_id,billing_no,bill_date,amount_paid,subtotal,vat FROM billing_details
+	$stmt = civicrmDB("SELECT participant_id,generated_bill,post_bill,billing_no,bir_no,bill_date,amount_paid,subtotal,vat FROM billing_details
                            WHERE event_id = ?
                            AND billing_type = 'Individual'
                           ");
