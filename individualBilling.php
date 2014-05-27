@@ -103,12 +103,14 @@ $(function() {
    echo "<td align='center'><a href='individualBilling.php?eventId=$eventId&billingType=individual&uid=".$uid."'>INDIVIDUAL BILLING</a></td>";
    echo "<td align='center' bgcolor='#084B8A'><a href='companyBilling.php?eventId=$eventId&billingType=company&uid=".$uid."'>COMPANY BILLING</td>";
    echo "</tr>";
-   echo "</table></br>";  
+   echo "</table></br>"; 
+
+   echo "<form action='' method='POST'>"; 
 
    $display = "<table id='billings' style='width:100%;'>"
             . "<thead>"
             . "<tr>"
-            . "<th>Participant Name</th>"
+            . "<th><input type='checkbox' id='check'>Participant Name</th>"
             . "<th>Status</th>"
             . "<th>Organization</th>"
             . "<th>Fee</th>"
@@ -128,7 +130,7 @@ $(function() {
 
    foreach($participants as $key => $field){
 	$display = $display."<tr>"
-                 . "<td>".$field['sort_name']."</td>"
+                 . "<td><input type='checkbox' class='checkbox' name='ids[]' value='".$field['participant_id']."'>".$field['sort_name']."</td>"
                  . "<td>".$field['status']."</td>"
                  . "<td>".$field['organization_name']."</td>"
                  . "<td>".$field['fee_amount']."</td>";
@@ -137,7 +139,7 @@ $(function() {
             $bill = $billedParticipants[$field['participant_id']];
             $display = $display. "<td>".$bill['subtotal']."</td>"
                      . "<td>".$bill['vat']."</td>"
-                     . "<td><a href='BIRForm/BIRForm.php?event_id=$eventId&billing_no=".$bill['billing_no']."&uid=$uid'><img src='printer-icon.png' width='50' height='50'></a></td>"
+                     . "<td><a href='BIRForm/BIRForm.php?event_id=$eventId&billing_no=".$bill['billing_no']."&uid=$uid' target='_blank'><img src='printer-icon.png' width='50' height='50'></a></td>"
                      . "<td>".number_format($bill['amount_paid'],2)."</td>"
                      . "<td>".$bill['billing_no']."</td>"
                      . "<td>".date("F j, Y",strtotime($bill['bill_date']))."</td>";
@@ -155,7 +157,19 @@ $(function() {
    }
    $display = $display."</tbody></table>";
    echo $display;
+   echo "</form>";
    echo "</div>";
 ?>
 </body>
+<script type="text/javascript">
+  $("#check").click(function(){
+
+    if($(this).is(":checked")){
+      $("body input[type=checkbox][class=checkbox]").prop("checked",true);
+    }else{
+      $("body input[type=checkbox][class=checkbox]").prop("checked",false);
+    }
+
+  });
+</script>
 </html>
