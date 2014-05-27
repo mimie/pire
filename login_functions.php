@@ -173,16 +173,18 @@ function getUserDetailsById(PDO $dbh,$userId){
 }
 
 /*
- * get the equivalent civicrm id from drupal user id
+ * get the name of the person who generated the bill
  */
-function getCivicrmId($drupalId){
+function getGeneratorName($drupalId){
 
-  $stmt = civicrmDB("SELECT contact_id FROM civicrm_uf_match WHERE uf_id = ?");
+  $stmt = civicrmDB("SELECT cc.sort_name FROM civicrm_contact cc,civicrm_uf_match uf 
+                     WHERE uf.uf_id = ?
+                     AND cc.id=uf.contact_id");
   $stmt->bindValue(1,$drupalId,PDO::PARAM_INT);
   $stmt->execute();
   $result = $stmt->fetch(PDO::FETCH_ASSOC);
-  $contact_id = $result["contact_id"];
-
-  return $contact_id;
+  $name = $result["sort_name"];
+  
+  return $name;
 }
 ?>
