@@ -13,6 +13,15 @@ href="IIAP%20Billing%20Form%20(rev2_2014%20ATP)_files/filelist.xml">
 </head>
 
 <body>
+<?php
+
+  include '../pdo_conn.php';
+  include '../login_functions.php';
+
+  @$uid = $_GET["uid"];
+  $generator = getGeneratorName($uid);
+
+?>
 
 <div id="IIAP Billing Form (rev2_2014 ATP)_2552" align=center
 x:publishsource="Excel">
@@ -507,7 +516,7 @@ x:publishsource="Excel">
   <td class=xl655352552></td>
   <td class=xl1172552>&nbsp;</td>
   <td class=xl992552>&nbsp;</td>
-  <td colspan=2 class=xl1632552>&nbsp;</td>
+  <td colspan=2 class=xl1632552>&nbsp;<b><font size='3'><?=$generator?></font></b></td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
  </tr>
