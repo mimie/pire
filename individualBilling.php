@@ -110,8 +110,8 @@ $(function() {
    $display = "<table id='billings' style='width:100%;'>"
             . "<thead>"
             . "<tr>"
-            . "<td colspan='12'>Account Receivable Type : <input type='radio' name='vat' value='1'>VATABLE <input type='radio' name='vat' value='0'>NON-VATABLE"
-            . "</br>BS. No. : <input type='text' name='bs_no' placeholder='000001'> <input type='submit' name='generate' value='GENERATE BILL'></td>"
+            . "<td colspan='12'>Account Receivable Type : <input type='radio' name='vat' value='1' checked='checked'>VATABLE <input type='radio' name='vat' value='0'>NON-VATABLE"
+            . "</br>BS. No. : <input type='text' name='bs_no' placeholder='000001' required> <input type='submit' name='generate' value='GENERATE BILL'></td>"
             . "</tr>"
             . "<tr>"
             . "<th><input type='checkbox' id='check'>Participant Name</th>"
@@ -175,6 +175,10 @@ $(function() {
    echo $display;
    echo "</form>";
    echo "</div>";
+
+   if($_POST["generate"]){
+     $participantIds = $_POST["ids"];
+   }
 ?>
 </body>
 <script type="text/javascript">
