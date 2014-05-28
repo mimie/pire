@@ -126,12 +126,38 @@ function generateIndividualBill($participant_id,$bs_no,$vatable){
         $stmt->bindValue(15,$billing_no,PDO::PARAM_STR);
         $stmt->bindValue(16,1,PDO::PARAM_INT);
         $stmt->bindValue(17,1,PDO::PARAM_INT);
-        $stmt->bindValue(18,$info["status"],PDO::PARAM_STR);
+        $stmt->bindValue(18,$info["participant_status"],PDO::PARAM_STR);
         $stmt->bindValue(19,$generator_uid,PDO::PARAM_INT);
         $stmt->bindValue(20,$bs_no,PDO::PARAM_STR);
 
         $stmt->execute();
+        echo "<pre>";
+        print_r($info);
+        echo "</pre>";
         
+}
+
+/*
+ * Retursn a formatted 6 digit-number BS No.
+ * @bs_no = numeric bs. no to be formatted
+ */
+function formatBSNo($bs_no){
+
+  $count = strlen($bs_no);
+  if($count < 6){
+     $countZeros = 6-$count;
+     $zeros = "";
+     for($i=1; $i <= $countZeros; $i++){
+        $zeros = $zeros."0";
+     }
+
+   return $zeros.$bs_no;
+     
+  }
+
+  else{
+    return $bs_no;
+  }
 }
 
 ?>
