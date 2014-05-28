@@ -8,7 +8,7 @@
   <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
   <script src="js/jquery-jPaginate.js"></script>
   <script src="js/jquery.tablesorter.js"></script>
-<script>
+<script type='text/javascript' language='javascript'>
 function reloadPage()
   {
   location.reload();
@@ -34,7 +34,21 @@ $(function() {
         }
       }
     });
-  });
+});
+
+function checkboxValidator(){
+	var checkbox = document.getElementsByName('ids[]');
+	var length = 0;
+	for(var i=0;i<checkbox.length;i++){
+           length = checkbox[i].checked ? length + 1 : length;
+        }
+        
+        if(length == 0){
+          alert("Please select a participant name.");
+        }else{
+          return true;
+         } 
+}
 
 </script>
 </head>
@@ -105,7 +119,7 @@ $(function() {
    echo "</tr>";
    echo "</table></br>"; 
 
-   echo "<form action='' method='POST'>"; 
+   echo "<form action='' method='POST' onsubmit=\"return checkboxValidator()\">"; 
 
    $display = "<table id='billings' style='width:100%;'>"
             . "<thead>"
@@ -179,11 +193,14 @@ $(function() {
    if($_POST["generate"]){
      $participantIds = $_POST["ids"];
      $bs_no = $_POST["bs_no"];
-     $vat = $_POST["vat"];
+     $is_vatable = $_POST["vat"];
      
      foreach($participantIds as $id){
-       $info = getInfoByParticipantId($id);
+     	generateIndividualBill($id,$bs_no,$is_vatable);
      }
+     echo "<script type='text/javascript'>";
+     echo "reloadPage()";
+     echo "</script>";
    }
 ?>
 </body>
