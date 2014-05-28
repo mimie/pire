@@ -84,13 +84,11 @@
 
     $note = $_POST["note"];
     $categoryId = $_POST["billingType"];
-    $status = $_POST["statusType"];
 
-    $sql = $dbh->prepare("INSERT INTO billing_notes(notes_category_id,notes,notes_status) VALUES (?,?,?)");
+    $sql = $dbh->prepare("INSERT INTO billing_notes(notes_category_id,notes) VALUES (?,?)");
 
     $sql->bindValue(1,$categoryId,PDO::PARAM_INT);
     $sql->bindValue(2,$note,PDO::PARAM_STR);
-    $sql->bindValue(3,$status,PDO::PARAM_INT);
 
     $sql->execute();
     header("Location:notes.php");
@@ -100,20 +98,17 @@
 
     $note = $_POST["note"];
     $categoryId = $_POST["billingType"];
-    $status = $_POST["statusType"];
     $noteId = $_POST["note_id"];
 
     $sql = $dbh->prepare("UPDATE billing_notes
                           SET notes_category_id = ?,
                           notes = ?,
-                          notes_status = ?
                           WHERE notes_id = ?
                          ");
 
     $sql->bindValue(1,$categoryId,PDO::PARAM_INT);
     $sql->bindValue(2,$note,PDO::PARAM_STR);
-    $sql->bindValue(3,$status,PDO::PARAM_INT);
-    $sql->bindValue(4,$noteId,PDO::PARAM_INT);
+    $sql->bindValue(3,$noteId,PDO::PARAM_INT);
 
     $sql->execute();
     header("Location:notes.php");
@@ -128,7 +123,6 @@
        ."<th>Select Notes</th>"
        ."<th>Type of Billing</th>"
        ."<th>Notes</th>"
-       ."<th>Status</th>"
        ."<tr>"
        ."</thead><tbody>";      
 
@@ -138,14 +132,11 @@
     $categoryId = $details["notes_category_id"];
     $billingType = $details["category_name"];
     $note = $details["notes"];
-    $status = $details["notes_status"];
-    $status = $status == 0 ? 'disabled' : 'enabled';
 
     echo "<tr>"
          ."<td><input type='checkbox' name=id value='$id'></td>"
          ."<td>$billingType</td>"
          ."<td>$note</td>"
-         ."<td>$status</td>"
          ."</tr>";
   }
 

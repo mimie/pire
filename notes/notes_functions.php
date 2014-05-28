@@ -2,7 +2,7 @@
 
 function getAllNotes($dbh){
 
-  $sql = $dbh->prepare("SELECT notes_id, notes.notes_category_id,category.category_name,notes,notes_status
+  $sql = $dbh->prepare("SELECT notes_id, notes.notes_category_id,category.category_name,notes
                         FROM billing_notes notes, billing_notes_category category
                         WHERE notes.notes_category_id = category.notes_category_id
                        ");
@@ -14,7 +14,7 @@ function getAllNotes($dbh){
 function getNoteById($dbh,$noteId){
 
   
-  $sql = $dbh->prepare("SELECT notes_id, notes.notes_category_id,category.category_name,notes,notes_status
+  $sql = $dbh->prepare("SELECT notes_id, notes.notes_category_id,category.category_name,notes
                         FROM billing_notes notes, billing_notes_category category
                         WHERE notes.notes_category_id = category.notes_category_id
                         AND notes_id = ?
@@ -43,7 +43,6 @@ function displayBillingNote($dbh,array $billingNote){
   $categoryId = $billingNote["notes_category_id"];
   $categoryName = $billingNote["category_name"];
   $note = $billingNote["notes"];
-  $status = $billingNote["notes_status"];
   $billingTypes = getAllTypeBilling($dbh);
   
   $html = "<fieldset>"
@@ -71,26 +70,6 @@ function displayBillingNote($dbh,array $billingNote){
   }
         
   $html = $html. "</select></td></tr>"
-        . "<tr>"
-        . "<th>Status</th>"
-        . "<td>"
-        . "<select name='statusType'>";
-
-  if($status == 0){
-   $disabled = "selected";
-   $enabled = "";
-  }
-
-  else{
-   $disabled = "";
-   $enabled = "selected";
-  }
-       
- $html = $html. "<option value='0' $disabled>disabled</option>"
-       . "<option value='1' $enabled>enabled</option>"
-       . "</select>"
-       . "</td>"
-       . "</tr>"
        . "<tr>"
        . "<td colspan='2' align='left'><input type='submit' value='Update Note' name='update'></td>"
        . "</tr>"
@@ -105,19 +84,16 @@ function updateNote($dbh,array $billingNote){
 
   $categoryId = $billingNote["category_id"];
   $notes = $billingNote["notes"];
-  $status = $billingNote["status"];
   $noteId = $billingNote["note_id"];
 
   $sql = $dbh->prepare("UPDATE FROM billing_notes
                         notes_category_id = ?,
                         notes = ?,
-                        notes_status = ?
                         WHERE notes_id = ?
                        ");
   $sql->bindValue(1,$categoryId,PDO::PARAM_INT);
   $sql->bindValue(2,$notes,PDO::PARAM_STR);
-  $sql->bindValue(3,$status,PDO::PARAM_INT);
-  $sql->bindValue(4,$noteId,PDO::PARAM_INT);
+  $sql->bindValue(3,$noteId,PDO::PARAM_INT);
 
   $sql->execute();
 
@@ -148,15 +124,6 @@ function addNoteForm($dbh){
   }
         
   $html = $html. "</select></td></tr>"
-        . "<tr>"
-        . "<th>Status</th>"
-        . "<td>"
-        . "<select name='statusType'>";
-       
- $html = $html. "<option value='0' $disabled>disabled</option>"
-       . "<option value='1' $enabled>enabled</option>"
-       . "</select>"
-       . "</td>"
        . "</tr>"
        . "<tr>"
        . "<td colspan='2'><input type='submit' value='Add Note' name='add'></td>"
