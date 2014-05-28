@@ -223,7 +223,9 @@ function validator(){
      $is_vatable = $_POST["vat"];
      
      foreach($participantIds as $id){
-     	generateIndividualBill($id,$bs_no,$is_vatable);
+        $bir_no = formatBSNo($bs_no);
+     	generateIndividualBill($id,$bir_no,$is_vatable);
+        $bs_no++;
      }
      
      echo "<div id='confirmation'>Successfully generated bill.</div>";
