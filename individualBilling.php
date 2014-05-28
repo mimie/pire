@@ -178,6 +178,12 @@ $(function() {
 
    if($_POST["generate"]){
      $participantIds = $_POST["ids"];
+     $bs_no = $_POST["bs_no"];
+     $vat = $_POST["vat"];
+     
+     foreach($participantIds as $id){
+       $info = getInfoByParticipantId($id);
+     }
    }
 ?>
 </body>
