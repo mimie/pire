@@ -152,14 +152,17 @@ function validator(){
    $display = "<table id='billings' style='width:100%;'>"
             . "<thead>"
             . "<tr>"
-            . "<td colspan='12'>Account Receivable Type : <input type='radio' name='vat' value='1' checked='checked'>VATABLE <input type='radio' name='vat' value='0'>NON-VATABLE"
+            . "<td colspan='13'>Account Receivable Type : <input type='radio' name='vat' value='1' checked='checked'>VATABLE <input type='radio' name='vat' value='0'>NON-VATABLE"
             . "</br>BS. No. : <input type='text' id='bs_no' name='bs_no' placeholder='Enter BS No. start number...' required>";
     $notes_opt = getNotesByCategory("Individual Event Billing");
+    $notes_collection = array();
     $display = $display."<SELECT name='notes'><option value='select'>- Select optional billing notes -</option><option>-----------------</option>";
     foreach($notes_opt as $key=>$field){
         $id = $field["notes_id"];
         $notes = $field["notes"];
     	$display = $display."<option value='$id'>$notes</option>";
+        //stores notes in an array for reference display of notes in the table
+        $notes_collection[$id] = $notes;
     }
 
     $display = $display."</SELECT><input type='submit' name='generate' value='GENERATE BILL'></td>"
@@ -177,6 +180,7 @@ function validator(){
              . "<th>BS No.</th>"
              . "<th>Billing Date</th>"
              . "<th>Billing Address</th>"
+             . "<th>Notes</th>"
              . "<tr>"
              . "</thead>"
              . "<tbody>";
@@ -209,6 +213,7 @@ function validator(){
                      . "<td>$strike".$bill['billing_no']."$endstrike</td>"
                      . "<td>$strike".$bill['bir_no']."$endstrike</td>"
                      . "<td>$strike".date("F j, Y",strtotime($bill['bill_date']))."$endstrike</td>";
+            $note = $notes_collection[$bill["notes_id"]];
          }else{
            $display = $display. "<td></td>"
                  . "<td></td>"
@@ -217,11 +222,13 @@ function validator(){
                  . "<td></td>"
                  . "<td></td>"
                  . "<td></td>";
+            $note = "";
           }
 
            $display = $display. "<td>$strike".$field['street_address']." ".$field['city_address']."$endstrike</td>"
-                 . "</tr>";	
-   }
+                    . "<td>$note</td>"
+                    . "</tr>";	
+   }//end of foreach
    $display = $display."</tbody></table>";
    echo $display;
    echo "</form>";
