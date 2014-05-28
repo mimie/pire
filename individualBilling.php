@@ -30,24 +30,51 @@ $(function() {
       modal: true,
       buttons: {
         "OK": function() {
-          $( this ).dialog( "close" );
+          //$( this ).dialog( "close" );
+          reloadPage();
         }
       }
     });
 });
 
-function checkboxValidator(){
-	var checkbox = document.getElementsByName('ids[]');
+function isNumeric(elem, helperMsg){
+	var numericExpression = /^[0-9]+$/;
+	if(elem.value.match(numericExpression)){
+		return true;
+	}else{
+		alert(helperMsg);
+		elem.focus();
+		return false;
+	}
+}
+
+
+function isCheck(elem, helperMsg){
 	var length = 0;
-	for(var i=0;i<checkbox.length;i++){
-           length = checkbox[i].checked ? length + 1 : length;
+	for(var i=0;i<elem.length;i++){
+           length = elem[i].checked ? length + 1 : length;
         }
         
         if(length == 0){
-          alert("Please select a participant name.");
+          alert(helperMsg);
+          return false;
         }else{
           return true;
          } 
+}
+
+function validator(){
+
+	var checkbox = document.getElementsByName('ids[]');
+        var bs_no = document.getElementById('bs_no');
+
+        if(isNumeric(bs_no,"Please enter a valid number for BS No. field.")){
+           if(isCheck(checkbox,"Please select a participant name.")){
+             return true;
+           }
+        }
+
+        return false;
 }
 
 </script>
@@ -119,13 +146,13 @@ function checkboxValidator(){
    echo "</tr>";
    echo "</table></br>"; 
 
-   echo "<form action='' method='POST' onsubmit=\"return checkboxValidator()\">"; 
+   echo "<form action='' method='POST' onsubmit=\"return validator()\">"; 
 
    $display = "<table id='billings' style='width:100%;'>"
             . "<thead>"
             . "<tr>"
             . "<td colspan='12'>Account Receivable Type : <input type='radio' name='vat' value='1' checked='checked'>VATABLE <input type='radio' name='vat' value='0'>NON-VATABLE"
-            . "</br>BS. No. : <input type='text' name='bs_no' placeholder='000001' required> <input type='submit' name='generate' value='GENERATE BILL'></td>"
+            . "</br>BS. No. : <input type='text' id='bs_no' name='bs_no' placeholder='Enter BS No. start number...' required> <input type='submit' name='generate' value='GENERATE BILL'></td>"
             . "</tr>"
             . "<tr>"
             . "<th><input type='checkbox' id='check'>Participant Name</th>"
@@ -198,9 +225,8 @@ function checkboxValidator(){
      foreach($participantIds as $id){
      	generateIndividualBill($id,$bs_no,$is_vatable);
      }
-     echo "<script type='text/javascript'>";
-     echo "reloadPage()";
-     echo "</script>";
+     
+     echo "<div id='confirmation'>Successfully generated bill.</div>";
    }
 ?>
 </body>
