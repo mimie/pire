@@ -62,4 +62,30 @@ function getBIRDetails($billing_no){
         return $result;
 }
 
+/*
+ *get participant details to be inserted in the billing_details table
+ */
+function getInfoByParticipantId($participant_id){
+
+	$stmt = civicrmDB("SELECT cp.id as participant_id, cp.contact_id, cp.event_id, cov.label as event_type,ce.title as event_name, cc.sort_name, 
+                           em.email,cc.organization_name, bd.street_address__company__3 as street_address, bd.city__company__5 as city_address,
+                           cc.employer_id as org_contact_id, cp.fee_amount, cps.label as particicpant_status
+                           FROM civicrm_participant cp, civicrm_event ce, civicrm_option_value cov, civicrm_participant_status_type cps,civicrm_contact cc
+                           LEFT JOIN civicrm_value_business_data_1 bd ON bd.entity_id = cc.id
+                           LEFT JOIN civicrm_email em ON em.contact_id = bd.entity_id
+                           WHERE cp.event_id = ce.id
+                           AND cov.value = ce.event_type_id
+                           AND cov.option_group_id = '14'
+                           AND cp.contact_id = cc.id
+                           AND cps.id = cp.status_id
+                           AND cp.id = ?");
+	$stmt->bindValue(1,$participant_id,PDO::PARAM_INT);
+	$stmt->execute();
+
+	$result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+	return $result;
+	
+}
+
 ?>
