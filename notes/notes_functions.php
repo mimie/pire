@@ -131,5 +131,21 @@ function addNoteForm($dbh){
        . "</fieldset>";
 
   return $html;
+}
+
+function getNotesByCategory($category){
+
+    try{
+	$stmt = civicrmDB("SELECT notes_id,notes FROM billing_notes bn,billing_notes_category cat
+                           WHERE bn.notes_category_id = cat.notes_category_id
+                           AND cat.category_name = ?");
+        $stmt->bindValue(1,$category,PDO::PARAM_STR);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }catch(PDOException $e){
+        print $e->getMessage();
+     }
+
+   return $result;
 } 
 ?>
