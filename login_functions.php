@@ -109,6 +109,7 @@ function logoutDiv($dbh){
         . "</div>";**/
 
      //$username = getUsername($dbh,$uiserId);
+     $uid = $_GET["uid"];
 
      $ciafile_dir = 'packages/ManagePackages.php';
      $ciafile_dir = file_exists($ciafile_dir) ? $ciafile_dir : '../packages/ManagePackages.php';
@@ -138,19 +139,19 @@ function logoutDiv($dbh){
 
      $html = "<div width='100%' style='background-color:black; padding:1px;'>"
            . "<ul>"
-           . "<li><a href='".$events_dir."'>Events</a></li>"
+           . "<li><a href='".$events_dir."?uid=$uid'>Events</a></li>"
            . "<li><a href='#'>Membership</a>"
-           . "<ul><li><a href='".$mem_dir."'>Membership Billing</a></li></ul>"
+           . "<ul><li><a href='".$mem_dir."?uid=$uid'>Membership Billing</a></li></ul>"
            . "</li>"
-           . "<li><a href='".$notes_dir."'>Notes</a></li>"
+           . "<li><a href='".$notes_dir."?uid=$uid'>Notes</a></li>"
            . "<a href='#'><li>Billing Report</a>"
-           . "<ul><li><a href='".$invidualBill_dir."'>Individual Event Billing</a></li>"
-           . "<li><a href='".$companyBill_dir."'>Company Event Billing</a></li>"
-           . "<li><a href='".$manageBill_dir."'>Update Billed Participants</a></li>"
+           . "<ul><li><a href='".$invidualBill_dir."?uid=$uid'>Individual Event Billing</a></li>"
+           . "<li><a href='".$companyBill_dir."?uid=$uid'>Company Event Billing</a></li>"
+           . "<li><a href='".$manageBill_dir."?uid=$uid'>Update Billed Participants</a></li>"
            . "</ul>"
            . "</li>"
            . "<li><a href='#'>Package Events</a>"
-           . "<ul><li><a href='".$ciafile_dir."'>Manage Package Events</a></li><li><a href='#'>Generate CIA Bill</a></li></ul>"
+           . "<ul><li><a href='".$ciafile_dir."?uid=$uid'>Manage Package Events</a></li><li><a href='#'>Generate CIA Bill</a></li></ul>"
            . "</li>"
            . "</ul><br><br>"
            . "</div>";
