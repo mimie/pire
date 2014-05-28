@@ -90,6 +90,7 @@ function validator(){
   include 'send_functions.php';
   include 'login_functions.php';
   include 'bir_functions.php';
+  include 'notes/notes_functions.php';
 
   $dbh = civicrmConnect();
  
@@ -152,24 +153,33 @@ function validator(){
             . "<thead>"
             . "<tr>"
             . "<td colspan='12'>Account Receivable Type : <input type='radio' name='vat' value='1' checked='checked'>VATABLE <input type='radio' name='vat' value='0'>NON-VATABLE"
-            . "</br>BS. No. : <input type='text' id='bs_no' name='bs_no' placeholder='Enter BS No. start number...' required> <input type='submit' name='generate' value='GENERATE BILL'></td>"
-            . "</tr>"
-            . "<tr>"
-            . "<th><input type='checkbox' id='check'>Participant Name</th>"
-            . "<th>Status</th>"
-            . "<th>Organization</th>"
-            . "<th>Fee</th>"
-            . "<th>Subtotal</th>"
-            . "<th>12% VAT</th>"
-            . "<th>Print Bill</th>"
-            . "<th>Amount Paid</th>"
-            . "<th>Billing Reference</th>"
-            . "<th>BS No.</th>"
-            . "<th>Billing Date</th>"
-            . "<th>Billing Address</th>"
-            . "<tr>"
-            . "</thead>"
-            . "<tbody>";
+            . "</br>BS. No. : <input type='text' id='bs_no' name='bs_no' placeholder='Enter BS No. start number...' required>";
+    $notes_opt = getNotesByCategory("Individual Event Billing");
+    $display = $display."<SELECT name='notes'><option value='select'>- Select optional billing notes -</option><option>-----------------</option>";
+    foreach($notes_opt as $key=>$field){
+        $id = $field["notes_id"];
+        $notes = $field["notes"];
+    	$display = $display."<option value='$id'>$notes</option>";
+    }
+
+    $display = $display."</SELECT><input type='submit' name='generate' value='GENERATE BILL'></td>"
+             . "</tr>"
+             . "<tr>"
+             . "<th><input type='checkbox' id='check'>Participant Name</th>"
+             . "<th>Status</th>"
+             . "<th>Organization</th>"
+             . "<th>Fee</th>"
+             . "<th>Subtotal</th>"
+             . "<th>12% VAT</th>"
+             . "<th>Print Bill</th>"
+             . "<th>Amount Paid</th>"
+             . "<th>Billing Reference</th>"
+             . "<th>BS No.</th>"
+             . "<th>Billing Date</th>"
+             . "<th>Billing Address</th>"
+             . "<tr>"
+             . "</thead>"
+             . "<tbody>";
    
    $participants = getIndividualParticipantsByEventId($eventId);
    $billedParticipants = getIndividualBilledParticipantsByEventId($eventId);
@@ -221,10 +231,11 @@ function validator(){
      $participantIds = $_POST["ids"];
      $bs_no = $_POST["bs_no"];
      $is_vatable = $_POST["vat"];
+     $note_id = $_POST["notes"];
      
      foreach($participantIds as $id){
         $bir_no = formatBSNo($bs_no);
-     	generateIndividualBill($id,$bir_no,$is_vatable);
+     	generateIndividualBill($id,$bir_no,$is_vatable,$note_id);
         $bs_no++;
      }
      
