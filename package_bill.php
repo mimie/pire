@@ -16,8 +16,8 @@ function reloadPage()
 $(function() {
         $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
         $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
-        $('#billings').jPaginate({
-                'max': 10,
+        $('#packages').jPaginate({
+                'max': 15,
                 'page': 1,
                 'links': 'buttons'
         });
@@ -60,9 +60,9 @@ $(function() {
 
 <?php
   $events = getAllPackageDetails();
-  $packages = getAllPackagesPerPackageId();
+  $packages = $_POST['search'] ? searchPackageName($_POST['package']) : getAllPackagesPerPackageId();
 
-  $display = "<table style='width:50%;' align='center'>"
+  $display = "<table id='packages' style='width:50%;' align='center'>"
            . "<thead>"
            . "<tr><th colspan='3'>PACKAGES</th></tr>"
            . "</thead><tbody>";
