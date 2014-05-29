@@ -50,6 +50,7 @@ $(function() {
   $menu = logoutDiv($dbh);
   echo $menu;
   echo "<br>";
+  $uid = $_GET['uid'];
 ?>
 <div align='center'>
 	<form action='' method='POST'>
@@ -68,7 +69,7 @@ $(function() {
            . "</thead><tbody>";
 
   foreach($packages as $pid=>$package_name){
-  	$display = $display."<tr><td  bgcolor='#084B8A' colspan=3><button>$package_name</button></td></tr>";
+  	$display = $display."<tr><td  bgcolor='#084B8A' colspan=3><button><a href='package_events.php?uid=$uid'>$package_name</a></button></td></tr>";
         $info = $events[$pid];
         $count = count($info);
         $display = $count ?  $display."<tr><td>Event</td><td>Start Date</td><td>End Date</td></tr>" : $display;
