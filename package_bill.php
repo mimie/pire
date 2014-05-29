@@ -68,9 +68,10 @@ $(function() {
            . "</thead><tbody>";
 
   foreach($packages as $pid=>$package_name){
-  	$display = $display."<tr><th colspan=3>$package_name</th></tr>"
-                 . "<tr><td>Event</td><td>Start Date</td><td>End Date</td></tr>";
+  	$display = $display."<tr><td  bgcolor='#084B8A' colspan=3><button>$package_name</button></td></tr>";
         $info = $events[$pid];
+        $count = count($info);
+        $display = $count ?  $display."<tr><td>Event</td><td>Start Date</td><td>End Date</td></tr>" : $display;
         foreach($info as $key=>$field){
             $display = $display."<tr><td>".$field['event_name']."</td>"
                      . "<td>".date_standard($field['start_date'])."</td>"
