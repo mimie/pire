@@ -151,7 +151,7 @@ function logoutDiv($dbh){
            . "</ul>"
            . "</li>"
            . "<li><a href='#'>Package Events</a>"
-           . "<ul><li><a href='".$ciafile_dir."?uid=$uid'>Manage Package Events</a></li><li><a href='#'>Generate CIA Bill</a></li></ul>"
+           . "<ul><li><a href='".$ciafile_dir."?uid=$uid'>Manage Package Events</a></li><li><a href='#'>Generate Package Bill</a></li></ul>"
            . "</li>"
            . "</ul><br><br>"
            . "</div>";
