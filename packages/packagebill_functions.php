@@ -25,5 +25,16 @@ function getAllPackagesPerPackageId(){
   return $result;
 }
 
+function searchPackageName($packageName){
+
+	$stmt = civicrmDB("SELECT pid,package_name FROM billing_package
+                           WHERE package_name LIKE ?");
+        $stmt->bindValue(1,"%".$packageName."%",PDO::PARAM_STR);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+
+        return $result;
+}
+
 ?>
 
