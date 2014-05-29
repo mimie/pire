@@ -238,7 +238,7 @@ function validator(){
      $participantIds = $_POST["ids"];
      $bs_no = $_POST["bs_no"];
      $is_vatable = $_POST["vat"];
-     $note_id = $_POST["notes"];
+     $note_id = $_POST["notes"] == 'select' ? NULL : $_POST["notes"];
      
      foreach($participantIds as $id){
         $bir_no = formatBSNo($bs_no);
@@ -246,7 +246,7 @@ function validator(){
         $bs_no++;
      }
      
-     echo "<div id='confirmation'>Successfully generated bill.</div>";
+     echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully generated bill.</div>";
    }
 ?>
 </body>
