@@ -46,6 +46,7 @@ $(function() {
   include 'login_functions.php';
   include 'bir_functions.php';
   include 'packages/packagebill_functions.php';
+  include 'packages/package_functions.php';
 
   $dbh = civicrmConnect();
   $menu = logoutDiv($dbh);
@@ -54,10 +55,23 @@ $(function() {
   $uid = $_GET['uid'];
   $pid = $_GET['pid'];
 
+  $events = getEventsPerPackage($pid);
+  $package_name = getPackageName($pid);
   $participants = getParticipantsPerPackage($pid);
-  echo "<pre>";
-  print_r($participants);
-  echo "</pre>";
+
+  $display = "<table align='center'>"
+           . "<tr><th colspan='4'>$package_name</th></tr>"
+           . "<tr><th>Event Id</th><th>Event Name</th><th>Start Date</th><th>End Date</th></tr>";
+  foreach($events as $key=>$field){
+  	$display = $display."<tr>"
+                 . "<td>".$field['event_id']."</td>"
+                 . "<td>".$field['event_name']."</td>"
+                 . "<td>".date_standard($field['start_date'])."</td>"
+                 . "<td>".date_standard($field['end_date'])."</td>"
+                 . "</tr>";
+  }
+  $display = $display."</table>";
+  echo $display;
 
 
 ?>
