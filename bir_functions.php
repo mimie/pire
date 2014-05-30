@@ -160,9 +160,9 @@ function formatBSNo($bs_no){
 function getParticipantsPerPackage($packageId){
 
 	$stmt = civicrmDB("SELECT cc.id as contact_id,pac.pid as package_id,pac.package_name,cp.status_id,cc.sort_name,cc.organization_name, cp.fee_amount,cp.id as participant_id,cp.event_id, 
-                           billing_type.billing_45 as bill_type,cps.label as status,
+                           ce.title as event_name,billing_type.billing_45 as bill_type,cps.label as status,
                            bd. street_address__company__3 as street_address, city__company__5 as city_address
-                           FROM billing_package pac,billing_package_events pac_events,
+                           FROM billing_package pac,billing_package_events pac_events, civicrm_event ce,
                            civicrm_participant cp, civicrm_value_billing_17 as billing_type, civicrm_participant_status_type cps, civicrm_contact cc
                            LEFT JOIN civicrm_value_business_data_1 bd ON bd.entity_id = cc.id
                            WHERE cp.contact_id = cc.id
@@ -170,6 +170,7 @@ function getParticipantsPerPackage($packageId){
                            AND pac.pid = ?
                            AND pac.pid = pac_events.pid
                            AND cp.event_id = pac_events.event_id
+                           AND cp.event_id = ce.id
                            AND billing_type.billing_45 = 'Individual'
                            AND cps.id = cp.status_id
                            AND cc.is_deleted = '0'

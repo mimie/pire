@@ -71,6 +71,48 @@ $(function() {
                  . "</tr>";
   }
   $display = $display."</table>";
+
+  $display = $display."<table align='center'>"
+           . "<thead><tr><td colspan='13'>LIST OF PARTICIPANTS</td></tr></thead><tbody>";
+  
+  //billing details for package events
+  foreach($participants as $contact_id=>$details){
+     $name = getContactName($contact_id);
+     $display = $display."<tr><th colspan='13'>$name</th></tr>"
+              . "<th>Event Name</th>"
+              . "<th>Status</th>"
+              . "<th>Organization</th>"
+              . "<th>Fee</th>"
+              . "<th>Total</th>"
+              . "<th>Subtotal</th>"
+              . "<th>VAT</th>"
+              . "<th>Print Bill</th>"
+              . "<th>Amount Paid</th>"
+              . "<th>BS No.</th>"
+              . "<th>Billing Date</th>"
+              . "<th>Billing Address</th>"
+              . "<th>Notes</th>";
+     foreach($details as $key=>$field){
+     	$display = $display."<tr>"
+                 . "<td>".$field['event_name']."</td>"
+                 . "<td></td>"
+                 . "<td></td>"
+                 . "<td></td>"
+                 . "<td></td>"
+                 . "<td></td>"
+                 . "<td></td>"
+                 . "<td></td>"
+                 . "<td></td>"
+                 . "<td></td>"
+                 . "<td></td>"
+                 . "<td></td>"
+                 . "<td></td>";
+     	
+     }
+  	
+  }
+
+  $display = $display."</tbody></table>";
   echo $display;
 
 
