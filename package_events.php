@@ -17,7 +17,7 @@ $(function() {
         $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
         $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
         $('#packages').jPaginate({
-                'max': 15,
+                'max': 20,
                 'page': 1,
                 'links': 'buttons'
         });
@@ -47,6 +47,7 @@ $(function() {
   include 'bir_functions.php';
   include 'packages/packagebill_functions.php';
   include 'packages/package_functions.php';
+  include 'notes/notes_functions.php';
 
   $dbh = civicrmConnect();
   $menu = logoutDiv($dbh);
@@ -59,6 +60,7 @@ $(function() {
   $package_name = getPackageName($pid);
   $participants = getParticipantsPerPackage($pid);
 
+
   $display = "<table align='center'>"
            . "<tr><th colspan='4'>$package_name</th></tr>"
            . "<tr><th>Event Id</th><th>Event Name</th><th>Start Date</th><th>End Date</th></tr>";
@@ -70,50 +72,66 @@ $(function() {
                  . "<td>".date_standard($field['end_date'])."</td>"
                  . "</tr>";
   }
-  $display = $display."</table>";
 
-  $display = $display."<table align='center'>"
-           . "<thead><tr><td colspan='13'>LIST OF PARTICIPANTS</td></tr></thead><tbody>";
+  $display = $display."</table></br></br>";
+
+  echo "<form action='' method='POST'>";
+
+  $display = $display."<table id='packages' align='center'>"
+           . "<thead>"
+           . "<tr><td colspan='3'>Account Receivable Type : "
+           . "<input type='radio' name='vat' value='1'>VATABLE"
+           . "<input type='radio' name='vat' value='2'>NON-VATABLE</br>"
+           . "BS No. : <input type='text' placeholder='Enter BS No. start number' required>";
+    $notes_opt = getNotesByCategory("Individual Event Billing");
+    $notes_collection = array();
+    $display = $display."<SELECT name='notes'><option value='select'>- Select optional billing notes -</option><option>-----------------</option>";
+    foreach($notes_opt as $key=>$field){
+        $id = $field["notes_id"];
+        $notes = $field["notes"];
+    	$display = $display."<option value='$id'>$notes</option>";
+        //stores notes in an array for reference display of notes in the table
+        $notes_collection[$id] = $notes;
+    }
+
+   
+  $display = $display."</SELECT><input type='submit' name='generate' value='GENERATE BILL'></td></tr>";
+  $display = $display. "<tr><td colspan='3'>LIST OF PARTICIPANTS</td></tr></thead><tbody>";
   
   //billing details for package events
   foreach($participants as $contact_id=>$details){
      $name = getContactName($contact_id);
-     $display = $display."<tr><th colspan='13'>$name</th></tr>"
+     $display = $display."<tr><th colspan='13'><input type='checkbox' value='$contact_id' name='ids[]'>$name</th></tr>"
               . "<th>Event Name</th>"
               . "<th>Status</th>"
-              . "<th>Organization</th>"
-              . "<th>Fee</th>"
-              . "<th>Total</th>"
-              . "<th>Subtotal</th>"
-              . "<th>VAT</th>"
-              . "<th>Print Bill</th>"
-              . "<th>Amount Paid</th>"
-              . "<th>BS No.</th>"
-              . "<th>Billing Date</th>"
-              . "<th>Billing Address</th>"
-              . "<th>Notes</th>";
+              . "<th>Fee</th>";
+     $total = 0;
      foreach($details as $key=>$field){
      	$display = $display."<tr>"
                  . "<td>".$field['event_name']."</td>"
-                 . "<td></td>"
-                 . "<td></td>"
-                 . "<td></td>"
-                 . "<td></td>"
-                 . "<td></td>"
-                 . "<td></td>"
-                 . "<td></td>"
-                 . "<td></td>"
-                 . "<td></td>"
-                 . "<td></td>"
-                 . "<td></td>"
-                 . "<td></td>";
+                 . "<td>".$field['status']."</td>"
+                 . "<td>".$field['fee_amount']."</td>";
+         $total = $total + $field['fee_amount'];
+         $organization = $field['organization_name'];
      	
      }
+
+     $address = $field['street_address'].",".$field['city_address'];
+     $display = $display."<tr><td colspan='2'>Subtotal</td><td></td></tr>"
+              . "<tr><td colspan='2'>VAT</td><td></td></tr>"
+              . "<tr><td colspan='2'>Total</td><td>".number_format($total,2)."</td></tr>"
+              . "<tr><td colspan='2'>Amount Paid</td><td></td></tr>"
+              . "<tr><td colspan='2'>BS No.</td><td></td></tr>"
+              . "<tr><td colspan='2'>Organization</td><td>".htmlspecialchars($organization)."</td></tr>"
+              . "<tr><td colspan='2'>Billing Date</td><td></td></tr>"
+              . "<tr><td colspan='2'>Billing Address</td><td>$address</td></tr>"
+              . "<tr><td colspan='2'>Notes</td><td></td></tr>";
   	
   }
 
   $display = $display."</tbody></table>";
   echo $display;
+  echo "</form>";
 
 
 ?>
