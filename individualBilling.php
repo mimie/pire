@@ -208,7 +208,8 @@ function validator(){
         if(array_key_exists($field['participant_id'],$billedParticipants)){
             $display = $display. "<td>$strike".$bill['subtotal']."$endstrike</td>"
                      . "<td>$strike".$bill['vat']."$endstrike</td>"
-                     . "<td><a href='BIRForm/BIRForm.php?event_id=$eventId&billing_no=".$bill['billing_no']."&uid=$uid' target='_blank'><img src='printer-icon.png' width='50' height='50'></a></td>"
+                     . "<td><a href='BIRForm/BIRForm.php?event_id=$eventId&billing_no=".$bill['billing_no']."&uid=$uid' target='_blank'><img src='images/preview.png' width='30' height='30'></a>"
+                     . "<a href='BIRForm/print_bir.php?event_id=$eventId&billing_no=".$bill['billing_no']."&uid=$uid' target='_blank'><img src='printer-icon.png' width='30' height='30'></a></td>"
                      . "<td>$strike".number_format($bill['amount_paid'],2)."$endstrike</td>"
                      . "<td>$strike".$bill['billing_no']."$endstrike</td>"
                      . "<td>$strike".$bill['bir_no']."$endstrike</td>"

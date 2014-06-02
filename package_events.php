@@ -80,7 +80,7 @@ $(function() {
   $display = $display."<table id='packages' align='center'>"
            . "<thead>"
            . "<tr><td colspan='3'>Account Receivable Type : "
-           . "<input type='radio' name='vat' value='1'>VATABLE"
+           . "<input type='radio' name='vat' value='1' checked='checked'>VATABLE"
            . "<input type='radio' name='vat' value='2'>NON-VATABLE</br>"
            . "BS No. : <input type='text' placeholder='Enter BS No. start number' required>";
     $notes_opt = getNotesByCategory("Individual Event Billing");
@@ -102,12 +102,14 @@ $(function() {
   foreach($participants as $contact_id=>$details){
      $name = getContactName($contact_id);
      $display = $display."<tr><th colspan='13'><input type='checkbox' value='$contact_id' name='ids[]'>$name</th></tr>"
+              . "<th>Participant Id</th>"
               . "<th>Event Name</th>"
               . "<th>Status</th>"
               . "<th>Fee</th>";
      $total = 0;
      foreach($details as $key=>$field){
      	$display = $display."<tr>"
+                 . "<td><input type='checkbox' name='participants' value='".$field['participant_id']."'>".$field['participant_id']."</td>"
                  . "<td>".$field['event_name']."</td>"
                  . "<td>".$field['status']."</td>"
                  . "<td>".$field['fee_amount']."</td>";
