@@ -64,6 +64,8 @@ $(function() {
   $display = "<table align='center'>"
            . "<tr><th colspan='4'>$package_name</th></tr>"
            . "<tr><th>Event Id</th><th>Event Name</th><th>Start Date</th><th>End Date</th></tr>";
+
+  $eventIds = array();
   foreach($events as $key=>$field){
   	$display = $display."<tr>"
                  . "<td>".$field['event_id']."</td>"
@@ -71,7 +73,10 @@ $(function() {
                  . "<td>".date_standard($field['start_date'])."</td>"
                  . "<td>".date_standard($field['end_date'])."</td>"
                  . "</tr>";
+        $eventIds[] = $field['event_id'];
   }
+
+  $participantsWithBill = getParticipantIdWithBill($eventIds);
 
   $display = $display."</table></br></br>";
 
@@ -79,7 +84,7 @@ $(function() {
 
   $display = $display."<table id='packages' align='center'>"
            . "<thead>"
-           . "<tr><td colspan='3'>Account Receivable Type : "
+           . "<tr><td colspan='4'>Account Receivable Type : "
            . "<input type='radio' name='vat' value='1' checked='checked'>VATABLE"
            . "<input type='radio' name='vat' value='2'>NON-VATABLE</br>"
            . "BS No. : <input type='text' placeholder='Enter BS No. start number' required>";
@@ -96,7 +101,7 @@ $(function() {
 
    
   $display = $display."</SELECT><input type='submit' name='generate' value='GENERATE BILL'></td></tr>";
-  $display = $display. "<tr><td colspan='3'>LIST OF PARTICIPANTS</td></tr></thead><tbody>";
+  $display = $display. "<tr><td colspan='4' bgcolor='05123E'>LIST OF PARTICIPANTS</td></tr></thead><tbody>";
   
   //billing details for package events
   foreach($participants as $contact_id=>$details){
@@ -108,8 +113,10 @@ $(function() {
               . "<th>Fee</th>";
      $total = 0;
      foreach($details as $key=>$field){
+        $participant_id = $field['participant_id'];
+        $disabled = array_key_exists($participant_id, $participantsWithBill) ? 'disabled' : '';
      	$display = $display."<tr>"
-                 . "<td><input type='checkbox' name='participants' value='".$field['participant_id']."'>".$field['participant_id']."</td>"
+                 . "<td><input type='checkbox' name='participants' value='$participant_id' $disabled>".$field['participant_id']."</td>"
                  . "<td>".$field['event_name']."</td>"
                  . "<td>".$field['status']."</td>"
                  . "<td>".$field['fee_amount']."</td>";
@@ -119,15 +126,15 @@ $(function() {
      }
 
      $address = $field['street_address'].",".$field['city_address'];
-     $display = $display."<tr><td colspan='2'>Subtotal</td><td></td></tr>"
-              . "<tr><td colspan='2'>VAT</td><td></td></tr>"
-              . "<tr><td colspan='2'>Total</td><td>".number_format($total,2)."</td></tr>"
-              . "<tr><td colspan='2'>Amount Paid</td><td></td></tr>"
-              . "<tr><td colspan='2'>BS No.</td><td></td></tr>"
-              . "<tr><td colspan='2'>Organization</td><td>".htmlspecialchars($organization)."</td></tr>"
-              . "<tr><td colspan='2'>Billing Date</td><td></td></tr>"
-              . "<tr><td colspan='2'>Billing Address</td><td>$address</td></tr>"
-              . "<tr><td colspan='2'>Notes</td><td></td></tr>";
+     $display = $display."<tr><td colspan='2'>Subtotal</td><td colspan='2'></td></tr>"
+              . "<tr><td colspan='2'>VAT</td><td colspan='2'></td></tr>"
+              . "<tr><td colspan='2'>Total</td><td colspan='2'>".number_format($total,2)."</td></tr>"
+              . "<tr><td colspan='2'>Amount Paid</td><td colspan='2'></td></tr>"
+              . "<tr><td colspan='2'>BS No.</td><td colspan='2'></td></tr>"
+              . "<tr><td colspan='2'>Organization</td><td colspan='2'>".htmlspecialchars($organization)."</td></tr>"
+              . "<tr><td colspan='2'>Billing Date</td><td colspan='2'></td></tr>"
+              . "<tr><td colspan='2'>Billing Address</td><td colspan='2'>$address</td></tr>"
+              . "<tr><td colspan='2'>Notes</td><td colspan='2'></td></tr>";
   	
   }
 
