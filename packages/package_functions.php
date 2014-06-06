@@ -192,4 +192,18 @@ function insertPackageEvents(array $eventIds,$packageId){
    $stmt->execute(array($packageId,$id));
   }
 }
+
+/*
+ * return an array of participant ids that has a bill already in package events 
+ */
+function getParticipantIdWithBill(array $eventIds){
+
+  $ids = implode(",",$eventIds);
+  $stmt = civicrmDB("SELECT participant_id FROM billing_details WHERE event_id IN(?) AND billing_type='Individual'");
+  $stmt->bindValue(1,$ids,PDO::PARAM_STR);
+  $stmt->execute();
+  $result = $stmt->fetchAll(PDO::FETCH_GROUP);
+
+  return $result;
+}
 ?>
