@@ -198,12 +198,22 @@ function insertPackageEvents(array $eventIds,$packageId){
  */
 function getParticipantIdWithBill(array $eventIds){
 
-  $ids = implode(",",$eventIds);
-  $stmt = civicrmDB("SELECT participant_id FROM billing_details WHERE event_id IN(?) AND billing_type='Individual'");
-  $stmt->bindValue(1,$ids,PDO::PARAM_STR);
+  $count = count($eventIds);
+  $i = 1;
+  $params = '';
+  while($i <= $count){
+    $params = $i < $count ? $params."?," : $params."?" ;
+    $i++;
+  }
+  $stmt = civicrmDB("SELECT participant_id FROM billing_details WHERE event_id IN(".$params.") AND billing_type='Individual'");
+  
+  $param_no = 1;
+  foreach($eventIds as $id){
+    $stmt->bindValue($param_no,$id,PDO::PARAM_STR);
+    $param_no++;
+  }
   $stmt->execute();
   $result = $stmt->fetchAll(PDO::FETCH_GROUP);
-
   return $result;
 }
 ?>
