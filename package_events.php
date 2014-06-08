@@ -125,14 +125,15 @@ $(function() {
      $total = 0;
      foreach($details as $key=>$field){
         $participant_id = $field['participant_id'];
-        $disabled = array_key_exists($participant_id, $participantsWithBill) ? 'disabled' : '';
-     	$display = $display."<tr>"
-                 . "<td><input type='checkbox' name='participants' value='$participant_id' $disabled>".$field['participant_id']."</td>"
-                 . "<td>".$field['event_name']."</td>"
-                 . "<td>".$field['status']."</td>"
-                 . "<td>".$field['fee_amount']."</td>";
-         $total = $total + $field['fee_amount'];
-         $organization = $field['organization_name'];
+        if(!array_key_exists($participant_id, $participantsWithBill)){
+     	      $display = $display."<tr>"
+                   . "<td>".$field['participant_id']."</td>"
+                   . "<td>".$field['event_name']."</td>"
+                   . "<td>".$field['status']."</td>"
+                   . "<td>".$field['fee_amount']."</td>";
+                   $total = $total + $field['fee_amount'];
+                   $organization = $field['organization_name'];
+       }
 
      }
 
