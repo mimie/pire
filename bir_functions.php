@@ -2,7 +2,7 @@
 
 function getIndividualParticipantsByEventId($eventId){
 
-	$stmt = civicrmDB("SELECT cc.id as contact_id, cp.status_id,cc.sort_name,cc.organization_name, cp.fee_amount,cp.id as participant_id, 
+	$stmt = civicrmDB("SELECT cc.id as contact_id, cp.status_id,cc.sort_name,cc.organization_name, cp.fee_amount,cp.id as participant_id,
                      billing_type.billing_45 as bill_type,cps.label as status,
                      bd. street_address__company__3 as street_address, city__company__5 as city_address
                      FROM civicrm_participant cp, civicrm_value_billing_17 as billing_type, civicrm_participant_status_type cps, civicrm_contact cc
@@ -16,11 +16,11 @@ function getIndividualParticipantsByEventId($eventId){
                      ORDER BY sort_name");
 	$stmt->bindValue(1,$eventId,PDO::PARAM_INT);
         $stmt->execute();
-       
+
 	$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 	return $result;
-  
+
 }
 
 function getIndividualBilledParticipantsByEventId($eventId){
@@ -32,21 +32,21 @@ function getIndividualBilledParticipantsByEventId($eventId){
         $stmt->bindValue(1,$eventId,PDO::PARAM_INT);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
+
         $participants = array();
         foreach($result as $key=>$field){
         	$participant_id = $field["participant_id"];
                 unset($field["participant_id"]);
                 $participants[$participant_id] = $field;
         }
-        
+
        return $participants;
 }
 
 function getBIRDetails($billing_no){
 
 	$stmt = civicrmDB("SELECT cc.sort_name,ce.title as event_name,ce.start_date,ce.end_date,bill.bir_no,bill.fee_amount,
-                           bill.subtotal,bill.vat,bill.bill_date,bd. street_address__company__3 as street_address, 
+                           bill.subtotal,bill.vat,bill.bill_date,bd. street_address__company__3 as street_address,
                            city__company__5 as city_address
                            FROM billing_details bill,civicrm_event ce,civicrm_contact cc
                            LEFT JOIN civicrm_value_business_data_1 bd ON bd.entity_id = cc.id
@@ -67,7 +67,7 @@ function getBIRDetails($billing_no){
  */
 function getInfoByParticipantId($participant_id){
 
-	$stmt = civicrmDB("SELECT cp.contact_id, cp.event_id, cov.label as event_type,ce.title as event_name, cc.sort_name, 
+	$stmt = civicrmDB("SELECT cp.contact_id, cp.event_id, cov.label as event_type,ce.title as event_name, cc.sort_name,
                            em.email,cc.organization_name, bd.street_address__company__3 as street_address, bd.city__company__5 as city_address,
                            cc.employer_id as org_contact_id, cp.fee_amount, cps.label as particicpant_status
                            FROM civicrm_participant cp, civicrm_event ce, civicrm_option_value cov, civicrm_participant_status_type cps,civicrm_contact cc
@@ -85,12 +85,12 @@ function getInfoByParticipantId($participant_id){
 	$result = $stmt->fetch(PDO::FETCH_ASSOC);
 
 	return $result;
-	
+
 }
 
 /*
  * this will generate an individual bill
- * @participant_id 
+ * @participant_id
  * @bs_no-billing no. in the bir form
  * @vatable- 1 for vatable, 2 for non-vatable
  */
@@ -129,7 +129,7 @@ function generateIndividualBill($participant_id,$bs_no,$vatable,$notes_id){
         $stmt->bindValue(18,$info["participant_status"],PDO::PARAM_STR);
         $stmt->bindValue(19,$generator_uid,PDO::PARAM_INT);
         $stmt->bindValue(20,$bs_no,PDO::PARAM_STR);
-        $stmt->bindValue(21,$notes_id,PDO::PARAM_INT);       
+        $stmt->bindValue(21,$notes_id,PDO::PARAM_INT);
 
         $stmt->execute();
 }
@@ -149,7 +149,7 @@ function formatBSNo($bs_no){
      }
 
    return $zeros.$bs_no;
-     
+
   }
 
   else{
@@ -159,7 +159,7 @@ function formatBSNo($bs_no){
 
 function getParticipantsPerPackage($packageId){
 
-	$stmt = civicrmDB("SELECT cc.id as contact_id,pac.pid as package_id,pac.package_name,cp.status_id,cc.sort_name,cc.organization_name, cp.fee_amount,cp.id as participant_id,cp.event_id, 
+	$stmt = civicrmDB("SELECT cc.id as contact_id,pac.pid as package_id,pac.package_name,cp.status_id,cc.sort_name,cc.organization_name, cp.fee_amount,cp.id as participant_id,cp.event_id,
                            ce.title as event_name,billing_type.billing_45 as bill_type,cps.label as status,
                            bd. street_address__company__3 as street_address, city__company__5 as city_address
                            FROM billing_package pac,billing_package_events pac_events, civicrm_event ce,
@@ -182,6 +182,31 @@ function getParticipantsPerPackage($packageId){
 	 return $result;
 }
 
+function searchParticipantsPerPackage($packageId,$name){
 
+	$stmt = civicrmDB("SELECT cc.id as contact_id,pac.pid as package_id,pac.package_name,cp.status_id,cc.sort_name,cc.organization_name, cp.fee_amount,cp.id as participant_id,cp.event_id,
+													ce.title as event_name,billing_type.billing_45 as bill_type,cps.label as status,
+													bd. street_address__company__3 as street_address, city__company__5 as city_address
+													FROM billing_package pac,billing_package_events pac_events, civicrm_event ce,
+													civicrm_participant cp, civicrm_value_billing_17 as billing_type, civicrm_participant_status_type cps, civicrm_contact cc
+													LEFT JOIN civicrm_value_business_data_1 bd ON bd.entity_id = cc.id
+													WHERE cp.contact_id = cc.id
+													AND billing_type.entity_id = cp.id
+													AND pac.pid = ?
+													AND pac.pid = pac_events.pid
+													AND cp.event_id = pac_events.event_id
+													AND cp.event_id = ce.id
+													AND billing_type.billing_45 = 'Individual'
+													AND cps.id = cp.status_id
+													AND cc.is_deleted = '0'
+													AND cc.sort_name LIKE ?
+													ORDER BY sort_name,cp.event_id");
+				$stmt->bindValue(1,$packageId,PDO::PARAM_INT);
+				$stmt->bindValue(2,"%".$name."%",PDO::PARAM_STR);
+				$stmt->execute();
+				$result = $stmt->fetchAll(PDO::FETCH_GROUP);
+
+	return $result;
+}
 
 ?>
