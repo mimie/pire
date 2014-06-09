@@ -97,7 +97,7 @@ function getInfoByParticipantId($participant_id){
 function generateIndividualBill($participant_id,$bs_no,$vatable,$notes_id){
 
         $generator_uid = $_GET["uid"];
-	$info = getInfoByParticipantId($participant_id);
+      	$info = getInfoByParticipantId($participant_id);
         $stmt = civicrmDB("INSERT INTO billing_details (participant_id,contact_id,event_id,event_type,event_name,participant_name,email, bill_address,organization_name,
                                                         org_contact_id,billing_type,fee_amount,subtotal,vat,billing_no,generated_bill,view_bill,participant_status,
                                                         generator_uid,bir_no,notes_id)
@@ -135,6 +135,56 @@ function generateIndividualBill($participant_id,$bs_no,$vatable,$notes_id){
 }
 
 /*
+ * Returns an executed sql to generate package bill
+ * @contact_id - contact id of the participant in civicrm
+ * @info - an of participant details
+ * @bs_no - bir no of the bill to be generated
+ * @vatable - value 1,0 for vatable and non-vatable bill
+ * @notes_id - notes of the bill
+ * @package_id - package of the bill
+ */
+function generatePackageBill($contact_id,$info,$bs_no,$vatable,$notes_id,$package_id){
+
+				$generator_uid = $_GET["uid"];
+      	$info = getInfoByParticipantId($participant_id);
+				$stmt = civicrmDB("INSERT INTO billing_details (participant_id,contact_id,event_id,event_type,event_name,participant_name,email, bill_address,organization_name,
+																												org_contact_id,billing_type,fee_amount,subtotal,vat,billing_no,generated_bill,view_bill,participant_status,
+																												generator_uid,bir_no,notes_id)
+													VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+
+				$bill_address = $info["street_address"]." ".$info["city_address"];
+
+				$subtotal = $vatable == 1 ? round($info["fee_amount"]/1.12,2) : $info["fee_amount"];
+				$vat = $info["fee_amount"] - $subtotal;
+				$billing_no = $info["event_type"]."-".date("y")."-".formatBillingNo($participant_id);
+
+				$stmt->bindValue(1,$participant_id,PDO::PARAM_INT);
+				$stmt->bindValue(2,$info["contact_id"],PDO::PARAM_INT);
+				$stmt->bindValue(3,$info["event_id"],PDO::PARAM_INT);
+				$stmt->bindValue(4,$info["event_type"],PDO::PARAM_STR);
+				$stmt->bindValue(5,$info["event_name"],PDO::PARAM_STR);
+				$stmt->bindValue(6,$info["participant_name"],PDO::PARAM_STR);
+				$stmt->bindValue(7,$info["email"],PDO::PARAM_STR);
+				$stmt->bindValue(8,$bill_address,PDO::PARAM_STR);
+				$stmt->bindValue(9,$info["organization_name"],PDO::PARAM_STR);
+				$stmt->bindValue(10,$info["org_contact_id"],PDO::PARAM_INT);
+				$stmt->bindValue(11,"Individual",PDO::PARAM_STR);
+				$stmt->bindValue(12,$info["fee_amount"],PDO::PARAM_INT);
+				$stmt->bindValue(13,$subtotal,PDO::PARAM_INT);
+				$stmt->bindValue(14,$vat,PDO::PARAM_INT);
+				$stmt->bindValue(15,$billing_no,PDO::PARAM_STR);
+				$stmt->bindValue(16,1,PDO::PARAM_INT);
+				$stmt->bindValue(17,1,PDO::PARAM_INT);
+				$stmt->bindValue(18,$info["participant_status"],PDO::PARAM_STR);
+				$stmt->bindValue(19,$generator_uid,PDO::PARAM_INT);
+				$stmt->bindValue(20,$bs_no,PDO::PARAM_STR);
+				$stmt->bindValue(21,$notes_id,PDO::PARAM_INT);
+
+				$stmt->execute();
+}
+
+
+/*
  * Retursn a formatted 6 digit-number BS No.
  * @bs_no = numeric bs. no to be formatted
  */
@@ -159,10 +209,10 @@ function formatBSNo($bs_no){
 
 function getParticipantsPerPackage($packageId){
 
-	$stmt = civicrmDB("SELECT cc.id as contact_id,pac.pid as package_id,pac.package_name,cp.status_id,cc.sort_name,cc.organization_name, cp.fee_amount,cp.id as participant_id,cp.event_id,
-                           ce.title as event_name,billing_type.billing_45 as bill_type,cps.label as status,
+	$stmt = civicrmDB("SELECT cc.id as contact_id,pac.pid as package_id,pac.package_name,cp.status_id,cc.sort_name,cc.organization_name, cc.employer_id,cp.fee_amount,cp.id as participant_id,cp.event_id,
+                           ce.title as event_name,cov.label as event_type,billing_type.billing_45 as bill_type,cps.label as status,
                            bd. street_address__company__3 as street_address, city__company__5 as city_address
-                           FROM billing_package pac,billing_package_events pac_events, civicrm_event ce,
+                           FROM billing_package pac,billing_package_events pac_events, civicrm_event ce, civicrm_option_value cov,
                            civicrm_participant cp, civicrm_value_billing_17 as billing_type, civicrm_participant_status_type cps, civicrm_contact cc
                            LEFT JOIN civicrm_value_business_data_1 bd ON bd.entity_id = cc.id
                            WHERE cp.contact_id = cc.id
@@ -171,6 +221,8 @@ function getParticipantsPerPackage($packageId){
                            AND pac.pid = pac_events.pid
                            AND cp.event_id = pac_events.event_id
                            AND cp.event_id = ce.id
+													 AND ce.event_type_id = cov.value
+													 AND cov.option_group_id = '14'
                            AND billing_type.billing_45 = 'Individual'
                            AND cps.id = cp.status_id
                            AND cc.is_deleted = '0'
@@ -184,10 +236,10 @@ function getParticipantsPerPackage($packageId){
 
 function searchParticipantsPerPackage($packageId,$name){
 
-	$stmt = civicrmDB("SELECT cc.id as contact_id,pac.pid as package_id,pac.package_name,cp.status_id,cc.sort_name,cc.organization_name, cp.fee_amount,cp.id as participant_id,cp.event_id,
-													ce.title as event_name,billing_type.billing_45 as bill_type,cps.label as status,
+	$stmt = civicrmDB("SELECT cc.id as contact_id,pac.pid as package_id,pac.package_name,cp.status_id,cc.sort_name,cc.organization_name, cc.employer_id,cp.fee_amount,cp.id as participant_id,cp.event_id,
+													ce.title as event_name,cov.label as event_type,billing_type.billing_45 as bill_type,cps.label as status,
 													bd. street_address__company__3 as street_address, city__company__5 as city_address
-													FROM billing_package pac,billing_package_events pac_events, civicrm_event ce,
+													FROM billing_package pac,billing_package_events pac_events, civicrm_event ce, civicrm_option_value cov,
 													civicrm_participant cp, civicrm_value_billing_17 as billing_type, civicrm_participant_status_type cps, civicrm_contact cc
 													LEFT JOIN civicrm_value_business_data_1 bd ON bd.entity_id = cc.id
 													WHERE cp.contact_id = cc.id
@@ -196,6 +248,8 @@ function searchParticipantsPerPackage($packageId,$name){
 													AND pac.pid = pac_events.pid
 													AND cp.event_id = pac_events.event_id
 													AND cp.event_id = ce.id
+													AND ce.event_type_id = cov.value
+													AND cov.option_group_id = '14'
 													AND billing_type.billing_45 = 'Individual'
 													AND cps.id = cp.status_id
 													AND cc.is_deleted = '0'
