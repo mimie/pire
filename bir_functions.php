@@ -137,50 +137,70 @@ function generateIndividualBill($participant_id,$bs_no,$vatable,$notes_id){
 /*
  * Returns an executed sql to generate package bill
  * @contact_id - contact id of the participant in civicrm
- * @info - an of participant details
+ * @details_ - an of participant details
  * @bs_no - bir no of the bill to be generated
- * @vatable - value 1,0 for vatable and non-vatable bill
+ * @vatable_ - value 1,0 for vatable and non-vatable bill
  * @notes_id - notes of the bill
  * @package_id - package of the bill
  */
-function generatePackageBill($contact_id,$info,$bs_no,$vatable,$notes_id,$package_id){
+function generatePackageBill($contact_id,$details,$bs_no,$vatable,$notes_id,$package_id){
 
-				$generator_uid = $_GET["uid"];
-      	$info = getInfoByParticipantId($participant_id);
-				$stmt = civicrmDB("INSERT INTO billing_details (participant_id,contact_id,event_id,event_type,event_name,participant_name,email, bill_address,organization_name,
-																												org_contact_id,billing_type,fee_amount,subtotal,vat,billing_no,generated_bill,view_bill,participant_status,
-																												generator_uid,bir_no,notes_id)
-													VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+	$generator_uid = $_GET["uid"];
+        $total_amount = 0;
 
-				$bill_address = $info["street_address"]." ".$info["city_address"];
+        foreach($details as $info){
 
-				$subtotal = $vatable == 1 ? round($info["fee_amount"]/1.12,2) : $info["fee_amount"];
-				$vat = $info["fee_amount"] - $subtotal;
-				$billing_no = $info["event_type"]."-".date("y")."-".formatBillingNo($participant_id);
+        try{
+	       $stmt = civicrmDB("INSERT INTO billing_details (participant_id,contact_id,event_id,event_type,event_name,participant_name,email, bill_address,organization_name,
+			          org_contact_id,billing_type,fee_amount,billing_no,generated_bill,view_bill,participant_status,generator_uid,bir_no,notes_id,is_package)
+				   VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
-				$stmt->bindValue(1,$participant_id,PDO::PARAM_INT);
-				$stmt->bindValue(2,$info["contact_id"],PDO::PARAM_INT);
-				$stmt->bindValue(3,$info["event_id"],PDO::PARAM_INT);
-				$stmt->bindValue(4,$info["event_type"],PDO::PARAM_STR);
-				$stmt->bindValue(5,$info["event_name"],PDO::PARAM_STR);
-				$stmt->bindValue(6,$info["participant_name"],PDO::PARAM_STR);
-				$stmt->bindValue(7,$info["email"],PDO::PARAM_STR);
-				$stmt->bindValue(8,$bill_address,PDO::PARAM_STR);
-				$stmt->bindValue(9,$info["organization_name"],PDO::PARAM_STR);
-				$stmt->bindValue(10,$info["org_contact_id"],PDO::PARAM_INT);
-				$stmt->bindValue(11,"Individual",PDO::PARAM_STR);
-				$stmt->bindValue(12,$info["fee_amount"],PDO::PARAM_INT);
-				$stmt->bindValue(13,$subtotal,PDO::PARAM_INT);
-				$stmt->bindValue(14,$vat,PDO::PARAM_INT);
-				$stmt->bindValue(15,$billing_no,PDO::PARAM_STR);
-				$stmt->bindValue(16,1,PDO::PARAM_INT);
-				$stmt->bindValue(17,1,PDO::PARAM_INT);
-				$stmt->bindValue(18,$info["participant_status"],PDO::PARAM_STR);
-				$stmt->bindValue(19,$generator_uid,PDO::PARAM_INT);
-				$stmt->bindValue(20,$bs_no,PDO::PARAM_STR);
-				$stmt->bindValue(21,$notes_id,PDO::PARAM_INT);
+		$bill_address = $info["street_address"]." ".$info["city_address"];
+                $total_amount = $total_amount + $info["fee_amount"];
 
-				$stmt->execute();
+
+		$stmt->bindValue(1,$info["participant_id"],PDO::PARAM_INT);
+		$stmt->bindValue(2,$contact_id,PDO::PARAM_INT);
+		$stmt->bindValue(3,$info["event_id"],PDO::PARAM_INT);
+		$stmt->bindValue(4,$info["event_type"],PDO::PARAM_STR);
+		$stmt->bindValue(5,$info["event_name"],PDO::PARAM_STR);
+		$stmt->bindValue(6,$info["sort_name"],PDO::PARAM_STR);
+		$stmt->bindValue(7,"",PDO::PARAM_STR);
+		$stmt->bindValue(8,$bill_address,PDO::PARAM_STR);
+		$stmt->bindValue(9,$info["organization_name"],PDO::PARAM_STR);
+		$stmt->bindValue(10,$info["employer_id"],PDO::PARAM_INT);
+		$stmt->bindValue(11,"Individual",PDO::PARAM_STR);
+		$stmt->bindValue(12,$info["fee_amount"],PDO::PARAM_INT);
+		$stmt->bindValue(13,$bs_no,PDO::PARAM_STR);
+		$stmt->bindValue(14,1,PDO::PARAM_INT);
+		$stmt->bindValue(15,1,PDO::PARAM_INT);
+		$stmt->bindValue(16,$info["status"],PDO::PARAM_STR);
+		$stmt->bindValue(17,$generator_uid,PDO::PARAM_INT);
+		$stmt->bindValue(18,$bs_no,PDO::PARAM_STR);
+		$stmt->bindValue(19,$notes_id,PDO::PARAM_INT);
+                $stmt->bindValue(20,$package_id,PDO::PARAM_INT);
+
+		$stmt->execute();}
+
+          catch (PDOException $e) { 
+            echo $e->getCode();
+          }
+        }
+	$subtotal = $vatable == 1 ? round($total_amount/1.12,2) : $total_amount;
+	$vat = $total_amount - $subtotal;
+
+        $stmt = civicrmDB("INSERT INTO billing_details_package (bir_no,contact_id,subtotal,vat,total_amount,pid,notes_id)
+                         VALUES(?,?,?,?,?,?,?);
+                        ");
+        $stmt->bindValue(1,$bs_no,PDO::PARAM_STR);
+        $stmt->bindValue(2,$contact_id,PDO::PARAM_INT);
+        $stmt->bindValue(3,$subtotal,PDO::PARAM_INT);
+        $stmt->bindValue(4,$vat,PDO::PARAM_INT);
+        $stmt->bindValue(5,$total_amount,PDO::PARAM_INT);
+        $stmt->bindValue(6,$package_id,PDO::PARAM_INT);
+        $stmt->bindValue(7,$notes_id,PDO::PARAM_INT);
+
+      $stmt->execute();
 }
 
 
