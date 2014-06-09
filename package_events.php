@@ -87,7 +87,6 @@ $(function() {
 
 <?php
   $participants = $_POST['search'] ? searchParticipantsPerPackage($pid,$_POST['searchtext']) : getParticipantsPerPackage($pid);
-  $participantsWithBill = getParticipantIdWithBill($eventIds);
 
   $display = $display."</table></br></br>";
 
@@ -125,7 +124,6 @@ $(function() {
      $total = 0;
      foreach($details as $key=>$field){
         $participant_id = $field['participant_id'];
-        if(!array_key_exists($participant_id, $participantsWithBill)){
      	      $display = $display."<tr>"
                    . "<td>".$field['participant_id']."</td>"
                    . "<td>".$field['event_name']."</td>"
@@ -133,7 +131,6 @@ $(function() {
                    . "<td>".$field['fee_amount']."</td>";
                    $total = $total + $field['fee_amount'];
                    $organization = $field['organization_name'];
-       }
 
      }
 
@@ -157,7 +154,7 @@ $(function() {
   if($_POST['generate']){
     $contact_ids = $_POST['ids'];
     foreach($contact_ids as $contact_id){
-      $info = $participants($contact_id);
+      $info = $participants[$contact_id];
       echo "<pre>";
       print_r($info);
       echo "</pre>";
