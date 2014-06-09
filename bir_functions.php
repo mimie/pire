@@ -114,7 +114,7 @@ function generateIndividualBill($participant_id,$bs_no,$vatable,$notes_id){
         $stmt->bindValue(3,$info["event_id"],PDO::PARAM_INT);
         $stmt->bindValue(4,$info["event_type"],PDO::PARAM_STR);
         $stmt->bindValue(5,$info["event_name"],PDO::PARAM_STR);
-        $stmt->bindValue(6,$info["participant_name"],PDO::PARAM_STR);
+        $stmt->bindValue(6,$info["sort_name"],PDO::PARAM_STR);
         $stmt->bindValue(7,$info["email"],PDO::PARAM_STR);
         $stmt->bindValue(8,$bill_address,PDO::PARAM_STR);
         $stmt->bindValue(9,$info["organization_name"],PDO::PARAM_STR);
