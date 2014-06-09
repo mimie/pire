@@ -97,7 +97,7 @@ $(function() {
            . "<tr><td colspan='4'>Account Receivable Type : "
            . "<input type='radio' name='vat' value='1' checked='checked'>VATABLE"
            . "<input type='radio' name='vat' value='2'>NON-VATABLE</br>"
-           . "BS No. : <input type='text' placeholder='Enter BS No. start number' required>";
+           . "BS No. : <input name='bs_no' type='text' placeholder='Enter BS No. start number' required>";
     $notes_opt = getNotesByCategory("Individual Event Billing");
     $notes_collection = array();
     $display = $display."<SELECT name='notes'><option value='select'>- Select optional billing notes -</option><option>-----------------</option>";
@@ -153,11 +153,15 @@ $(function() {
 
   if($_POST['generate']){
     $contact_ids = $_POST['ids'];
+    $bs_no = $_POST["bs_no"];
+    $is_vatable = $_POST["vat"];
+    $note_id = $_POST["notes"] == 'select' ? NULL : $_POST["notes"];
+
     foreach($contact_ids as $contact_id){
-      $info = $participants[$contact_id];
-      echo "<pre>";
-      print_r($info);
-      echo "</pre>";
+      $bir_no = formatBSNo($bs_no);
+      $details = $participants[$contact_id];
+      generatePackageBill($contact_id,$details,$bs_no,$is_vatable,$note_id,$pid);
+      $bs_no++;
     }
   }
 
