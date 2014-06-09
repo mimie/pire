@@ -36,6 +36,47 @@ $(function() {
       }
     });
 });
+
+function isNumeric(elem, helperMsg){
+        var numericExpression = /^[0-9]+$/;
+        if(elem.value.match(numericExpression)){
+                return true;
+        }else{
+                alert(helperMsg);
+                elem.focus();
+                return false;
+        }
+}
+
+
+function isCheck(elem, helperMsg){
+        var length = 0;
+        for(var i=0;i<elem.length;i++){
+           length = elem[i].checked ? length + 1 : length;
+        }
+        
+        if(length == 0){
+          alert(helperMsg);
+          return false;
+        }else{
+          return true;
+         } 
+}
+
+function validator(){
+
+        var checkbox = document.getElementsByName('ids[]');
+        var bs_no = document.getElementById('bs_no');
+
+        if(isNumeric(bs_no,"Please enter a valid number for BS No. field.")){
+           if(isCheck(checkbox,"Please select a participant name.")){
+             return true;
+           }
+        }
+
+        return false;
+}
+
 </script>
 </head>
 <body>
@@ -90,14 +131,14 @@ $(function() {
 
   $display = $display."</table></br></br>";
 
-  echo "<form action='' method='POST'>";
+  echo "<form action='' method='POST' onsubmit=\"return validator()\">";
 
   $display = $display."<table id='packages' align='center'>"
            . "<thead>"
            . "<tr><td colspan='4'>Account Receivable Type : "
            . "<input type='radio' name='vat' value='1' checked='checked'>VATABLE"
            . "<input type='radio' name='vat' value='2'>NON-VATABLE</br>"
-           . "BS No. : <input name='bs_no' type='text' placeholder='Enter BS No. start number' required>";
+           . "BS No. : <input name='bs_no' id='bs_no' type='text' placeholder='Enter BS No. start number' required>";
     $notes_opt = getNotesByCategory("Individual Event Billing");
     $notes_collection = array();
     $display = $display."<SELECT name='notes'><option value='select'>- Select optional billing notes -</option><option>-----------------</option>";
@@ -160,9 +201,10 @@ $(function() {
     foreach($contact_ids as $contact_id){
       $bir_no = formatBSNo($bs_no);
       $details = $participants[$contact_id];
-      generatePackageBill($contact_id,$details,$bs_no,$is_vatable,$note_id,$pid);
+      generatePackageBill($contact_id,$details,$bir_no,$is_vatable,$note_id,$pid);
       $bs_no++;
     }
+    echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully generated bill.</div>";
   }
 
 ?>
