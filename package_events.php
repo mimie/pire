@@ -154,6 +154,15 @@ $(function() {
   echo $display;
   echo "</form>";
 
+  if($_POST['generate']){
+    $contact_ids = $_POST['ids'];
+    foreach($contact_ids as $contact_id){
+      $info = $participants($contact_id);
+      echo "<pre>";
+      print_r($info);
+      echo "</pre>";
+    }
+  }
 
 ?>
 </body>
