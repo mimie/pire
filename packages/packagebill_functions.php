@@ -36,5 +36,20 @@ function searchPackageName($packageName){
         return $result;
 }
 
+function getBillByPackageId($packageId){
+
+	$stmt = civicrmDB("SELECT bdp.bir_no, bdp.contact_id, bdp.subtotal, bdp.vat, bdp.total_amount, bdp.amount_paid,bdp.bill_date,
+                           bn.notes, cc.sort_name, cc.organization_name
+                           FROM billing_details_package bdp, billing_notes bn, civicrm_contact cc
+                           WHERE bdp.notes_id = bn.notes_id
+                           AND cc.id = bdp.contact_id
+                           AND bdp.pid = ?
+                            ");
+       $stmt->bindValue(1,$packageId,PDO::PARAM_INT);
+       $stmt->execute();
+       $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+       return $result;
+}
+
 ?>
 
