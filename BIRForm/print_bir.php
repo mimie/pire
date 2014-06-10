@@ -5,7 +5,7 @@
 <head>
 
 <link rel="stylesheet" type="text/css" href="css/check.css" media="screen" />
-<title>Print Check</title>
+<title>Print Bill</title>
 </head>
 <style>
 p.myname{
@@ -130,26 +130,42 @@ p.totalamount{
 <body onload="printTkt()">
 <?php
 
-include('connectDb.php');
 
-$sql="";
+  include '../pdo_conn.php';
+  include '../login_functions.php';
+  include '../bir_functions.php';
+  include '../billing_functions.php';
+
+  $dbh = civicrmConnect();
+  @$eventId = $_GET["event_id"];
+
+  @$uid = $_GET["uid"];
+  $generator = getGeneratorName($uid);
+  @$billing_no = $_GET["billing_no"];
+  $bill = getBIRDetails($billing_no);
+  $address = $bill['street_address']." ".$bill['city_address'];
+  $location = formatEventLocation(getEventLocation($dbh,$eventId));
 
 
 ?>
-<p class="myname">Name</p>
-<p class="myaddress">Address</p>
+<p class="myname"><?=$bill['sort_name']?></p>
+<p class="myaddress"><?=$address?></p>
 <p class="mytin">Tin</p>
 <p class="lbltxn">Txn. No:</p>
-<p class="myrefno">RefNo</p>
-<p class="mybilldate">Bill date</p>
-<p class="myduedate">Due Date</p>
-<p class="myparticulars">Particulars<br>Particulars</p>
-<p class="myamount">Amount</p>
-<p class="vatsales">VatSales</p>
+<p class="myrefno"><?=$billing_no?></p>
+<p class="mybilldate"><?=date("F j, Y",strtotime($bill['bill_date']))?></p>
+<p class="myduedate"><?=date("F j, Y",strtotime($bill['start_date']))?></p>
+<p class="myparticulars">
+   <?=$bill['event_name']?></br>
+   On <?=date("F j, Y",strtotime($bill['start_date']))?> to <?=date("F j, Y",strtotime($bill['end_date']))?></br>
+   <?=$location?>
+</p>
+<p class="myamount"><?=number_format($bill['fee_amount'],2)?></p>
+<p class="vatsales"><?=number_format($bill['subtotal'],2)?></p>
 <p class="vatexempt">VatExempt</p>
 <p class="vatzero">VatZero</p>
-<p class="vatamount">VatAmount</p>
-<p class="totalamount">TotalAmount</p>
+<p class="vatamount"><?=number_format($bill['vat'],2)?></p>
+<p class="totalamount"><?=number_format($bill['fee_amount'],2)?></p>
 
 <?php
 include('myFunctions.php');
