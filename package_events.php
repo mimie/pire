@@ -176,15 +176,9 @@ function validator(){
      }
 
      $address = $field['street_address'].",".$field['city_address'];
-     $display = $display."<tr><td colspan='2'>Subtotal</td><td colspan='2'></td></tr>"
-              . "<tr><td colspan='2'>VAT</td><td colspan='2'></td></tr>"
-              . "<tr><td colspan='2'>Total</td><td colspan='2'>".number_format($total,2)."</td></tr>"
-              . "<tr><td colspan='2'>Amount Paid</td><td colspan='2'></td></tr>"
-              . "<tr><td colspan='2'>BS No.</td><td colspan='2'></td></tr>"
+     $display = $display. "<tr><td colspan='3'>Total</td><td>".number_format($total,2)."</td></tr>"
               . "<tr><td colspan='2'>Organization</td><td colspan='2'>".htmlspecialchars($organization)."</td></tr>"
-              . "<tr><td colspan='2'>Billing Date</td><td colspan='2'></td></tr>"
-              . "<tr><td colspan='2'>Billing Address</td><td colspan='2'>$address</td></tr>"
-              . "<tr><td colspan='2'>Notes</td><td colspan='2'></td></tr>";
+              . "<tr><td colspan='2'>Billing Address</td><td colspan='2'>$address</td></tr>";
 
   }
 
