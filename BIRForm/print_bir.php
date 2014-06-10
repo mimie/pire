@@ -76,6 +76,15 @@ p.myparticulars{
   font-family: Calibri;
 }
 
+p.notes{
+  position:fixed;
+  top:500px;
+  left:10px;
+  font-size: 10pt;
+  font-family: Calibri;
+}
+
+
 
 p.myamount{
   position:fixed;
@@ -125,6 +134,15 @@ p.totalamount{
   font-family: Calibri;
 }
 
+p.issuedby{
+  position:fixed;
+  top:720px;
+  left:870px;
+  font-size: 10pt;
+  font-family: Calibri;
+}
+
+
 
 </style>
 <body onload="printTkt()">
@@ -135,6 +153,7 @@ p.totalamount{
   include '../login_functions.php';
   include '../bir_functions.php';
   include '../billing_functions.php';
+  include '../notes/notes_functions.php';
 
   $dbh = civicrmConnect();
   @$eventId = $_GET["event_id"];
@@ -160,12 +179,19 @@ p.totalamount{
    On <?=date("F j, Y",strtotime($bill['start_date']))?> to <?=date("F j, Y",strtotime($bill['end_date']))?></br>
    <?=$location?>
 </p>
+<p class="notes">
+<?php
+	$notes = getNoteById($dbh,$bill['notes_id']);
+        echo $notes['notes'];
+?>
+</p>
 <p class="myamount"><?=number_format($bill['fee_amount'],2)?></p>
 <p class="vatsales"><?=number_format($bill['subtotal'],2)?></p>
 <p class="vatexempt">VatExempt</p>
 <p class="vatzero">VatZero</p>
 <p class="vatamount"><?=number_format($bill['vat'],2)?></p>
 <p class="totalamount"><?=number_format($bill['fee_amount'],2)?></p>
+<p class="issuedby"><?=$generator?></p>
 
 <?php
 include('myFunctions.php');
