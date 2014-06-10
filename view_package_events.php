@@ -94,8 +94,8 @@ function validator(){
   $menu = logoutDiv($dbh);
   echo $menu;
   echo "<br>";
-  $uid = $_GET['uid'];
-  $pid = $_GET['pid'];
+  @$uid = $_GET['uid'];
+  @$pid = $_GET['pid'];
 
   $events = getEventsPerPackage($pid);
   $package_name = getPackageName($pid);
@@ -107,8 +107,14 @@ function validator(){
    echo "<td align='center'><a href='view_package_events.php?pid=".$pid."&uid=".$uid."'>VIEW PACKAGE BILLS</td>";
    echo "</tr>";
    echo "</table></br>"; 
+?>
+  <div align='center'>
+  <form action='' method='POST'>
+    <input type='text' name='searchtext' placeholder='Type name here...' />
+    <input type='submit' name='search' value='SEARCH PARTICIPANT'>
+  </form></br>
 
-  echo "<div align='center'>";
+<?php
   $display = "<table align='center'>"
            . "<tr><th colspan='4'>$package_name</th></tr>"
            . "<tr><th>Event Id</th><th>Event Name</th><th>Start Date</th><th>End Date</th></tr>";
@@ -123,13 +129,43 @@ function validator(){
                  . "</tr>";
         $eventIds[] = $field['event_id'];
   }
+
+  $display = $display."</table></div><br><br>";
+
+  $bills = getBillByPackageId($pid);
+  $display = $display."<table width='100%' align='center' id='packages'>"
+           . "<thead>"
+           . "<tr>"
+           . "<th>Name</th>"
+           . "<th>Organization</th>"
+           . "<th>Fee</th>"
+           . "<th>Subtotal</th>"
+           . "<th>12% VAT</th>"
+           . "<th>Print Bill</th>"
+           . "<th>Amount Paid</th>"
+           . "<th>BS No.</th>"
+           . "<th>Billing Date</th>"
+           . "<th>Notes</th>"
+           . "</tr></thead><tbody>";
+
+   foreach($bills as $key=>$field){
+   	 $display = $display."<tr>"
+                  . "<td>".$field['sort_name']."</td>"
+                  . "<td>".$field['organization_name']."</td>"
+                  . "<td>".number_format($field['total_amount'],2)."</td>"
+                  . "<td>".number_format($field['subtotal'],2)."</td>"
+                  . "<td>".number_format($field['vat'],2)."</td>"
+                  . "<td></td>"
+                  . "<td>".number_format($field['amount_paid'],2)."</td>"
+                  . "<td>".$field['bir_no']."</td>"
+                  . "<td>".date("F j, Y",strtotime($field['bill_date']))."</td>"
+                  . "<td>".$field['notes']."</td>"
+                  . "</tr>";
+   }
+           
+
+  $display = $display."</tbody></table>";
   echo $display;
 ?>
-
-  <form action='' method='POST'>
-    <input type='text' name='searchtext' placeholder='Type name here...' />
-    <input type='submit' name='search' value='SEARCH PARTICIPANT'>
-  </form></br></br>
-</div>
 </body>
 </html>
