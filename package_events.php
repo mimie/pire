@@ -101,6 +101,13 @@ function validator(){
   $package_name = getPackageName($pid);
   $participants = getParticipantsPerPackage($pid);
 
+   echo "<table width='100%'>";
+   echo "<tr>";
+   echo "<td align='center'><a href='package_events.php?pid=".$pid."&uid=".$uid."'>GENERATE PACKAGE BILL</a></td>";
+   echo "<td align='center' bgcolor='#084B8A'><a href='view_package_events.php?pid=".$pid."&uid=".$uid."'>VIEW PACKAGE BILLS</td>";
+   echo "</tr>";
+   echo "</table></br>"; 
+
   echo "<div align='center'>";
   $display = "<table align='center'>"
            . "<tr><th colspan='4'>$package_name</th></tr>"
