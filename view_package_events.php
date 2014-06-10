@@ -148,6 +148,8 @@ function validator(){
            . "<th>Notes</th>"
            . "</tr></thead><tbody>";
 
+   $preview_img = "<img src='images/preview.png' height='30' width='30'>";
+
    foreach($bills as $key=>$field){
    	 $display = $display."<tr>"
                   . "<td>".$field['sort_name']."</td>"
@@ -155,7 +157,7 @@ function validator(){
                   . "<td>".number_format($field['total_amount'],2)."</td>"
                   . "<td>".number_format($field['subtotal'],2)."</td>"
                   . "<td>".number_format($field['vat'],2)."</td>"
-                  . "<td></td>"
+                  . "<td><a href='BIRForm/birform_package.php?bir_no=".$field['bir_no']."&uid=".$uid."'>$preview_img</a></td>"
                   . "<td>".number_format($field['amount_paid'],2)."</td>"
                   . "<td>".$field['bir_no']."</td>"
                   . "<td>".date("F j, Y",strtotime($field['bill_date']))."</td>"
