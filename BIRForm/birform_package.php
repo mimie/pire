@@ -18,18 +18,18 @@ href="IIAP%20Billing%20Form%20(rev2_2014%20ATP)_files/filelist.xml">
   include '../pdo_conn.php';
   include '../login_functions.php';
   include '../bir_functions.php';
-  include '../billing_functions.php';
   include '../notes/notes_functions.php';
+  include '../packages/packagebill_functions.php';
+  include '../billing_functions.php';
 
   $dbh = civicrmConnect();
   @$eventId = $_GET["event_id"];
 
   @$uid = $_GET["uid"];
   $generator = getGeneratorName($uid);
-  @$billing_no = $_GET["billing_no"];
-  $bill = getBIRDetails($billing_no);
+  @$bir_no = $_GET["bir_no"];
+  $bill = getBillDetailsByBIRNo($bir_no);
   $address = $bill['street_address']." ".$bill['city_address'];
-  $location = formatEventLocation(getEventLocation($dbh,$eventId));
 
 ?>
 
@@ -238,7 +238,14 @@ x:publishsource="Excel">
  <tr height=26 style='mso-height-source:userset;height:20.1pt'>
   <td height=26 class=xl655352552 style='height:20.1pt'></td>
   <td class=xl655352552></td>
-  <td colspan=8 class=xl1582552 style='border-right:.5pt solid black'>&nbsp;<?=$bill['event_name']?></td>
+  <td colspan=8 class=xl1582552 style='border-right:.5pt solid black'>
+  <?php
+      $infobill = getEventBillDetailsByBIRNo($bir_no);
+      echo "<pre>";
+      print_r($infobill);
+      echo "</pre>";	
+  ?>
+  </td>
   <td class=xl1272552>&nbsp;</td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
@@ -246,15 +253,15 @@ x:publishsource="Excel">
  <tr height=26 style='mso-height-source:userset;height:20.1pt'>
   <td height=26 class=xl655352552 style='height:20.1pt'></td>
   <td class=xl655352552></td>
-  <td colspan=8 class=xl1572552 style='border-right:.5pt solid black'>&nbsp;On&nbsp;<?=date("F j,Y",strtotime($bill['start_date']))?>&nbsp;to&nbsp;<?=date("F j, Y",strtotime($bill['end_date']))?></td>
-  <td class=xl1282552>&nbsp;<?=number_format($bill['fee_amount'],2)?></td>
+  <td colspan=8 class=xl1572552 style='border-right:.5pt solid black'>&nbsp;</td>
+  <td class=xl1282552>&nbsp;Amount here</td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
  </tr>
  <tr height=26 style='mso-height-source:userset;height:20.1pt'>
   <td height=26 class=xl655352552 style='height:20.1pt'></td>
   <td class=xl655352552></td>
-  <td colspan=8 class=xl1572552 style='border-right:.5pt solid black'>&nbsp;At&nbsp;<?=$location?></td>
+  <td colspan=8 class=xl1572552 style='border-right:.5pt solid black'>&nbsp;</td>
   <td class=xl1282552>&nbsp;</td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
@@ -392,8 +399,8 @@ x:publishsource="Excel">
   <td class=xl655352552></td>
   <td colspan=8 class=xl1572552 style='border-right:.5pt solid black'>&nbsp;
   <?php
-     $notes = getNoteById($dbh,$bill['notes_id']);
-     echo $notes['notes'];
+     
+     echo $bill['notes'];
   ?>
 
   </td>
@@ -490,7 +497,7 @@ x:publishsource="Excel">
   <td colspan=6 class=xl1312552>THANK YOU FOR YOUR BUSINESS!</td>
   <td class=xl1112552>&nbsp;</td>
   <td class=xl1122552 style='border-top:none'>TOTAL AMOUNT DUE</td>
-  <td class=xl1122552 style='border-top:none'><?=number_format($bill['fee_amount'],2)?></td>
+  <td class=xl1122552 style='border-top:none'><?=number_format($bill['total_amount'],2)?></td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
  </tr>
