@@ -182,10 +182,7 @@ function validator(){
 
      }
 
-     $address = $field['street_address'].",".$field['city_address'];
-     $display = $display. "<tr><td colspan='3'>Total</td><td>".number_format($total,2)."</td></tr>"
-              . "<tr><td colspan='2'>Organization</td><td colspan='2'>".htmlspecialchars($organization)."</td></tr>"
-              . "<tr><td colspan='2'>Billing Address</td><td colspan='2'>$address</td></tr>";
+     $display = $display. "<tr><td colspan='3'>Total</td><td>".number_format($total,2)."</td></tr>";
 
   }
 
