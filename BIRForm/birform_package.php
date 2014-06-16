@@ -241,20 +241,42 @@ x:publishsource="Excel">
   <td colspan=8 class=xl1582552 style='border-right:.5pt solid black'>
   <?php
       $infobill = getEventBillDetailsByBIRNo($bir_no);
-      echo "<pre>";
-      print_r($infobill);
-      echo "</pre>";	
+      $amounts = array();
+      foreach($infobill as $key=>$field){
+           echo $field['event_name']."</br>";
+           if($field['end_date']){
+           	echo "On ".date("F j,Y",strtotime($field['start_date']))." to ".date("F j, Y",strtotime($field['end_date']))."</br>"; 
+           }else{
+		echo "On ".date("F j,Y",strtotime($field['start_date']))."</br>";
+	    }
+
+           $location = formatEventLocation(getEventLocation($dbh,$eventId));
+  
+           if($location){
+              echo "At ".$location."<br>";
+              $amounts[] = "</br></br>".number_format($field['fee_amount'],2);
+           }else{
+              $amounts[] = "</br>".number_format($field['fee_amount'],2);
+            }
+           echo "</br></br>";      
+      }
   ?>
   </td>
-  <td class=xl1272552>&nbsp;</td>
+  <td class=xl1582552 style='border-right:.5pt solid black'>
+  <?php
+      foreach($amounts as $display_amount){
+        echo $display_amount."</br></br></br>";
+      }
+  ?>
+  </td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
  </tr>
  <tr height=26 style='mso-height-source:userset;height:20.1pt'>
   <td height=26 class=xl655352552 style='height:20.1pt'></td>
   <td class=xl655352552></td>
-  <td colspan=8 class=xl1572552 style='border-right:.5pt solid black'>&nbsp;</td>
-  <td class=xl1282552>&nbsp;Amount here</td>
+  <td colspan=8 class=xl1572552 style='border-right:.5pt solid black'></td>
+  <td class=xl1282552></td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
  </tr>
