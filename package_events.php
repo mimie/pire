@@ -30,7 +30,7 @@ $(function() {
       modal: true,
       buttons: {
         "OK": function() {
-          //$( this ).dialog( "close" );
+          $( this ).dialog( "close" );
           reloadPage();
         }
       }
@@ -138,7 +138,7 @@ function validator(){
 
   $display = $display."</table></br></br>";
 
-  echo "<form action='' method='POST' onsubmit=\"return validator()\">";
+  echo "<form action='package_events.php?pid=$pid&uid=$uid' method='POST' onsubmit=\"return validator()\">";
 
   $display = $display."<table id='packages' align='center'>"
            . "<thead>"
@@ -158,7 +158,7 @@ function validator(){
     }
 
 
-  $display = $display."</SELECT><input type='submit' name='generate' value='GENERATE BILL'></td></tr>";
+  $display = $display."</SELECT><input type='submit' name='generate' value='GENERATE BILL'/></td></tr>";
   $display = $display. "<tr><td colspan='4' bgcolor='05123E'>LIST OF PARTICIPANTS</td></tr></thead><tbody>";
 
   //billing details for package events
