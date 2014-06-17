@@ -35,6 +35,45 @@ $(function() {
     });
   });
 
+function isNumeric(elem, helperMsg){
+	var numericExpression = /^[0-9]+$/;
+	if(elem.value.match(numericExpression)){
+		return true;
+	}else{
+		alert(helperMsg);
+		elem.focus();
+		return false;
+	}
+}
+
+
+function isCheck(elem, helperMsg){
+	var length = 0;
+	for(var i=0;i<elem.length;i++){
+           length = elem[i].checked ? length + 1 : length;
+        }
+        
+        if(length == 0){
+          alert(helperMsg);
+          return false;
+        }else{
+          return true;
+         } 
+}
+
+function validator(){
+
+	var checkbox = document.getElementsByName('ids[]');
+        var bs_no = document.getElementById('bs_no');
+
+        if(isNumeric(bs_no,"Please enter a valid number for BS No. field.")){
+           if(isCheck(checkbox,"Please select a participant name.")){
+             return true;
+           }
+        }
+
+        return false;
+}
 </script>
 </head>
 <body>
@@ -49,6 +88,7 @@ $(function() {
   include 'login_functions.php';
   include 'company_functions.php';
   include 'notes/notes_functions.php';
+  include 'bir_functions.php';
 
    $dbh = civicrmConnect();
  
@@ -105,6 +145,8 @@ $(function() {
    echo "</tr>";
    echo "</table><br>";
 
+   echo "<form action='' method='POST' onsubmit=\"return validator()\">";
+
    $display = "<table width='100%'>" 
             . "<thead>"
             . "<tr>"
@@ -142,8 +184,14 @@ $(function() {
             . "</thead><tbody>";
    $display = $display."</tbody></table>";
    echo $display;
+
+   $comp_participants = getCompanyParticipantsByEventId($eventId);
+   echo "<pre>";
+   print_r($comp_participants);
+   echo "</pre>";
    
 
+   echo "</form>";
    echo "</div>";
 ?>
 </body>
