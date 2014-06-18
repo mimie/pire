@@ -192,21 +192,53 @@ function validator(){
 	foreach($participants as $key=>$field){
 		$total_fee = $field["status"] == 'Cancelled' || $field["status"] == 'VOID' || $field["status"] == 'Void' ? $total_fee : $total_fee + $field["fee_amount"];
         }
+
+        $bill_info = checkCompanyBillGenerated($orgId,$eventId);
+
+        if($bill_info){
+                //bill_total = generated bill totatl
+                //total_fee = actual civicrm amount
+                $bill_total = number_format($bill_info['total_amount'],2);
+                $total_fee = number_format($total_fee,2);
+                $color = $bill_total != $total_fee ? "red" : "";
+                $notes_id = $bill_info['notes_id'];
+                $notes = $notes_collection[$notes_id];
+
+                $disabled = $bill_total == $total_fee || $total_fee == 0.0 ? 'disabled' : '';
+                $class = $bill_total == $total_fee || $total_fee == 0.0 ? '' : 'checkbox';
+
+                $bill_date = date("F j, Y",strtotime($bill_info['bill_date']));
+		$display = $display."<tr>"
+			 . "<td><input type='checkbox' name='ids[]' value='$orgId' $disabled class='$class'>".$comp_names[$orgId]."</td>"
+			 . "<td><font color='$color'>$bill_total</font></td>"
+			 . "<td><font color='$color'>$total_fee</font></td>"
+			 . "<td><font color='$color'>".number_format($bill_info['subtotal'],2)."</font></td>"
+			 . "<td><font color='$color'>".number_format($bill_info['vat'],2)."</font></td>"
+			 . "<td></td>"
+			 . "<td>".number_format($bill_info['amount_paid'],2)."</td>"
+			 . "<td>".$bill_info['billing_no']."</td>"
+			 . "<td>".$bill_info['bir_no']."</td>"
+			 . "<td>".$bill_date."</td>"
+			 . "<td>".$notes."</td>"
+			 . "<td></td>"
+			 . "</tr>"; 
+        }else{
   
-        $display = $display."<tr>"
-                 . "<td><input type='checkbox' name='ids[]' value='$orgId'>".$comp_names[$orgId]."</td>"
-                 . "<td></td>"
-                 . "<td>".number_format($total_fee,2)."</td>"
-                 . "<td></td>"
-                 . "<td></td>"
-                 . "<td></td>"
-                 . "<td></td>"
-                 . "<td></td>"
-                 . "<td></td>"
-                 . "<td></td>"
-                 . "<td></td>"
-                 . "<td></td>"
-                 . "</tr>"; 
+		$display = $display."<tr>"
+			 . "<td><input type='checkbox' name='ids[]' value='$orgId'>".$comp_names[$orgId]."</td>"
+			 . "<td></td>"
+			 . "<td>".number_format($total_fee,2)."</td>"
+			 . "<td></td>"
+			 . "<td></td>"
+			 . "<td></td>"
+			 . "<td></td>"
+			 . "<td></td>"
+			 . "<td></td>"
+			 . "<td></td>"
+			 . "<td></td>"
+			 . "<td></td>"
+			 . "</tr>"; 
+      	}
 
   }
    
