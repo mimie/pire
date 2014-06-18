@@ -134,6 +134,7 @@ function validator(){
    echo "</table>";
    echo "</div>";
 
+   $comp_names = getCompanyNames();
 ?>
 
 <?php  
@@ -147,10 +148,10 @@ function validator(){
 
    echo "<form action='' method='POST' onsubmit=\"return validator()\">";
 
-   $display = "<table width='100%'>" 
+   $display = "<table width='100%' id='billings'>" 
             . "<thead>"
             . "<tr>"
-            . "<td colspan='11'>"
+            . "<td colspan='12'>"
             . "Account Receivable Type: <input type='radio' name='vat' value='1' checked='checked'>VATABLE  <input type='radio' name='vat' value='0'>NON-VATABLE"
             . "</br>BS. No. : <input type='text' id='bs_no' name='bs_no' placeholder='Enter BS No. start number...' required>";
 
@@ -171,6 +172,7 @@ function validator(){
             . "<tr>"
             . "<th><input type='checkbox' id='check'>Organization Name</th>"
             . "<th>Total Fee</th>"
+            . "<th>Civicrm Amount</th>"
             . "<th>Subtotal</th>"
             . "<th>12% VAT</th>"
             . "<th>Print Bill</th>"
@@ -182,15 +184,35 @@ function validator(){
             . "<th>Billed Participants</th>"
             . "</tr>"
             . "</thead><tbody>";
-   $display = $display."</tbody></table>";
-   echo $display;
 
    $comp_participants = getCompanyParticipantsByEventId($eventId);
-   echo "<pre>";
-   print_r($comp_participants);
-   echo "</pre>";
-   
 
+   foreach($comp_participants as $orgId => $participants){
+        $total_fee = 0.0;
+	foreach($participants as $key=>$field){
+		$total_fee = $field["status"] == 'Cancelled' || $field["status"] == 'VOID' || $field["status"] == 'Void' ? $total_fee : $total_fee + $field["fee_amount"];
+        }
+  
+        $display = $display."<tr>"
+                 . "<td><input type='checkbox' name='ids[]' value='$orgId'>".$comp_names[$orgId]."</td>"
+                 . "<td></td>"
+                 . "<td>".number_format($total_fee,2)."</td>"
+                 . "<td></td>"
+                 . "<td></td>"
+                 . "<td></td>"
+                 . "<td></td>"
+                 . "<td></td>"
+                 . "<td></td>"
+                 . "<td></td>"
+                 . "<td></td>"
+                 . "<td></td>"
+                 . "</tr>"; 
+
+  }
+   
+   
+   $display = $display."</tbody></table>";
+   echo $display;
    echo "</form>";
    echo "</div>";
 ?>
