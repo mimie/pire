@@ -310,4 +310,13 @@ function searchParticipantsPerPackage($packageId,$name){
 	return $result;
 }
 
+function getCompanyNames(){
+
+	$stmt = civicrmDB("SELECT id, display_name FROM civicrm_contact WHERE contact_type='Organization' AND is_deleted = 0");
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+
+        return $result;
+}
+
 ?>
