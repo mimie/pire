@@ -208,19 +208,21 @@ function validator(){
                 $class = $bill_total == $total_fee || $total_fee == 0.0 ? '' : 'checkbox';
 
                 $bill_date = date("F j, Y",strtotime($bill_info['bill_date']));
+                $billing_no = $bill_info['billing_no'];
 		$display = $display."<tr>"
 			 . "<td><input type='checkbox' name='ids[]' value='$orgId' $disabled class='$class'>".$comp_names[$orgId]."</td>"
 			 . "<td><font color='$color'>$bill_total</font></td>"
 			 . "<td><font color='$color'>$total_fee</font></td>"
 			 . "<td><font color='$color'>".number_format($bill_info['subtotal'],2)."</font></td>"
 			 . "<td><font color='$color'>".number_format($bill_info['vat'],2)."</font></td>"
-			 . "<td></td>"
+			 . "<td><a href='#'><img src='images/preview.png' width='30' height='30'></a>"
+                         . "<a href='#'><img src='printer-icon.png' width='30' height='30'></a></td>"
 			 . "<td>".number_format($bill_info['amount_paid'],2)."</td>"
-			 . "<td>".$bill_info['billing_no']."</td>"
+			 . "<td>$billing_no</td>"
 			 . "<td>".$bill_info['bir_no']."</td>"
 			 . "<td>".$bill_date."</td>"
 			 . "<td>".$notes."</td>"
-			 . "<td></td>"
+			 . "<td>".participantsLink($billing_no,$eventId,$orgId)."</td>"
 			 . "</tr>"; 
         }else{
   
