@@ -198,16 +198,21 @@ function getIndividualBillingAddress(PDO $dbh, $participantId, $eventId){
   return $billingAddress;
 }
 
-function checkCompanyBillGenerated(PDO $dbh,$orgContactId,$eventId){
+function checkCompanyBillGenerated($orgContactId,$eventId){
 
-  $sql = $dbh->prepare("SELECT count(*) as exist FROM billing_company
-                        WHERE org_contact_id = '$orgContactId'
-                        AND event_id = '$eventId'
+  $stmt = civicrmDB("SELECT billing_no,total_amount, subtotal, vat, amount_paid, bir_no, bill_date, notes_id
+                    FROM billing_company
+                    WHERE org_contact_id = ?
+                    AND event_id = ?
                       ");
-  $sql->execute();
-  $sqlCount = $sql->fetch(PDO::FETCH_ASSOC);
+  $stmt->bindValue(1,$orgContactId,PDO::PARAM_INT);
+  $stmt->bindValue(2,$eventId,PDO::PARAM_INT);
+  $stmt->execute();
+  $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-  return $sqlCount["exist"];
+  return $result;
+
+ 
 }
 
 function getCompanyBillingNo(PDO $dbh,$orgContactId,$eventId){
