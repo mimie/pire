@@ -259,7 +259,7 @@ function displayCompanyBillings(array $billings){
 
 function updateCompanyTotalAmount($dbh,$billingNo){
 
-  $sql = $dbh->prepare("SELECT fee_amount FROM billing_details WHERE billing_no = ?");
+ $sql = $dbh->prepare("SELECT fee_amount FROM billing_details WHERE billing_no = ?");
   $sql->bindValue(1,$billingNo,PDO::PARAM_STR);
   $sql->execute();
   $participant = $sql->fetchAll(PDO::FETCH_ASSOC);
@@ -273,24 +273,25 @@ function updateCompanyTotalAmount($dbh,$billingNo){
 
   $eventType = substr($billingNo,0,3);
 
-  if($eventType == 'CON' || $eventType == 'MBA'){
-    $taxQuery = '';
+  if($eventType == 'MBA'){
+        $tax = 0.0;
+        $subtotal = $totalAmount;
   }
 
    else{
-     $tax = $totalAmount/9.3333;
-     $tax = number_format($tax, 2, '.', '');
-     $subtotal = $totalAmount - $tax;
-     $taxQuery = ", subtotal=".$subtotal.",vat="."$tax";
-
+        $subtotal = $totalAmount/1.12;
+        $subtotal = number_format($subtotal, 2, '.', '');
+        $tax = $totalAmount - $subtotal;
    }
 
-  $sqlUpdate = $dbh->prepare("UPDATE billing_company SET total_amount = ? $taxQuery
+  $sqlUpdate = $dbh->prepare("UPDATE billing_company SET total_amount=?,subtotal=?,vat=?
                               WHERE billing_no = ?
                              ");
   $sqlUpdate->bindValue(1,$totalAmount,PDO::PARAM_INT);
-  $sqlUpdate->bindValue(2,$billingNo,PDO::PARAM_INT);
-  $sql->execute();
-  
+  $sqlUpdate->bindValue(2,$subtotal,PDO::PARAM_INT);
+  $sqlUpdate->bindValue(3,$tax,PDO::PARAM_INT);
+  $sqlUpdate->bindValue(4,$billingNo,PDO::PARAM_STR);
+  $sqlUpdate->execute();
+ 
 }
 ?>
