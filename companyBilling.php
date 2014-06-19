@@ -254,9 +254,12 @@ function validator(){
 
    if($_POST['generate']){
 	$orgIds = $_POST['ids'];
-        echo "<pre>";
-        print_r($orgIds);
-        echo "</pre>";
+        $note_id = $_POST['notes'];
+        $vatable = $_POST['vat'];
+        
+        foreach($orgIds as $id){
+           $participants = $comp_participants[$id];
+        }
   }
 ?>
 </body>
