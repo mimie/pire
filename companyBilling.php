@@ -194,23 +194,21 @@ function validator(){
         }
 
         $bill_info = checkCompanyBillGenerated($orgId,$eventId);
+        $orgName = $comp_names[$orgId];
+        $total_fee = number_format($total_fee,2);
 
         if($bill_info){
                 //bill_total = generated bill totatl
                 //total_fee = actual civicrm amount
                 $bill_total = number_format($bill_info['total_amount'],2);
-                $total_fee = number_format($total_fee,2);
-                $color = $bill_total != $total_fee ? "red" : "";
+                $color = $bill_total != $total_fee || $bill_total == 0.00 || $total_fee == 0.00 ? "red" : "";
                 $notes_id = $bill_info['notes_id'];
                 $notes = $notes_collection[$notes_id];
-
-                $disabled = $bill_total == $total_fee || $total_fee == 0.0 ? 'disabled' : '';
-                $class = $bill_total == $total_fee || $total_fee == 0.0 ? '' : 'checkbox';
+                $billing_no = $bill_info['billing_no'];
 
                 $bill_date = date("F j, Y",strtotime($bill_info['bill_date']));
-                $billing_no = $bill_info['billing_no'];
 		$display = $display."<tr>"
-			 . "<td><input type='checkbox' name='ids[]' value='$orgId' $disabled class='$class'>".$comp_names[$orgId]."</td>"
+			 . "<td><input type='checkbox' name='ids[]' value='$orgId' disabled>".$orgName."</td>"
 			 . "<td><font color='$color'>$bill_total</font></td>"
 			 . "<td><font color='$color'>$total_fee</font></td>"
 			 . "<td><font color='$color'>".number_format($bill_info['subtotal'],2)."</font></td>"
@@ -225,11 +223,15 @@ function validator(){
 			 . "<td>".participantsLink($billing_no,$eventId,$orgId)."</td>"
 			 . "</tr>"; 
         }else{
-  
+
+                $disabled = $total_fee == 0.00 || $orgName == NULL ? 'disabled' : '';
+                $class = $total_fee == 0.00 || $orgName == NULL ? '' : 'checkbox';
+                $color = $total_fee == 0.00 ? 'red' : '';
+
 		$display = $display."<tr>"
-			 . "<td><input type='checkbox' name='ids[]' value='$orgId'>".$comp_names[$orgId]."</td>"
+			 . "<td><input type='checkbox' name='ids[]' value='$orgId' $disabled class='$class'>".$orgName."</td>"
 			 . "<td></td>"
-			 . "<td>".number_format($total_fee,2)."</td>"
+			 . "<td><font color='$color'>".$total_fee."</font></td>"
 			 . "<td></td>"
 			 . "<td></td>"
 			 . "<td></td>"
@@ -249,6 +251,13 @@ function validator(){
    echo $display;
    echo "</form>";
    echo "</div>";
+
+   if($_POST['generate']){
+	$orgIds = $_POST['ids'];
+        echo "<pre>";
+        print_r($orgIds);
+        echo "</pre>";
+  }
 ?>
 </body>
 <script type="text/javascript">
