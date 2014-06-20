@@ -192,6 +192,7 @@ function validator(){
         $total_fee = 0.0;
 	foreach($participants as $key=>$field){
 		$total_fee = $field["status"] == 'Cancelled' || $field["status"] == 'VOID' || $field["status"] == 'Void' ? $total_fee : $total_fee + $field["fee_amount"];
+                $totals[$orgId] = $total_fee;
         }
 
         $bill_info = checkCompanyBillGenerated($orgId,$eventId);
@@ -245,7 +246,6 @@ function validator(){
 			 . "</tr>"; 
       	}
 
-        $totals[$orgId] = $total_fee;
 
   }
    
@@ -268,6 +268,8 @@ function validator(){
 		$billing_id = formatBillingNo($max_stmt->fetchColumn(0) + 1);
 		$current_year = date("y");
 		$billing_no = $eventTypeName."-".$current_year."-".$billing_id;
+                $subtotal = $vatable == 1 ? $totals[$orgId]/1.12 : $totals[$orgId];
+                $vat = $totals[$orgId] - round($subtotal,2);
                 $billing_information = array('event_id' => $eventId,
                                              'event_type' => $eventTypeName,
                                              'event_name' => $eventName,
@@ -276,10 +278,12 @@ function validator(){
                                              'address' => getCompleteCompanyAddress($dbh,$id),
                                              'billing_no' => $billing_no,
                                              'total_amount' => $totals[$orgId],
-                                             'is_vat' => $vatable,
+                                             'subtotal' => round($subtotal,2),
+                                             'vat' => $vat,
                                              'bir_no' => formatBSNo($bs_no), 
                                              'notes_id' => $note_id,
                                              'generator_uid' => $uid);
+                generateCompanyBill($billing_information);
                 $bs_no++;
         }
   }
