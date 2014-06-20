@@ -256,9 +256,17 @@ function validator(){
 	$orgIds = $_POST['ids'];
         $note_id = $_POST['notes'];
         $vatable = $_POST['vat'];
+        $bs_no = $_POST['bs_no'];
         
         foreach($orgIds as $id){
-           $participants = $comp_participants[$id];
+                $participants = $comp_participants[$id];
+		$max_stmt = civicrmDB("SELECT MAX(cbid) as max_id FROM billing_company");
+		$max_stmt->execute();
+		$billing_id = formatBillingNo($max_stmt->fetchColumn(0) + 1);
+		$current_year = date("y");
+		$billing_no = $eventTypeName."-".$current_year."-".$billing_id;
+		$bir_no = formatBSNo;
+                $bs_no++;
         }
   }
 ?>
