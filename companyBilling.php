@@ -262,12 +262,24 @@ function validator(){
         
         foreach($orgIds as $id){
                 $participants = $comp_participants[$id];
+
 		$max_stmt = civicrmDB("SELECT MAX(cbid) as max_id FROM billing_company");
 		$max_stmt->execute();
 		$billing_id = formatBillingNo($max_stmt->fetchColumn(0) + 1);
 		$current_year = date("y");
 		$billing_no = $eventTypeName."-".$current_year."-".$billing_id;
-		$bir_no = formatBSNo;
+                $billing_information = array('event_id' => $eventId,
+                                             'event_type' => $eventTypeName,
+                                             'event_name' => $eventName,
+                                             'org_id' => $id,
+                                             'org_name' => $comp_names[$id],
+                                             'address' => getCompleteCompanyAddress($dbh,$id),
+                                             'billing_no' => $billing_no,
+                                             'total_amount' => $totals[$orgId],
+                                             'is_vat' => $vatable,
+                                             'bir_no' => formatBSNo($bs_no), 
+                                             'notes_id' => $note_id,
+                                             'generator_uid' => $uid);
                 $bs_no++;
         }
   }
