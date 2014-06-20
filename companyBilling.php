@@ -186,6 +186,7 @@ function validator(){
             . "</thead><tbody>";
 
    $comp_participants = getCompanyParticipantsByEventId($eventId);
+   $totals = array();
 
    foreach($comp_participants as $orgId => $participants){
         $total_fee = 0.0;
@@ -244,8 +245,9 @@ function validator(){
 			 . "</tr>"; 
       	}
 
+        $totals[$orgId] = $total_fee;
+
   }
-   
    
    $display = $display."</tbody></table>";
    echo $display;
