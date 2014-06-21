@@ -209,6 +209,9 @@ function validator(){
         $date = $bill['bill_date'];
         $notes_id = $bill['notes_id'];
 
+        //update amount if status is cancelled 
+        $fee_amount = $status_id == 4 ? 0 : $fee_amount;
+
         $checkbox = (array_key_exists($participant_id,$billedParticipants) && $is_post == 1) || (array_key_exists($participant_id,$billedParticipants) && $is_generated == 1) || $fee_amount == 0 ? "" : "class='checkbox'";
         $disabled = (array_key_exists($participant_id,$billedParticipants) && $is_post == 1) || (array_key_exists($participant_id,$billedParticipants) && $is_generated == 1) || $fee_amount == 0 ? 'disabled' : '';
 
@@ -223,6 +226,10 @@ function validator(){
                  . "<td>$strike".$fee_amount."$endstrike</td>";
 
         if(array_key_exists($field['participant_id'],$billedParticipants)){
+
+            if($status_id == 4){
+		updateAmountCancelledBill($billing_no);
+            }
             $display = $display. "<td>$strike".$subtotal."$endstrike</td>"
                      . "<td>$strike".$vat."$endstrike</td>"
                      . "<td><a href='BIRForm/BIRForm.php?event_id=$eventId&billing_no=".$billing_no."&uid=$uid' target='_blank'><img src='images/preview.png' width='30' height='30'></a>"
