@@ -342,4 +342,14 @@ function generateCompanyBill(array $bill){
         $stmt->execute();
 }
 
+function updateAmountCancelledBill($billing_no){
+
+	$stmt = civicrmDB("UPDATE billing_details
+                           SET fee_amount='0',subtotal='0',vat='0',is_cancelled='1'
+                           WHERE billing_no = ?
+                ");
+        $stmt->bindValue(1,$billing_no,PDO::PARAM_STR);
+     	$stmt->execute();
+}
+
 ?>
