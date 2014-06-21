@@ -11,7 +11,8 @@
 <script type='text/javascript' language='javascript'>
 function reloadPage()
   {
-    location.reload();
+    //location.reload();
+    window.location=window.location;
   }
 $(function() {
         $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
