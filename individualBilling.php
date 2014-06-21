@@ -152,7 +152,7 @@ function validator(){
    $display = "<table id='billings' style='width:100%;'>"
             . "<thead>"
             . "<tr>"
-            . "<td colspan='13'>Account Receivable Type : <input type='radio' name='vat' value='1' checked='checked'>VATABLE <input type='radio' name='vat' value='0'>NON-VATABLE"
+            . "<td colspan='14'>Account Receivable Type : <input type='radio' name='vat' value='1' checked='checked'>VATABLE <input type='radio' name='vat' value='0'>NON-VATABLE"
             . "</br>BS. No. : <input type='text' id='bs_no' name='bs_no' placeholder='Enter BS No. start number...' required>";
     $notes_opt = getNotesByCategory("Individual Event Billing");
     $notes_collection = array();
@@ -181,6 +181,7 @@ function validator(){
              . "<th>Billing Date</th>"
              . "<th>Billing Address</th>"
              . "<th>Notes</th>"
+             . "<th>Edit Bill</th>"
              . "<tr>"
              . "</thead>"
              . "<tbody>";
@@ -215,7 +216,9 @@ function validator(){
                      . "<td>$strike".$bill['bir_no']."$endstrike</td>"
                      . "<td>$strike".date("F j, Y",strtotime($bill['bill_date']))."$endstrike</td>";
             $note = $notes_collection[$bill["notes_id"]];
+            $img_link = "<img src='images/edit_bill.png'>";
          }else{
+           $img_link = "";
            $display = $display. "<td></td>"
                  . "<td></td>"
                  . "<td></td>"
@@ -228,6 +231,7 @@ function validator(){
 
            $display = $display. "<td>$strike".$field['street_address']." ".$field['city_address']."$endstrike</td>"
                     . "<td>$note</td>"
+                    . "<td>$img_link</td>"
                     . "</tr>";	
    }//end of foreach
    $display = $display."</tbody></table>";
