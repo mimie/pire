@@ -342,7 +342,7 @@ function generateCompanyBill(array $bill){
         $stmt->execute();
 }
 
-function updateAmountCancelledBill($billing_no){
+function updateAmountCancelledBill($billing_no,$participant_id){
 
 	$stmt = civicrmDB("UPDATE billing_details
                            SET fee_amount='0',subtotal='0',vat='0',is_cancelled='1'
@@ -350,6 +350,13 @@ function updateAmountCancelledBill($billing_no){
                 ");
         $stmt->bindValue(1,$billing_no,PDO::PARAM_STR);
      	$stmt->execute();
+
+        $action = "Cancelled participant no. $participant_id"; 
+        $hist_stmt = civicrmDB("INSERT INTO billing_history(billing_no,action_taken)
+                                VALUES(?,?)");
+        $hist_stmt->bindValue(1,$billing_no,PDO::PARAM_STR);
+        $hist_stmt->bindValue(2,$action,PDO::PARAM_STR);
+        $hist_stmt->execute();
 }
 
 ?>

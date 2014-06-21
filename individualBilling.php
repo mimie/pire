@@ -225,10 +225,10 @@ function validator(){
                  . "<td>$strike".$orgname."$endstrike</td>"
                  . "<td>$strike".$fee_amount."$endstrike</td>";
 
-        if(array_key_exists($field['participant_id'],$billedParticipants)){
+        if(array_key_exists($participant_id,$billedParticipants)){
 
             if($status_id == 4){
-		updateAmountCancelledBill($billing_no);
+		updateAmountCancelledBill($billing_no,$participant_id);
             }
             $display = $display. "<td>$strike".$subtotal."$endstrike</td>"
                      . "<td>$strike".$vat."$endstrike</td>"
@@ -239,7 +239,7 @@ function validator(){
                      . "<td>$strike".$bir_no."$endstrike</td>"
                      . "<td>$strike".date("F j, Y",strtotime($date))."$endstrike</td>";
             $note = $notes_collection[$notes_id];
-            $img_link = "<a href='edit_individual.php?'><img src='images/edit_bill.png'></a>";
+            $img_link = "<a href='edit_individual.php?billing_no=$billing_no' onclick=\"window.open(this.href,'edit_individual.php?billing_no=$billing_no','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=900,height=900');return false;\"><img src='images/edit_bill.png'></a>";
          }else{
            $img_link = "";
            $display = $display. "<td></td>"
