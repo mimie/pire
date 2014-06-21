@@ -192,32 +192,47 @@ function validator(){
 
    foreach($participants as $key => $field){
         $bill = array();
-        $bill = $billedParticipants[$field['participant_id']];
+        $participant_id = $field['participant_id']; 
+        $status_id = $field['status_id'];
+        $status = $field['status'];
+        $orgname = $field["organization_name"];
+        $fee_amount = $field['fee_amount'];
 
-        $checkbox = (array_key_exists($field['participant_id'],$billedParticipants) && $bill['post_bill'] == 1) || (array_key_exists($field['participant_id'],$billedParticipants) && $bill['generated_bill'] == 1) || $field['fee_amount'] == 0 ? "" : "class='checkbox'";
-        $disabled = (array_key_exists($field['participant_id'],$billedParticipants) && $bill['post_bill'] == 1) || (array_key_exists($field['participant_id'],$billedParticipants) && $bill['generated_bill'] == 1) || $field['fee_amount'] == 0 ? 'disabled' : '';
+        $bill = $billedParticipants[$participant_id];
+        $is_post = $bill['post_bill'];
+        $is_generated = $bill['generated_bill'];
+        $subtotal = $bill['subtotal'];
+        $vat = $bill['vat'];
+        $billing_no = $bill['billing_no'];
+        $paid = $bill['amount_paid'];
+        $bir_no = $bill['bir_no'];
+        $date = $bill['bill_date'];
+        $notes_id = $bill['notes_id'];
+
+        $checkbox = (array_key_exists($participant_id,$billedParticipants) && $is_post == 1) || (array_key_exists($participant_id,$billedParticipants) && $is_generated == 1) || $fee_amount == 0 ? "" : "class='checkbox'";
+        $disabled = (array_key_exists($participant_id,$billedParticipants) && $is_post == 1) || (array_key_exists($participant_id,$billedParticipants) && $is_generated == 1) || $fee_amount == 0 ? 'disabled' : '';
 
         //status = 4 = Cancelled - Strike the column if the participant status is cancelled.
-        $strike = $field['status_id'] == 4 || $field['status_id'] == 7 || $field['status_id'] == 15 ? '<strike>' : '';
-        $endstrike = $field['status_id'] == 4 || $field['status_id'] == 7 || $field['status_id'] == 15 ? '</strike>' : '';
+        $strike = $status_id == 4 || $status_id == 7 || $status_id == 15 ? '<strike>' : '';
+        $endstrike = $status_id == 4 || $status_id == 7 || $status_id == 15 ? '</strike>' : '';
 
 	$display = $display."<tr>"
-                 . "<td>$strike<input type='checkbox' $checkbox $disabled name='ids[]' value='".$field['participant_id']."'>".$field['sort_name']."$endstrike</td>"
-                 . "<td>$strike".$field['status']."$endstrike</td>"
-                 . "<td>$strike".$field['organization_name']."$endstrike</td>"
-                 . "<td>$strike".$field['fee_amount']."$endstrike</td>";
+                 . "<td>$strike<input type='checkbox' $checkbox $disabled name='ids[]' value='".$participant_id."'>".$field['sort_name']."$endstrike</td>"
+                 . "<td>$strike".$status."$endstrike</td>"
+                 . "<td>$strike".$orgname."$endstrike</td>"
+                 . "<td>$strike".$fee_amount."$endstrike</td>";
 
         if(array_key_exists($field['participant_id'],$billedParticipants)){
-            $display = $display. "<td>$strike".$bill['subtotal']."$endstrike</td>"
-                     . "<td>$strike".$bill['vat']."$endstrike</td>"
-                     . "<td><a href='BIRForm/BIRForm.php?event_id=$eventId&billing_no=".$bill['billing_no']."&uid=$uid' target='_blank'><img src='images/preview.png' width='30' height='30'></a>"
-                     . "<a href='BIRForm/print_bir.php?event_id=$eventId&billing_no=".$bill['billing_no']."&uid=$uid' target='_blank'><img src='printer-icon.png' width='30' height='30'></a></td>"
-                     . "<td>$strike".number_format($bill['amount_paid'],2)."$endstrike</td>"
-                     . "<td>$strike".$bill['billing_no']."$endstrike</td>"
-                     . "<td>$strike".$bill['bir_no']."$endstrike</td>"
-                     . "<td>$strike".date("F j, Y",strtotime($bill['bill_date']))."$endstrike</td>";
-            $note = $notes_collection[$bill["notes_id"]];
-            $img_link = "<img src='images/edit_bill.png'>";
+            $display = $display. "<td>$strike".$subtotal."$endstrike</td>"
+                     . "<td>$strike".$vat."$endstrike</td>"
+                     . "<td><a href='BIRForm/BIRForm.php?event_id=$eventId&billing_no=".$billing_no."&uid=$uid' target='_blank'><img src='images/preview.png' width='30' height='30'></a>"
+                     . "<a href='BIRForm/print_bir.php?event_id=$eventId&billing_no=".$billing_no."&uid=$uid' target='_blank'><img src='printer-icon.png' width='30' height='30'></a></td>"
+                     . "<td>$strike".number_format($paid,2)."$endstrike</td>"
+                     . "<td>$strike".$billing_no."$endstrike</td>"
+                     . "<td>$strike".$bir_no."$endstrike</td>"
+                     . "<td>$strike".date("F j, Y",strtotime($date))."$endstrike</td>";
+            $note = $notes_collection[$notes_id];
+            $img_link = "<a href='edit_individual.php?'><img src='images/edit_bill.png'></a>";
          }else{
            $img_link = "";
            $display = $display. "<td></td>"
