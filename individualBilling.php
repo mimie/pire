@@ -154,9 +154,9 @@ function validator(){
             . "<thead>"
             . "<tr>"
             . "<td colspan='14'><a href='#' onclick='reloadPage()' id='reload'><img src='images/reload.png'></a><br>Account Receivable Type : "
-            . "<input type='radio' name='vat' value='1' checked='checked'>VATABLE "
-            . "<input type='radio' name='vat' value='0'>VAT-EXEMPT "
-            . "<input type='radio' name='vat' value='0'>VAT-ZERO "
+            . "<input type='radio' name='vat' value='vatable' checked='checked'>VATABLE "
+            . "<input type='radio' name='vat' value='vat-exempt'>VAT-EXEMPT "
+            . "<input type='radio' name='vat' value='vat-zero'>VAT-ZERO "
             . "</br>BS. No. : <input type='text' id='bs_no' name='bs_no' placeholder='Enter BS No. start number...' required>";
     $notes_opt = getNotesByCategory("Individual Event Billing");
     $notes_collection = array();
@@ -268,12 +268,13 @@ function validator(){
    if($_POST["generate"]){
      $participantIds = $_POST["ids"];
      $bs_no = $_POST["bs_no"];
-     $is_vatable = $_POST["vat"];
+     $nonvatable_type = $_POST['vat'] == 'vatable' ? '' : $_POST['vat'];
+     $is_vatable = $_POST["vat"] == 'vat-exempt' || $_POST['vat-zero'] ? 0 : 1;
      $note_id = $_POST["notes"] == 'select' ? NULL : $_POST["notes"];
      
      foreach($participantIds as $id){
         $bir_no = formatBSNo($bs_no);
-     	generateIndividualBill($id,$bir_no,$is_vatable,$note_id);
+     	generateIndividualBill($id,$bir_no,$is_vatable,$note_id,$nonvatable_type);
         $bs_no++;
      }
      
