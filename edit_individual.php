@@ -1,5 +1,8 @@
 <html>
-<head><title>Edit Individual Bill</title></head>
+<head>
+<title>Edit Individual Bill</title>
+<link rel="stylesheet" type="text/css" href="billingStyle.css">
+</head>
 <body>
 <?php
 	include 'pdo_conn.php';
@@ -8,8 +11,8 @@
         $billing_no = $_GET['billing_no'];
         $bill = getInfoByBillingNo($billing_no);
         $address = $bill['street_address']." ".$bill['city_address'];
-
 ?>
+      <div align='center'>
 	<table>
 		<tr>
 			<th colspan='2'>Billing Information</th>
@@ -42,8 +45,9 @@
 			<th>Civicrm Amount</th><td><?=$bill['civicrm_amount']?></td>
 		</tr>
 		<tr>
-			<th>Participant Status</th><td><?=$bill['status']?></td>
+			<th>Participant Status</th><td><?=$bill['participant_status']?></td>
 		</tr>
 	</table>
+      </div>
 </body>
 </html>
