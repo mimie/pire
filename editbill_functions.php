@@ -43,8 +43,6 @@ function updateParticipant($bir_no,array $info){
                            generator_uid = ?
                            WHERE bir_no = ?
                           ");
-         var_dump($stmt);
-         
 
         $billing_no = $info['event_type']."-".date("y")."-".formatBillingNo($info['participant_id']);
 
@@ -68,6 +66,26 @@ function updateParticipant($bir_no,array $info){
 
 	echo $e->getCode();
     }
+}
+
+
+function insertBillingHistory(array $hist_details){
+
+	try{
+		
+		$stmt = civicrmDB("INSERT INTO billing_history(billing_no,action_taken,generator_uid,bir_no)
+                                   VALUES(?,?,?,?)
+                                  ");
+                $stmt->bindValue(1,$hist_details['billing_no'],PDO::PARAM_STR);
+                $stmt->bindValue(2,$hist_details['action'],PDO::PARAM_STR);
+                $stmt->bindValue(3,$_GET['uid'],PDO::PARAM_INT);
+                $stmt->bindValue(4,$hist_details['bir_no'],PDO::PARAM_STR);
+                $stmt->execute();
+	   }
+
+        catch(PDOException $e){
+                echo $e->getCode();
+        }
 }
 
 
