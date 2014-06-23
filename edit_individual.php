@@ -101,6 +101,10 @@
            $selected_participantId = $_POST['participant_id'];
            $info = getInfoByParticipantId($selected_participantId);
            updateParticipant($bir_no,$info);
+           $history = array('billing_no'=>$billing_no,
+                            'action'=>"Change participant no. ".$participant_id." to ".$selected_participantId,
+                             'bir_no'=>$bir_no);
+           insertBillingHistory($history);
         }
 	
 
