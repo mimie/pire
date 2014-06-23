@@ -350,13 +350,5 @@ function updateAmountCancelledBill($billing_no,$participant_id){
                 ");
         $stmt->bindValue(1,$billing_no,PDO::PARAM_STR);
      	$stmt->execute();
-
-        $action = "Cancelled participant no. $participant_id"; 
-        $hist_stmt = civicrmDB("INSERT INTO billing_history(billing_no,action_taken)
-                                VALUES(?,?)");
-        $hist_stmt->bindValue(1,$billing_no,PDO::PARAM_STR);
-        $hist_stmt->bindValue(2,$action,PDO::PARAM_STR);
-        $hist_stmt->execute();
 }
-
 ?>
