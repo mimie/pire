@@ -26,7 +26,7 @@ function getParticipantWithSameAmount($eventId,$amount){
 /*
  * $info - details of the participant
  */
-function updateParticipant($bir_no,array $info){
+function updateParticipant($bir_no,array $info,$is_vat,$nonvatable_type){
 
 	
    try{
@@ -40,11 +40,18 @@ function updateParticipant($bir_no,array $info){
                            org_contact_id = ?,
                            billing_no = ?,
                            participant_status = ?,
-                           generator_uid = ?
+                           generator_uid = ?,
+                           fee_amount = ?,
+                           subtotal = ?,
+                           vat = ?,
+                           nonvatable_type = ?
                            WHERE bir_no = ?
                           ");
 
         $billing_no = $info['event_type']."-".date("y")."-".formatBillingNo($info['participant_id']);
+        $subtotal = $is_vat == 0 ? $info['fee_amount'] : $info['fee_amount']/1.12;
+        $subtotal = round($subtotal,2);
+        $tax = $info['fee_amount'] - $subtotal;
 
         $address = $info['street_address']." ".$info['city_address'];
         $stmt->bindValue(1,$info['participant_id'],PDO::PARAM_INT);
@@ -57,14 +64,18 @@ function updateParticipant($bir_no,array $info){
         $stmt->bindValue(8,$billing_no,PDO::PARAM_STR);
         $stmt->bindValue(9,$info['participant_status'],PDO::PARAM_STR);
         $stmt->bindValue(10,$_GET['uid'],PDO::PARAM_INT);
-        $stmt->bindValue(11,$bir_no,PDO::PARAM_STR);
+        $stmt->bindValue(11,$info['fee_amount'],PDO::PARAM_INT);
+        $stmt->bindValue(12,$subtotal,PDO::PARAM_INT);
+        $stmt->bindValue(13,$tax,PDO::PARAM_INT);
+        $stmt->bindValue(14,$nonvatable_type,PDO::PARAM_STR);
+        $stmt->bindValue(15,$bir_no,PDO::PARAM_STR);
         
         $stmt->execute();
     }
 
     catch(PDOException $e){
 
-	echo $e->getCode();
+	echo $e->getMessage();
     }
 }
 
