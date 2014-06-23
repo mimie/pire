@@ -152,7 +152,9 @@ function validator(){
             . "<thead>"
             . "<tr>"
             . "<td colspan='12'>"
-            . "Account Receivable Type: <input type='radio' name='vat' value='1' checked='checked'>VATABLE  <input type='radio' name='vat' value='0'>NON-VATABLE"
+            . "Account Receivable Type: <input type='radio' name='vat' value='1' checked='checked'>VATABLE  "
+            . "<input type='radio' name='vat' value='0'>VAT-EXEMPT "
+            . "<input type='radio' name='vat' value='0'>VAT-ZERO "
             . "</br>BS. No. : <input type='text' id='bs_no' name='bs_no' placeholder='Enter BS No. start number...' required>";
 
     $notes_opt = getNotesByCategory("Company Event Billing");
