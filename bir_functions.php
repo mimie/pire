@@ -140,14 +140,14 @@ function getInfoByBillingNo($billing_no){
  * @bs_no-billing no. in the bir form
  * @vatable- 1 for vatable, 2 for non-vatable
  */
-function generateIndividualBill($participant_id,$bs_no,$vatable,$notes_id){
+function generateIndividualBill($participant_id,$bs_no,$vatable,$notes_id,$nonvatable_type){
 
         $generator_uid = $_GET["uid"];
       	$info = getInfoByParticipantId($participant_id);
         $stmt = civicrmDB("INSERT INTO billing_details (participant_id,contact_id,event_id,event_type,event_name,participant_name,email, bill_address,organization_name,
                                                         org_contact_id,billing_type,fee_amount,subtotal,vat,billing_no,generated_bill,view_bill,participant_status,
-                                                        generator_uid,bir_no,notes_id)
-                          VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                                                        generator_uid,bir_no,notes_id,nonvatable_type)
+                          VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
         $bill_address = $info["street_address"]." ".$info["city_address"];
 
@@ -176,6 +176,7 @@ function generateIndividualBill($participant_id,$bs_no,$vatable,$notes_id){
         $stmt->bindValue(19,$generator_uid,PDO::PARAM_INT);
         $stmt->bindValue(20,$bs_no,PDO::PARAM_STR);
         $stmt->bindValue(21,$notes_id,PDO::PARAM_INT);
+        $stmt->bindValue(22,$nonvatable_type,PDO::PARAM_STR);
 
         $stmt->execute();
 }
