@@ -8,9 +8,11 @@
 	include 'pdo_conn.php';
         include 'bir_functions.php';
         include 'editbill_functions.php';
+        include 'billing_functions.php';
        
         $billing_no = $_GET['billing_no'];
         $bill = getInfoByBillingNo($billing_no);
+        $bir_no = $bill['bir_no'];
         $address = $bill['street_address']." ".$bill['city_address'];
         $status = $bill['participant_status'];
         $isEdit = $bill['edit_bill'];
@@ -28,7 +30,7 @@
 			<th>Reference No.</th><td><?=$billing_no?></td>
 		</tr>
 		<tr>
-			<th>BS No.</th><td><?=$bill['bir_no']?></td>
+			<th>BS No.</th><td><?=$bir_no?></td>
 		</tr>
 		<tr>
 			<th>Name</th><td><?=$bill['sort_name']?></td>
@@ -64,7 +66,7 @@
 <?php
 	if($status == 'Cancelled' && $isEdit == 1){
                 echo "<tr>";
-	        echo "<td>Change Name</td><td><SELECT>";
+	        echo "<td>Change Name</td><td><SELECT name='participant_id'>";
 		$participants = getParticipantWithSameAmount($eventId,$civicrm_amount);
                 foreach($participants as $key=>$field){
                         $participant_id = $field['participant_id'];
@@ -73,21 +75,36 @@
 			echo "<option value='".$participant_id."'>".$name."-".$amount."</option>";
                 }
 		echo "</SELECT><input type='submit' name='update' value='UPDATE BILL'></td></tr>";
+                $update_action = 'change name';
 
         }elseif($status !='Cancelled' && $current_amount!=$civicrm_amount && $isEdit == 1){
                echo "<tr>";
                echo "<td>Change Amount</td><td><input type='text' name='new_amount' value='$civicrm_amount' readonly>";
                echo "<input type='submit' name='update' value='UPDATE BILL'></td></tr>";
+               $update_action = 'update amount';
            
         }elseif($status !='Cancelled' && $current_amount!=$civicrm_amount && $isEdit == 0){
 	       echo "<tr>";
-               echo "<td>Generate Bill</td><td><input type='text' name='bs_no' placeholder='000001' required/>";
-               echo "<input type='submit' value='generate' value='GENERATE BILL'></td></tr>";
-         }
+               echo "<td>Generate Bill</td>";
+               echo "<td>Account Receivable Type: <input type='text' name='bs_no' placeholder='Enter BS No.' required/>";
+               echo "<input type='submit' value='GENERATE BILL'></td></tr>";
+               $update_action = 'regenerate';
+          }
+         
 
 ?>
 </form>
 	</table>
       </div>
+<?php
+	if($_POST['update'] && $update_action == 'change name'){
+           $selected_participantId = $_POST['participant_id'];
+           $info = getInfoByParticipantId($selected_participantId);
+           updateParticipant($bir_no,$info);
+        }
+	
+
+
+?>
 </body>
 </html>
