@@ -55,6 +55,7 @@ $(function() {
         $current_amount = sprintf('%0.2f', $bill['current_amount']);
         $civicrm_amount = $bill['civicrm_amount'];
         $eventId = $bill['event_id'];
+        $notes_id = $bill['notes_id'];
         $allowedEdit_info = $isEdit == '0' || ($isEdit == 1 && $civicrm_amount == $current_amount) ? 'Billing information cannot be updated.' : 'Update Billing Information';
 ?>
       <div align='center'>
@@ -106,7 +107,7 @@ $(function() {
                 echo "Account Receivable Type:";
                 echo "<input type='radio' name='vat' value='vatable' checked='checked'>VATABLE ";
                 echo "<input type='radio' name='vat' value='vat-exempt'>VAT-EXEMPT ";
-                echo "<input type='radio' name='vat' value='vat-zero'>VAT-ZERO ";
+                echo "<input type='radio' name='vat' value='vat-zero'>VAT-ZERO </br>";
                 echo "<SELECT name='participant_id'>";
 		$participants = getParticipantWithSameAmount($eventId,$civicrm_amount);
                 foreach($participants as $key=>$field){
@@ -127,7 +128,11 @@ $(function() {
         }elseif($status !='Cancelled' && $current_amount!=$civicrm_amount && $isEdit == 0){
 	       echo "<tr>";
                echo "<td>Generate Bill</td>";
-               echo "<td>Account Receivable Type: <input type='text' name='bs_no' placeholder='Enter BS No.' required/>";
+               echo "<td>Account Receivable Type:";
+               echo "<input type='radio' name='vat' value='vatable' checked='checked'>VATABLE ";
+               echo "<input type='radio' name='vat' value='vat-exempt'>VAT-EXEMPT ";
+               echo "<input type='radio' name='vat' value='vat-zero'>VAT-ZERO </br>";
+               echo "<input type='text' name='bs_no' placeholder='Enter BS No.' required/>";
                echo "<input type='submit' value='GENERATE BILL'></td></tr>";
                $update_action = 'regenerate';
           }
@@ -159,13 +164,14 @@ $(function() {
            	insertBillingHistory($history);
            	echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully updated bill amount information.</div>";
 
-         }
-
-
-       
-	
-
-
+         }elseif($_POST['update'] && $update_action == 'regenerate'){
+	     $bs_no = $_POST["bs_no"];
+	     $nonvatable_type = $_POST['vat'] == 'vatable' ? '' : $_POST['vat'];
+	     $is_vatable = $_POST["vat"] == 'vat-exempt' || $_POST['vat-zero'] ? 0 : 1;
+	     $bir_no = formatBSNo($bs_no);
+	     generateIndividualBill($participant_id,$bir_no,$is_vatable,$note_id,$nonvatable_type);
+             echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully generated bill.</div>";
+   }
 ?>
 </body>
 </html>
