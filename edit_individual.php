@@ -149,7 +149,20 @@ $(function() {
                              'bir_no'=>$bir_no);
            insertBillingHistory($history);
            echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully change participant name.</div>";
-        }
+
+        }elseif($_POST['update'] && $update_action == 'update amount'){
+		updateAmountByBIRNo($bir_no,$_POST['new_amount']);
+                
+           	$history = array('billing_no'=>$billing_no,
+                            'action'=>"Update participant amount to ".$_POST['new_amount'],
+                             'bir_no'=>$bir_no);
+           	insertBillingHistory($history);
+           	echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully updated bill amount information.</div>";
+
+         }
+
+
+       
 	
 
 

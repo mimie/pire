@@ -99,5 +99,25 @@ function insertBillingHistory(array $hist_details){
         }
 }
 
+function updateAmountByBIRNo($bir_no,$amount){
+
+	try{
+
+                $subtotal = round($amount/1.12);
+                $tax = $amount-$subtotal;
+        	$stmt = civicrmDB("UPDATE billing_details SET fee_amount = ?, subtotal = ?, vat = ?
+                                   WHERE bir_no = ?");
+                $stmt->bindValue(1,$amount,PDO::PARAM_INT);
+                $stmt->bindValue(2,$subtotal,PDO::PARAM_INT);
+                $stmt->bindValue(3,$tax,PDO::PARAM_INT);
+                $stmt->bindValue(4,$bir_no,PDO::PARAM_STR);
+                $stmt->execute();
+        }
+
+        catch(PDOException $e){
+        	echo $e->getMessage();
+        }
+}
+
 
 ?>
