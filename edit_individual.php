@@ -49,6 +49,8 @@ $(function() {
         $billing_no = $_GET['billing_no'];
         $bill = getInfoByBillingNo($billing_no);
         $bir_no = $bill['bir_no'];
+        $participant_no = $bill['participant_id'];
+        $employer_id = $bill['employer_id'];
         $address = $bill['street_address']." ".$bill['city_address'];
         $status = $bill['participant_status'];
         $isEdit = $bill['edit_bill'];
@@ -68,6 +70,9 @@ $(function() {
 		</tr>
 		<tr>
 			<th>BS No.</th><td><?=$bir_no?></td>
+		</tr>
+		<tr>
+			<th>Participant Id</th><td><?=$participant_no?></td>
 		</tr>
 		<tr>
 			<th>Name</th><td><?=$bill['sort_name']?></td>
@@ -109,7 +114,7 @@ $(function() {
                 echo "<input type='radio' name='vat' value='vat-exempt'>VAT-EXEMPT ";
                 echo "<input type='radio' name='vat' value='vat-zero'>VAT-ZERO </br>";
                 echo "<SELECT name='participant_id'>";
-		$participants = getParticipantWithSameAmount($eventId,$civicrm_amount);
+		$participants = getParticipantWithSameAmount($eventId,$civicrm_amount,$employer_id);
                 foreach($participants as $key=>$field){
                         $participant_id = $field['participant_id'];
                         $name = $field['sort_name'];
@@ -133,7 +138,7 @@ $(function() {
                echo "<input type='radio' name='vat' value='vat-exempt'>VAT-EXEMPT ";
                echo "<input type='radio' name='vat' value='vat-zero'>VAT-ZERO </br>";
                echo "<input type='text' name='bs_no' placeholder='Enter BS No.' required/>";
-               echo "<input type='submit' value='GENERATE BILL'></td></tr>";
+               echo "<input type='submit' name='update' value='GENERATE BILL'></td></tr>";
                $update_action = 'regenerate';
           }
          
@@ -150,7 +155,7 @@ $(function() {
            $is_vat = $_POST['vat'] == 'vatable' ? 1 : 0 ;
            updateParticipant($bir_no,$info,$is_vat,$nonvatable_type);
            $history = array('billing_no'=>$billing_no,
-                            'action'=>"Change participant no. ".$participant_id." to ".$selected_participantId,
+                            'action'=>"Change participant no. ".$participant_no." to ".$selected_participantId,
                              'bir_no'=>$bir_no);
            insertBillingHistory($history);
            echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully change participant name.</div>";
@@ -168,8 +173,12 @@ $(function() {
 	     $bs_no = $_POST["bs_no"];
 	     $nonvatable_type = $_POST['vat'] == 'vatable' ? '' : $_POST['vat'];
 	     $is_vatable = $_POST["vat"] == 'vat-exempt' || $_POST['vat-zero'] ? 0 : 1;
-	     $bir_no = formatBSNo($bs_no);
-	     generateIndividualBill($participant_id,$bir_no,$is_vatable,$note_id,$nonvatable_type);
+	     $newBIR_no = formatBSNo($bs_no);
+
+	     generateIndividualBill($participant_no,$newBIR_no,$is_vatable,$note_id,$nonvatable_type);
+             $history = array('billing_no'=>$billing_no,
+                              'action'=>"Updated participant amount and regenerate new bir no. ".$newBIR_no,
+                              'bir_no'=>$bir_no);
              echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully generated bill.</div>";
    }
 ?>
