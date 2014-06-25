@@ -9,11 +9,9 @@
   <script src="js/jquery-jPaginate.js"></script>
   <script src="js/jquery.tablesorter.js"></script>
 <script type='text/javascript' language='javascript'>
-function reloadPage()
-  {
-    //location.reload();
+function reloadPage(){
     window.location=window.location;
-  }
+}
 $(function() {
         $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
         $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
