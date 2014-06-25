@@ -35,6 +35,7 @@ function getCompanyParticipantsByEventId($eventId){
                      AND cp.event_id = ?
                      AND billing_type.billing_45 = 'Company'
                      AND cps.id = cp.status_id
+                     AND cp.status_id <> 4
                      AND cc.is_deleted = '0'
                      ORDER BY sort_name");
 	$stmt->bindValue(1,$eventId,PDO::PARAM_INT);
