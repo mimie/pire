@@ -149,56 +149,66 @@ function getInfoByBillingNo($billing_no){
 /*
  * this will generate an individual bill
  * @participant_id
- * @bs_no-billing no. in the bir form
- * @vatable- 1 for vatable, 2 for non-vatable
+ * @details_ - bs_no,vatable,notes_id,nonvatable_type,billing_type,billing_id
+ * 
  */
-function generateIndividualBill($participant_id,$bs_no,$vatable,$notes_id,$nonvatable_type){
+function generateIndividualBill($participant_id,array $details){
 
 		$generator_uid = $_GET["uid"];
                 $participant_id = intval($participant_id);
 		$info = getInfoByParticipantId($participant_id);
-	try{
+                $event_type = $info["event_type"];
+                $orgId = $info["org_contact_id"];
 
-		$stmt = civicrmDB("INSERT INTO billing_details (participant_id,contact_id,event_id,event_type,event_name,participant_name,email, bill_address,organization_name,
-								org_contact_id,billing_type,fee_amount,subtotal,vat,billing_no,generated_bill,view_bill,participant_status,
-								generator_uid,bir_no,notes_id,nonvatable_type)
-				  VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                $bs_no = $details['bs_no'];
+                $vatable = $details['vatable'];
+                $notes_id = $details['notes_id'];
+                $nonvatable_type = $details['nonvatable_type'];
+                $billing_type = $details['billing_type'];
+                $billing_id = $details['billing_id'];
 
-		$bill_address = $info["street_address"]." ".$info["city_address"];
+		try{
 
-		$subtotal = $vatable == 1 ? round($info["fee_amount"]/1.12,2) : $info["fee_amount"];
-		$vat = $info["fee_amount"] - $subtotal;
-		$billing_no = $info["event_type"]."-".date("y")."-".formatBillingNo($participant_id);
+			$stmt = civicrmDB("INSERT INTO billing_details (participant_id,contact_id,event_id,event_type,event_name,participant_name,email, bill_address,organization_name,
+									org_contact_id,billing_type,fee_amount,subtotal,vat,billing_no,generated_bill,view_bill,participant_status,
+									generator_uid,bir_no,notes_id,nonvatable_type)
+					  VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
-		$stmt->bindValue(1,$participant_id,PDO::PARAM_INT);
-		$stmt->bindValue(2,$info["contact_id"],PDO::PARAM_INT);
-		$stmt->bindValue(3,$info["event_id"],PDO::PARAM_INT);
-		$stmt->bindValue(4,$info["event_type"],PDO::PARAM_STR);
-		$stmt->bindValue(5,$info["event_name"],PDO::PARAM_STR);
-		$stmt->bindValue(6,$info["sort_name"],PDO::PARAM_STR);
-		$stmt->bindValue(7,$info["email"],PDO::PARAM_STR);
-		$stmt->bindValue(8,$bill_address,PDO::PARAM_STR);
-		$stmt->bindValue(9,$info["organization_name"],PDO::PARAM_STR);
-		$stmt->bindValue(10,$info["org_contact_id"],PDO::PARAM_INT);
-		$stmt->bindValue(11,"Individual",PDO::PARAM_STR);
-		$stmt->bindValue(12,$info["fee_amount"],PDO::PARAM_INT);
-		$stmt->bindValue(13,$subtotal,PDO::PARAM_INT);
-		$stmt->bindValue(14,$vat,PDO::PARAM_INT);
-		$stmt->bindValue(15,$billing_no,PDO::PARAM_STR);
-		$stmt->bindValue(16,1,PDO::PARAM_INT);
-		$stmt->bindValue(17,1,PDO::PARAM_INT);
-		$stmt->bindValue(18,$info["participant_status"],PDO::PARAM_STR);
-		$stmt->bindValue(19,$generator_uid,PDO::PARAM_INT);
-		$stmt->bindValue(20,$bs_no,PDO::PARAM_STR);
-		$stmt->bindValue(21,$notes_id,PDO::PARAM_INT);
-		$stmt->bindValue(22,$nonvatable_type,PDO::PARAM_STR);
+			$bill_address = $info["street_address"]." ".$info["city_address"];
 
-		$stmt->execute();
-       }
+			$subtotal = $vatable == 1 ? round($info["fee_amount"]/1.12,2) : $info["fee_amount"];
+			$vat = $info["fee_amount"] - $subtotal;
+			$billing_no = $billing_type == 'Individual' ? $event_type."-".date("y")."-".formatBillingNo($participant_id) : $event_type."-".date("y")."-".$billing_id;
 
-       catch(PDOException $e){
-       		echo $e->getMessage();
-       }
+			$stmt->bindValue(1,$participant_id,PDO::PARAM_INT);
+			$stmt->bindValue(2,$info["contact_id"],PDO::PARAM_INT);
+			$stmt->bindValue(3,$info["event_id"],PDO::PARAM_INT);
+			$stmt->bindValue(4,$event_type,PDO::PARAM_STR);
+			$stmt->bindValue(5,$info["event_name"],PDO::PARAM_STR);
+			$stmt->bindValue(6,$info["sort_name"],PDO::PARAM_STR);
+			$stmt->bindValue(7,$info["email"],PDO::PARAM_STR);
+			$stmt->bindValue(8,$bill_address,PDO::PARAM_STR);
+			$stmt->bindValue(9,$info["organization_name"],PDO::PARAM_STR);
+			$stmt->bindValue(10,$orgId,PDO::PARAM_INT);
+			$stmt->bindValue(11,$billing_type,PDO::PARAM_STR);
+			$stmt->bindValue(12,$info["fee_amount"],PDO::PARAM_INT);
+			$stmt->bindValue(13,$subtotal,PDO::PARAM_INT);
+			$stmt->bindValue(14,$vat,PDO::PARAM_INT);
+			$stmt->bindValue(15,$billing_no,PDO::PARAM_STR);
+			$stmt->bindValue(16,1,PDO::PARAM_INT);
+			$stmt->bindValue(17,1,PDO::PARAM_INT);
+			$stmt->bindValue(18,$info["participant_status"],PDO::PARAM_STR);
+			$stmt->bindValue(19,$generator_uid,PDO::PARAM_INT);
+			$stmt->bindValue(20,$bs_no,PDO::PARAM_STR);
+			$stmt->bindValue(21,$notes_id,PDO::PARAM_INT);
+			$stmt->bindValue(22,$nonvatable_type,PDO::PARAM_STR);
+
+			$stmt->execute();
+	       }
+
+	       catch(PDOException $error){
+			echo $error->getMessage();
+	       }
 }
 
 /*
