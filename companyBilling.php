@@ -263,6 +263,7 @@ function validator(){
         $vatable = $_POST['vat'] == 'vatable' ? 1 : 0;
         $nonvatable_type = $_POST['vat'] == 'vatable' ? '' : $_POST['vat'];
         $bs_no = $_POST['bs_no'];
+        $bir_no = formatBSNo($bs_no);
         
         foreach($orgIds as $id){
                 $participants = $comp_participants[$id];
@@ -286,11 +287,23 @@ function validator(){
                                              'total_amount' => $totals[$id],
                                              'subtotal' => $subtotal,
                                              'vat' => $vat,
-                                             'bir_no' => formatBSNo($bs_no), 
+                                             'bir_no' => $bir_no, 
                                              'notes_id' => $note_id,
                                              'generator_uid' => $uid,
                                              'nonvatable_type' => $nonvatable_type);
                 generateCompanyBill($billing_information);
+
+                foreach($participants as $key=>$field){
+                        $participant_id = $field['participant_id'];
+                        $details = array('bs_no' => $bir_no,
+                                         'vatable' => $vatable,
+                                         'notes_id' => $note_id,
+                                         'nonvatable_type' => $nonvatable_type,
+                                         'billing_type' => 'Company',
+                                         'billing_id' => $billing_id
+                                          );
+                	generateIndividualBill($participant_id,$details);
+                }
                 $bs_no++;
         }
 
