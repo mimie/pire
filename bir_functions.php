@@ -35,7 +35,7 @@ function getCompanyParticipantsByEventId($eventId){
                      AND cp.event_id = ?
                      AND billing_type.billing_45 = 'Company'
                      AND cps.id = cp.status_id
-                     AND cp.status_id <> 4
+                     AND cp.status_id NOT IN(15,17,7,4)
                      AND cc.is_deleted = '0'
                      ORDER BY sort_name");
 	$stmt->bindValue(1,$eventId,PDO::PARAM_INT);
@@ -365,25 +365,28 @@ function getCompanyNames(){
 
 function generateCompanyBill(array $bill){
 
-	$fields = array('event_id','event_type','event_name','org_contact_id','organization_name','bill_address','billing_no','total_amount','subtotal','vat','bir_no','notes_id','generator_id');
-
-        $stmt = civicrmDB("INSERT INTO billing_company 
-                          (event_id,event_type,event_name,org_contact_id,organization_name,bill_addresss,billing_no,total_amount,subtotal,vat,bir_no,notes_id,generator_id)
-			  VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
-        $stmt->bindValue(1,$bill['event_id'],PDO::PARAM_INT);
-        $stmt->bindValue(2,$bill['event_type'],PDO::PARAM_STR);
-        $stmt->bindValue(3,$bill['event_name'],PDO::PARAM_STR);
-        $stmt->bindValue(4,$bill['org_id'],PDO::PARAM_INT);
-        $stmt->bindValue(5,$bill['org_name'],PDO::PARAM_STR);
-        $stmt->bindValue(6,$bill['address'],PDO::PARAM_STR);
-        $stmt->bindValue(7,$bill['billing_no'],PDO::PARAM_STR);
-        $stmt->bindValue(8,$bill['total_amount'],PDO::PARAM_INT);
-        $stmt->bindValue(9,$bill['subtotal'],PDO::PARAM_INT);
-        $stmt->bindValue(10,$bil['vat'],PDO::PARAM_INT);
-        $stmt->bindValue(11,$bill['bir_no'],PDO::PARAM_STR);
-        $stmt->bindValue(12,$bill['notes_id'],PDO::PARAM_INT);
-        $stmt->bindValue(13,$bill['generator_uid'],PDO::PARAM_INT);
-        $stmt->execute();
+	try{	
+		$stmt = civicrmDB("INSERT INTO billing_company 
+				  (event_id,event_type,event_name,org_contact_id,organization_name,bill_address,billing_no,total_amount,subtotal,vat,bir_no,notes_id,generator_uid,nonvatable_type)
+				  VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+		$stmt->bindValue(1,$bill['event_id'],PDO::PARAM_INT);
+		$stmt->bindValue(2,$bill['event_type'],PDO::PARAM_STR);
+		$stmt->bindValue(3,$bill['event_name'],PDO::PARAM_STR);
+		$stmt->bindValue(4,$bill['org_id'],PDO::PARAM_INT);
+		$stmt->bindValue(5,$bill['org_name'],PDO::PARAM_STR);
+		$stmt->bindValue(6,$bill['address'],PDO::PARAM_STR);
+		$stmt->bindValue(7,$bill['billing_no'],PDO::PARAM_STR);
+		$stmt->bindValue(8,$bill['total_amount'],PDO::PARAM_INT);
+		$stmt->bindValue(9,$bill['subtotal'],PDO::PARAM_INT);
+		$stmt->bindValue(10,$bill['vat'],PDO::PARAM_INT);
+		$stmt->bindValue(11,$bill['bir_no'],PDO::PARAM_STR);
+		$stmt->bindValue(12,$bill['notes_id'],PDO::PARAM_INT);
+		$stmt->bindValue(13,$bill['generator_uid'],PDO::PARAM_INT);
+		$stmt->bindValue(14,$bill['nonvatable_type'],PDO::PARAM_INT);
+		$stmt->execute();
+	}catch(PDOException $error){
+		echo $error->getMessage();
+         }
 }
 
 function updateAmountCancelledBill($billing_no,$participant_id){
