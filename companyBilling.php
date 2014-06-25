@@ -67,7 +67,7 @@ function validator(){
         var bs_no = document.getElementById('bs_no');
 
         if(isNumeric(bs_no,"Please enter a valid number for BS No. field.")){
-           if(isCheck(checkbox,"Please select a participant name.")){
+           if(isCheck(checkbox,"Please select a company name.")){
              return true;
            }
         }
@@ -152,9 +152,9 @@ function validator(){
             . "<thead>"
             . "<tr>"
             . "<td colspan='12'>"
-            . "Account Receivable Type: <input type='radio' name='vat' value='1' checked='checked'>VATABLE  "
-            . "<input type='radio' name='vat' value='0'>VAT-EXEMPT "
-            . "<input type='radio' name='vat' value='0'>VAT-ZERO "
+            . "Account Receivable Type: <input type='radio' name='vat' value='vatable' checked='checked'>VATABLE  "
+            . "<input type='radio' name='vat' value='vat_exempt'>VAT-EXEMPT "
+            . "<input type='radio' name='vat' value='vat_zero'>VAT-ZERO "
             . "</br>BS. No. : <input type='text' id='bs_no' name='bs_no' placeholder='Enter BS No. start number...' required>";
 
     $notes_opt = getNotesByCategory("Company Event Billing");
@@ -193,12 +193,12 @@ function validator(){
    foreach($comp_participants as $orgId => $participants){
         $total_fee = 0.0;
 	foreach($participants as $key=>$field){
-		$total_fee = $field["status"] == 'Cancelled' || $field["status"] == 'VOID' || $field["status"] == 'Void' ? $total_fee : $total_fee + $field["fee_amount"];
-                $totals[$orgId] = $total_fee;
+		$total_fee = $total_fee + $field['fee_amount'];
         }
 
         $bill_info = checkCompanyBillGenerated($orgId,$eventId);
         $orgName = $comp_names[$orgId];
+        $total_per_org = $total_fee;
         $total_fee = number_format($total_fee,2);
 
         if($bill_info){
@@ -247,10 +247,11 @@ function validator(){
 			 . "<td></td>"
 			 . "</tr>"; 
       	}
+        $totals[$orgId] = number_format($total_per_org,2, '.', '');;
 
 
   }
-   
+
    $display = $display."</tbody></table>";
    echo $display;
    echo "</form>";
@@ -259,19 +260,22 @@ function validator(){
    if($_POST['generate']){
 	$orgIds = $_POST['ids'];
         $note_id = $_POST['notes'];
-        $vatable = $_POST['vat'];
+        $vatable = $_POST['vat'] == 'vatable' ? 1 : 0;
+        $nonvatable_type = $_POST['vat'] == 'vatable' ? '' : $_POST['vat'];
         $bs_no = $_POST['bs_no'];
         
         foreach($orgIds as $id){
                 $participants = $comp_participants[$id];
-
+           
 		$max_stmt = civicrmDB("SELECT MAX(cbid) as max_id FROM billing_company");
 		$max_stmt->execute();
 		$billing_id = formatBillingNo($max_stmt->fetchColumn(0) + 1);
 		$current_year = date("y");
 		$billing_no = $eventTypeName."-".$current_year."-".$billing_id;
-                $subtotal = $vatable == 1 ? $totals[$orgId]/1.12 : $totals[$orgId];
-                $vat = $totals[$orgId] - round($subtotal,2);
+                $subtotal = $vatable == 1 ? $totals[$id]/1.12 : $totals[$id];
+                $vat = $totals[$id] - $subtotal;
+                $subtotal = number_format($subtotal, 2, '.', '');
+                $vat = number_format($vat, 2, '.', ''); 
                 $billing_information = array('event_id' => $eventId,
                                              'event_type' => $eventTypeName,
                                              'event_name' => $eventName,
@@ -279,15 +283,17 @@ function validator(){
                                              'org_name' => $comp_names[$id],
                                              'address' => getCompleteCompanyAddress($dbh,$id),
                                              'billing_no' => $billing_no,
-                                             'total_amount' => $totals[$orgId],
-                                             'subtotal' => round($subtotal,2),
+                                             'total_amount' => $totals[$id],
+                                             'subtotal' => $subtotal,
                                              'vat' => $vat,
                                              'bir_no' => formatBSNo($bs_no), 
                                              'notes_id' => $note_id,
-                                             'generator_uid' => $uid);
+                                             'generator_uid' => $uid,
+                                             'nonvatable_type' => $nonvatable_type);
                 generateCompanyBill($billing_information);
                 $bs_no++;
         }
+
   }
 ?>
 </body>
