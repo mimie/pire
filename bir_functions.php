@@ -120,7 +120,7 @@ function getInfoByBillingNo($billing_no){
 
      try{
 
-	$stmt = civicrmDB("SELECT cp.contact_id, cp.id as participant_id,cp.event_id, cov.label as event_type,ce.title as event_name, cc.sort_name,
+	$stmt = civicrmDB("SELECT cp.contact_id, cp.id as participant_id,cp.event_id, cov.label as event_type,ce.title as event_name, cc.sort_name,cc.employer_id,
                            em.email,cc.organization_name, bd.street_address__company__3 as street_address, bd.city__company__5 as city_address,
                            cc.employer_id as org_contact_id, bill.bir_no,bill.edit_bill,bill.notes_id,bill.fee_amount current_amount,cp.fee_amount as civicrm_amount, cps.label as participant_status
                            FROM civicrm_participant cp, billing_details bill,civicrm_event ce, civicrm_option_value cov, civicrm_participant_status_type cps,civicrm_contact cc
