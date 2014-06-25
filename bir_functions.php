@@ -49,7 +49,7 @@ function getCompanyParticipantsByEventId($eventId){
 
 function getIndividualBilledParticipantsByEventId($eventId){
 
-	$stmt = civicrmDB("SELECT participant_id,generated_bill,post_bill,billing_no,bir_no,bill_date,amount_paid,subtotal,vat,notes_id FROM billing_details
+	$stmt = civicrmDB("SELECT participant_id,generated_bill,post_bill,billing_no,bir_no,bill_date,amount_paid,fee_amount,subtotal,vat,notes_id FROM billing_details
                            WHERE event_id = ?
                            AND billing_type = 'Individual'
                           ");
