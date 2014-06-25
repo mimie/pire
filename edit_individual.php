@@ -175,10 +175,18 @@ $(function() {
 	     $is_vatable = $_POST["vat"] == 'vat-exempt' || $_POST['vat-zero'] ? 0 : 1;
 	     $newBIR_no = formatBSNo($bs_no);
 
-	     generateIndividualBill($participant_no,$newBIR_no,$is_vatable,$note_id,$nonvatable_type);
+             $details = array('bs_no' => $newBIR_no,
+                              'vatable' => $is_vatable,
+                              'notes_id' => $note_id,
+                              'nonvatable_type' => $nonvatable_type,
+                              'billing_type' => 'Individual',
+                              'billing_id' => NULL);
+
+	     generateIndividualBill($participant_no,$details);
              $history = array('billing_no'=>$billing_no,
                               'action'=>"Updated participant amount and regenerate new bir no. ".$newBIR_no,
                               'bir_no'=>$bir_no);
+             insertBillingHistory($history);
              echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully generated bill.</div>";
    }
 ?>
