@@ -1,12 +1,13 @@
 <?php
 
-function getParticipantWithSameAmount($eventId,$amount){
+function getParticipantWithSameAmount($eventId,$amount,$employer_id){
 
-	$stmt = civicrmDB("SELECT cp.id as participant_id, cc.sort_name, cp.fee_amount
+	$stmt = civicrmDB("SELECT cp.id as participant_id, cc.sort_name, cc.employer_id,cp.fee_amount
                            FROM civicrm_participant cp, civicrm_contact cc, civicrm_value_billing_17 as billing_type
                            WHERE event_id = ?
                            AND cp.fee_amount = ?
                            AND cp.status_id <> '4'
+                           AND cc.employer_id = ?
                            AND cc.id = cp.contact_id
                            AND billing_type.billing_45 = 'Individual'
                            AND billing_type.entity_id = cp.id
@@ -15,7 +16,8 @@ function getParticipantWithSameAmount($eventId,$amount){
                           ");
         $stmt->bindValue(1,$eventId,PDO::PARAM_INT);
         $stmt->bindValue(2,$amount,PDO::PARAM_INT);
-        $stmt->bindValue(3,$eventId,PDO::PARAM_INT);
+        $stmt->bindValue(3,$employer_id,PDO::PARAM_INT);
+        $stmt->bindValue(4,$eventId,PDO::PARAM_INT);
         $stmt->execute();
 
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
