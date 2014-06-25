@@ -173,7 +173,8 @@ function validator(){
              . "<th><input type='checkbox' id='check'>Participant Name</th>"
              . "<th>Status</th>"
              . "<th>Organization</th>"
-             . "<th>Fee</th>"
+             . "<th>Total Fee</th>"
+             . "<th>Civicrm Amount</th>"
              . "<th>Subtotal</th>"
              . "<th>12% VAT</th>"
              . "<th>Print Bill</th>"
@@ -197,7 +198,7 @@ function validator(){
         $status_id = $field['status_id'];
         $status = $field['status'];
         $orgname = $field["organization_name"];
-        $fee_amount = $field['fee_amount'];
+        $civicrm_amount = $field['fee_amount'];
 
         $bill = $billedParticipants[$participant_id];
         $is_post = $bill['post_bill'];
@@ -209,12 +210,15 @@ function validator(){
         $bir_no = $bill['bir_no'];
         $date = $bill['bill_date'];
         $notes_id = $bill['notes_id'];
+        $bill_amount = $bill['fee_amount'];
+        $color = $civicrm_amount != $bill_amount ? 'red' : '';
+        $bill_amount = number_format($bill_amount,2,'.','');
 
         //update amount if status is cancelled 
-        $fee_amount = $status_id == 4 ? 0 : $fee_amount;
+        $civicrm_amount = $status_id == 4 ? 0 : $civicrm_amount;
 
-        $checkbox = (array_key_exists($participant_id,$billedParticipants) && $is_post == 1) || (array_key_exists($participant_id,$billedParticipants) && $is_generated == 1) || $fee_amount == 0 ? "" : "class='checkbox'";
-        $disabled = (array_key_exists($participant_id,$billedParticipants) && $is_post == 1) || (array_key_exists($participant_id,$billedParticipants) && $is_generated == 1) || $fee_amount == 0 ? 'disabled' : '';
+        $checkbox = (array_key_exists($participant_id,$billedParticipants) && $is_post == 1) || (array_key_exists($participant_id,$billedParticipants) && $is_generated == 1) || $civicrm_amount == 0 ? "" : "class='checkbox'";
+        $disabled = (array_key_exists($participant_id,$billedParticipants) && $is_post == 1) || (array_key_exists($participant_id,$billedParticipants) && $is_generated == 1) || $civicrm_amount == 0 ? 'disabled' : '';
 
         //status = 4 = Cancelled - Strike the column if the participant status is cancelled.
         $strike = $status_id == 4 || $status_id == 7 || $status_id == 15 ? '<strike>' : '';
@@ -223,15 +227,16 @@ function validator(){
 	$display = $display."<tr>"
                  . "<td>$strike<input type='checkbox' $checkbox $disabled name='ids[]' value='".$participant_id."'>".$field['sort_name']."$endstrike</td>"
                  . "<td>$strike".$status."$endstrike</td>"
-                 . "<td>$strike".$orgname."$endstrike</td>"
-                 . "<td>$strike".$fee_amount."$endstrike</td>";
+                 . "<td>$strike".$orgname."$endstrike</td>";
 
         if(array_key_exists($participant_id,$billedParticipants)){
 
             if($status_id == 4){
 		updateAmountCancelledBill($billing_no,$participant_id);
             }
-            $display = $display. "<td>$strike".$subtotal."$endstrike</td>"
+            $display = $display. "<td><font color='$color'>".$bill_amount."</font></td>"
+                     . "<td><font color='$color'>$strike".$civicrm_amount."$endstrike</font></td>"
+                     . "<td>$strike".$subtotal."$endstrike</td>"
                      . "<td>$strike".$vat."$endstrike</td>"
                      . "<td><a href='BIRForm/BIRForm.php?event_id=$eventId&billing_no=".$billing_no."&uid=$uid' target='_blank'><img src='images/preview.png' width='30' height='30'></a>"
                      . "<a href='BIRForm/print_bir.php?event_id=$eventId&billing_no=".$billing_no."&uid=$uid' target='_blank'><img src='printer-icon.png' width='30' height='30'></a></td>"
@@ -244,6 +249,8 @@ function validator(){
          }else{
            $img_link = "";
            $display = $display. "<td></td>"
+                 . "<td></td>"
+                 . "<td></td>"
                  . "<td></td>"
                  . "<td></td>"
                  . "<td></td>"
