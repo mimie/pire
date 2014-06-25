@@ -9,10 +9,10 @@
   <script src="js/jquery-jPaginate.js"></script>
   <script src="js/jquery.tablesorter.js"></script>
 <script>
-function reloadPage()
-  {
-  location.reload();
-  }
+function reloadPage(){
+  //location.reload();
+  window.location=window.location;
+}
 $(function() {
         $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
         $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
@@ -29,7 +29,8 @@ $(function() {
       modal: true,
       buttons: {
         "OK": function() {
-          $( this ).dialog( "close" );
+          //$( this ).dialog( "close" );
+          reloadPage();
         }
       }
     });
@@ -306,6 +307,8 @@ function validator(){
                 }
                 $bs_no++;
         }
+        
+        echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully generated company bill.</div>";
 
   }
 ?>
