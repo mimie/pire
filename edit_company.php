@@ -54,6 +54,7 @@ $(function() {
 	@$eventId = $_GET["eventId"];
 	@$orgId = $_GET["orgId"];
 
+        //Event Information
 	$eventDetails = getEventDetails($dbh,$eventId);
 	$eventName = $eventDetails["event_name"];
 	$eventStartDate = $eventDetails["start_date"];
@@ -63,9 +64,22 @@ $(function() {
 	$eventLocation = formatEventLocation($locationDetails);
         $orgName = getCompanyNameByOrgId($orgId);
 
+	//Current Bill Information
+	$currentbill = getCurrentCompanyBillByEvent($orgId,$eventId);
+        $billing_no = $currentbill['billing_no'];
+        $bir_no = "BS-".$currentbill['bir_no'];
+        $total_amount = number_format($currentbill['total_amount'],'2','.','');
+        $subtotal = number_format($currentbill['subtotal'],'2','.','');
+        $vat = number_format($currentbill['vat'],'2','.','');
+        $billing_date = $currentbill['bill_date'];
+        $notes = $currentbill['notes'];
+
 ?>
 <div id='eventDetails'>
- <table border = '1' width='100%'>
+ <table border='1' width='100%'>
+        <tr>
+        	<th colspan='2'>EVENT INFORMATION</th> 
+        </tr>
 	<tr>
         	<th>Event Name</th><td><b><i><?=$eventName?></i></b></td>
 	</tr>
@@ -84,7 +98,30 @@ $(function() {
 	<tr>
 		<th>Organization Name</th><td><i><?=$orgName?></i></td>
 	</tr>
- </table>
+</table><br></br>
+<table border='1' width='100%'>
+        <tr>
+        	<th colspan='2'>BILLING INFORMATION</th> 
+        </tr>
+	<tr>
+        	<th>Reference No.</th><td><b><i><?=$billing_no?></i></b></td>
+	</tr>
+	<tr>
+        	<th>BS No.</th><td><b><i><?=$bir_no?></i></b></td>
+	</tr>
+	<tr>
+        	<th>Billing Date</th><td><b><i><?=date("F j, Y",strtotime($billing_date))?></i></b></td>
+	</tr>
+	<tr>
+        	<th>Total</th><td><b><i><?=$total_amount?></i></b></td>
+	</tr>
+	<tr>
+        	<th>Subtotal</th><td><b><i><?=$subtotal?></i></b></td>
+	</tr>
+	<tr>
+        	<th>VAT</th><td><b><i><?=$vat?></i></b></td>
+	</tr>
+</table>
 </div>
 </body>
 </html>
