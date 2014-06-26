@@ -74,6 +74,9 @@ $(function() {
         $billing_date = $currentbill['bill_date'];
         $notes = $currentbill['notes'];
 
+        //Billed Participants
+        $participants = getCompanyBilledParticipants($dbh,$billing_no,$eventId);
+
 ?>
 <div id='eventDetails'>
  <table border='1' width='100%'>
@@ -99,6 +102,7 @@ $(function() {
 		<th>Organization Name</th><td><i><?=$orgName?></i></td>
 	</tr>
 </table><br></br>
+
 <table border='1' width='100%'>
         <tr>
         	<th colspan='2'>BILLING INFORMATION</th> 
@@ -121,6 +125,46 @@ $(function() {
 	<tr>
         	<th>VAT</th><td><b><i><?=$vat?></i></b></td>
 	</tr>
+	<tr>
+        	<th>Notes</th><td><b><i><?=$notes?></i></b></td>
+	</tr>
+</table><br/><br/>
+
+<table border='1' width='100%'>
+        <tr>
+        	<th colspan='6'>LIST OF BILLED PARTICIPANTS</th> 
+        </tr>
+        <tr>
+		<th>Select Participant</th>
+		<th>Participant Id</th>
+		<th>Participant Name</th>
+		<th>Email</th>
+		<th>Fee Amount</th>
+                <th>Civicrm Amount</th>
+        </tr>
+<?php
+	foreach($participants as $key=>$field){
+		$participant_id = $field['participant_id'];
+                $name = $field['participant_name'];
+                $email = $field['email'];
+                $fee_amount = number_format($field['fee_amount'],'2','.','');
+                $civicrm_amount = number_format($field['civicrm_amount'],'2','.','');
+                $color = $fee_amount != $civicrm_amount ? 'red' : '';
+                $disabled = $fee_amount == $civicrm_amount ? 'disabled' : '';
+  
+?>
+	<tr>
+        	<td><input type='checkbox' <?=$disabled?>><?=$participant_id?></td>
+                <td><?=$participant_id?></td>
+        	<td><?=$name?></td>
+        	<td><?=$email?></td>
+        	<td><font color='<?=$color?>'><?=$fee_amount?></font></td>
+        	<td><font color='<?=$color?>'><?=$civicrm_amount?></font></td>
+        </tr>
+
+<?php
+	}
+?>
 </table>
 </div>
 </body>
