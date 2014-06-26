@@ -73,6 +73,7 @@ $(function() {
         $vat = number_format($currentbill['vat'],'2','.','');
         $billing_date = $currentbill['bill_date'];
         $notes = $currentbill['notes'];
+        $is_edit = $currentbill['edit_bill'];
 
         //Billed Participants
         $participants = getCompanyBilledParticipants($dbh,$billing_no,$eventId);
@@ -182,23 +183,36 @@ $(function() {
         </tr>
 <?php
 	//new participants
-	foreach($new_participants as $key=>$field){
-		$participant_id = $field["participant_id"];
-        	$name = $field['name'];
-		$contact_id = $field['contact_id'];
-		$fee_amount = $field['fee_amount'];
-                $email = getContactEmail($dbh,$contact_id);
-                $status = $field['status'];
+        if($new_participants){
+		foreach($new_participants as $key=>$field){
+			$participant_id = $field["participant_id"];
+			$name = $field['name'];
+			$contact_id = $field['contact_id'];
+			$fee_amount = $field['fee_amount'];
+			$email = getContactEmail($dbh,$contact_id);
+			$status = $field['status'];
+?>
+		<tr>
+			<td><input type='checkbox' name='ids[]' value='<?=$participant_id?>'><?=$participant_id?></td>
+			<td><?=$name?></td>
+			<td><?=$email?></td>
+			<td colspan='2'><?=$fee_amount?></td>
+			<td><?=$status?></td>
+		</tr>
+<?php
+		}
+	}
+
+        //conditions for edit
+	if($is_edit == 1){
 ?>
 	<tr>
-		<td><input type='checkbox' name='ids[]' value='<?=$participant_id?>'><?=$participant_id?></td>
-		<td><?=$name?></td>
-		<td><?=$email?></td>
-		<td colspan='2'><?=$fee_amount?></td>
-                <td><?=$status?></td>
-        </tr>
+		<td colspan='6' bgcolor='#2c4f85'><input type='submit' name='update' value='UPDATE BILLING'></td>
+	</tr>
+
+
 <?php
-	}
+        }
 ?>
       
 </table></br></br>
