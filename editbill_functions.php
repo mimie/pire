@@ -133,5 +133,27 @@ function getCompanyNameByOrgId($orgId){
 	return $orgName;
 }
 
+function getCurrentCompanyBillByEvent($orgId,$eventId){
+
+	try{
+		$stmt = civicrmDB("SELECT max(cbid), bc.billing_no, bc.bir_no, bc.total_amount, bc.subtotal,bc.vat, bc.bill_date, bc.notes_id, bn.notes
+				   FROM billing_company bc, billing_notes bn
+				   WHERE bc.event_id = ?
+				   AND bc.org_contact_id = ?
+				   AND bn.notes_id = bc.notes_id
+				   AND bc.edit_bill = '1'
+				   AND is_cancelled = '0'
+				   AND is_void = '0'
+				   GROUP BY bc.org_contact_id, bc.event_id");
+		$stmt->bindValue(1,$eventId,PDO::PARAM_INT);
+		$stmt->bindValue(2,$orgId,PDO::PARAM_INT);
+		$stmt->execute();
+		$result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+		return $result;
+        }catch(PDOException $error){
+         	$error->getMessage();
+         }
+}
 
 ?>
