@@ -204,6 +204,8 @@ function checkCompanyBillGenerated($orgContactId,$eventId){
                     FROM billing_company
                     WHERE org_contact_id = ?
                     AND event_id = ?
+                    AND is_cancelled = 0
+                    AND is_void = 0
                       ");
   $stmt->bindValue(1,$orgContactId,PDO::PARAM_INT);
   $stmt->bindValue(2,$eventId,PDO::PARAM_INT);
