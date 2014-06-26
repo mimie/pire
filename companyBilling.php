@@ -152,7 +152,7 @@ function validator(){
    $display = "<table width='100%' id='billings'>" 
             . "<thead>"
             . "<tr>"
-            . "<td colspan='12'>"
+            . "<td colspan='13'>"
             . "Account Receivable Type: <input type='radio' name='vat' value='vatable' checked='checked'>VATABLE  "
             . "<input type='radio' name='vat' value='vat_exempt'>VAT-EXEMPT "
             . "<input type='radio' name='vat' value='vat_zero'>VAT-ZERO "
@@ -184,6 +184,7 @@ function validator(){
             . "<th>BS No.</th>"
             . "<th>Billing Date</th>"
             . "<th>Notes</th>"
+            . "<th>Edit</th>"
             . "<th>Billed Participants</th>"
             . "</tr>"
             . "</thead><tbody>";
@@ -212,6 +213,8 @@ function validator(){
                 $billing_no = $bill_info['billing_no'];
 
                 $bill_date = date("F j, Y",strtotime($bill_info['bill_date']));
+                $img_link = "<a href='edit_company.php?eventId=$eventId&orgId=$orgId&uid=$uid' onclick=\"window.open(this.href,'edit_company.php?eventId=$eventId&orgId=$orgId&uid=$uid','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=900,height=900');return false;\"><img src='images/edit_bill.png'></a>";
+                
 		$display = $display."<tr>"
 			 . "<td><input type='checkbox' name='ids[]' value='$orgId' disabled>".$orgName."</td>"
 			 . "<td><font color='$color'>$bill_total</font></td>"
@@ -225,6 +228,7 @@ function validator(){
 			 . "<td>".$bill_info['bir_no']."</td>"
 			 . "<td>".$bill_date."</td>"
 			 . "<td>".$notes."</td>"
+			 . "<td>".$img_link."</td>"
 			 . "<td>".participantsLink($billing_no,$eventId,$orgId)."</td>"
 			 . "</tr>"; 
         }else{
@@ -237,6 +241,7 @@ function validator(){
 			 . "<td><input type='checkbox' name='ids[]' value='$orgId' $disabled class='$class'>".$orgName."</td>"
 			 . "<td></td>"
 			 . "<td><font color='$color'>".$total_fee."</font></td>"
+			 . "<td></td>"
 			 . "<td></td>"
 			 . "<td></td>"
 			 . "<td></td>"
