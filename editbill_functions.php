@@ -121,5 +121,17 @@ function updateAmountByBIRNo($bir_no,$amount){
         }
 }
 
+function getCompanyNameByOrgId($orgId){
+
+	$stmt = civicrmDB("SELECT organization_name FROM civicrm_contact
+                           WHERE civicrm_contact.id = ?");
+	$stmt->bindValue(1,$orgId,PDO::PARAM_INT);
+	$stmt->execute();
+	$result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $orgName = $result["organization_name"];
+
+	return $orgName;
+}
+
 
 ?>
