@@ -11,6 +11,7 @@ function getNewlyAddedBillings($dbh,$eventId,$orgId){
                         AND cc.employer_id = ?
                         AND cc.is_deleted = 0
                         AND cp.contact_id = cc.id
+                        AND cp.status_id NOT IN (4,7,15,17)
                         AND cp.id NOT IN (SELECT bd.participant_id FROM billing_details bd
                                           WHERE bd.event_id = ?
                                           AND bd.org_contact_id = ?
