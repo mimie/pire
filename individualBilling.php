@@ -249,7 +249,7 @@ function validator(){
          }else{
            $img_link = "";
            $display = $display. "<td></td>"
-                 . "<td></td>"
+                 . "<td>$civicrm_amount</td>"
                  . "<td></td>"
                  . "<td></td>"
                  . "<td></td>"
