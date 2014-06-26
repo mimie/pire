@@ -296,12 +296,12 @@ function formatBSNo($bs_no){
         $zeros = $zeros."0";
      }
 
-   return "BS-".$zeros.$bs_no;
+   return $zeros.$bs_no;
 
   }
 
   else{
-    return "BS-".$bs_no;
+    return $bs_no;
   }
 }
 
