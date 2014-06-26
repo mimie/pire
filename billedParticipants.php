@@ -25,14 +25,6 @@ function reloadPage(){
   include 'billingview_functions.php';
   $dbh = civicrmConnect();
  
-  /**session_start();
-  //if the user has not logged in
-  if(!isLoggedIn())
-  {
-    header('Location: login.php');
-    die();
-  }**/
- 
   @$userId = $_GET["user"]; 
   echo "<div id='eventDetails'>";
   $logout = logoutDiv($dbh,$userId);
