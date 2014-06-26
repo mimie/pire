@@ -77,6 +77,9 @@ $(function() {
         //Billed Participants
         $participants = getCompanyBilledParticipants($dbh,$billing_no,$eventId);
 
+        //New Participants
+        $new_participants = getNewlyAddedBillings($dbh,$eventId,$orgId);
+
 ?>
 <div id='eventDetails'>
  <table border='1' width='100%'>
@@ -135,15 +138,15 @@ $(function() {
         	<th colspan='7'>LIST OF BILLED PARTICIPANTS</th> 
         </tr>
         <tr>
-		<th>Select Participant</th>
-		<th>Participant Id</th>
+		<th>Select Participant Id</th>
 		<th>Participant Name</th>
 		<th>Email</th>
 		<th>Fee Amount</th>
-                <th>Amount Change</th>
+                <th>Civicrm Amount</th>
                 <th>Status</th>
         </tr>
 <?php
+        //billed participants
 	foreach($participants as $key=>$field){
 		$participant_id = $field['participant_id'];
                 $name = $field['participant_name'];
@@ -156,8 +159,7 @@ $(function() {
   
 ?>
 	<tr>
-        	<td><input type='checkbox' <?=$disabled?>><?=$participant_id?></td>
-                <td><?=$participant_id?></td>
+        	<td><input type='checkbox' name='ids[]' value='<?=$participant_id?>' <?=$disabled?>><?=$participant_id?></td>
         	<td><?=$name?></td>
         	<td><?=$email?></td>
         	<td><font color='<?=$color?>'><?=$fee_amount?></font></td>
@@ -168,7 +170,38 @@ $(function() {
 <?php
 	}
 ?>
-</table>
+        <tr>
+        	<th colspan='6'>NEW PARTICIPANTS</th> 
+        </tr>
+	<tr>
+        	<th>Select Participant Id</th>
+        	<th>Participant Name</th>
+        	<th>Email</th>
+        	<th colspan='2'>Civicrm Amount</th>
+                <th>Status</th>
+        </tr>
+<?php
+	//new participants
+	foreach($new_participants as $key=>$field){
+		$participant_id = $field["participant_id"];
+        	$name = $field['name'];
+		$contact_id = $field['contact_id'];
+		$fee_amount = $field['fee_amount'];
+                $email = getContactEmail($dbh,$contact_id);
+                $status = $field['status'];
+?>
+	<tr>
+		<td><input type='checkbox' name='ids[]' value='<?=$participant_id?>'><?=$participant_id?></td>
+		<td><?=$name?></td>
+		<td><?=$email?></td>
+		<td colspan='2'><?=$fee_amount?></td>
+                <td><?=$status?></td>
+        </tr>
+<?php
+	}
+?>
+      
+</table></br></br>
 </div>
 </body>
 </html>
