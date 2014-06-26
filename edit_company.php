@@ -140,7 +140,7 @@ $(function() {
 		<th>Participant Name</th>
 		<th>Email</th>
 		<th>Fee Amount</th>
-                <th>Civicrm Amount</th>
+                <th>Amount Change</th>
                 <th>Status</th>
         </tr>
 <?php
@@ -148,11 +148,11 @@ $(function() {
 		$participant_id = $field['participant_id'];
                 $name = $field['participant_name'];
                 $email = $field['email'];
+                $status = $field['status'];
                 $fee_amount = number_format($field['fee_amount'],'2','.','');
-                $civicrm_amount = number_format($field['civicrm_amount'],'2','.','');
+                $civicrm_amount = $status == 'Cancelled' ? '0.00' : number_format($field['civicrm_amount'],'2','.','');
                 $color = $fee_amount != $civicrm_amount ? 'red' : '';
                 $disabled = $fee_amount == $civicrm_amount ? 'disabled' : '';
-                $status = $field['status'];
   
 ?>
 	<tr>
