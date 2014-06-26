@@ -604,7 +604,7 @@ x:publishsource="Excel">
   <td class=xl1142552>&nbsp;</td>
   <td class=xl1142552>&nbsp;</td>
   <td rowspan=2 class=xl1342552>BS No.</td>
-  <td rowspan=2 class=xl1352552><?=$bill['bir_no']?></td>
+  <td rowspan=2 class=xl1352552><?=$bir_no?></td>
   <td class=xl1142552>&nbsp;</td>
   <td class=xl655352552></td>
  </tr>
