@@ -132,7 +132,7 @@ $(function() {
 
 <table border='1' width='100%'>
         <tr>
-        	<th colspan='6'>LIST OF BILLED PARTICIPANTS</th> 
+        	<th colspan='7'>LIST OF BILLED PARTICIPANTS</th> 
         </tr>
         <tr>
 		<th>Select Participant</th>
@@ -141,6 +141,7 @@ $(function() {
 		<th>Email</th>
 		<th>Fee Amount</th>
                 <th>Civicrm Amount</th>
+                <th>Status</th>
         </tr>
 <?php
 	foreach($participants as $key=>$field){
@@ -151,6 +152,7 @@ $(function() {
                 $civicrm_amount = number_format($field['civicrm_amount'],'2','.','');
                 $color = $fee_amount != $civicrm_amount ? 'red' : '';
                 $disabled = $fee_amount == $civicrm_amount ? 'disabled' : '';
+                $status = $field['status'];
   
 ?>
 	<tr>
@@ -160,6 +162,7 @@ $(function() {
         	<td><?=$email?></td>
         	<td><font color='<?=$color?>'><?=$fee_amount?></font></td>
         	<td><font color='<?=$color?>'><?=$civicrm_amount?></font></td>
+                <td><?=$status?></td>
         </tr>
 
 <?php
