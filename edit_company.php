@@ -137,6 +137,8 @@ $(function() {
 	</tr>
 </table><br/><br/>
 
+<form action='' method='POST'>
+
 <table border='1' width='100%'>
         <tr>
         	<th colspan='7'>LIST OF BILLED PARTICIPANTS</th> 
@@ -151,8 +153,7 @@ $(function() {
         </tr>
 <?php
         //billed participants
-	foreach($participants as $key=>$field){
-		$participant_id = $field['participant_id'];
+	foreach($participants as $participant_id=>$field){
                 $name = $field['participant_name'];
                 $email = $field['email'];
                 $status = $field['status'];
@@ -188,8 +189,7 @@ $(function() {
         </tr>
 <?php
 	//new participants
-		foreach($new_participants as $key=>$field){
-			$participant_id = $field["participant_id"];
+		foreach($new_participants as $participant_id=>$field){
 			$name = $field['name'];
 			$contact_id = $field['contact_id'];
 			$fee_amount = $field['fee_amount'];
@@ -233,12 +233,48 @@ $(function() {
                         echo $options;
     		}
 
+                $update_action = 'regenerate';
                 echo "</td>";
                 echo "</tr>";
 	}
 ?>
-      
-</table></br></br>
+</table></form>
+</br></br>
 </div>
+
+<?php
+        $new_total = $total_amount;
+	if($_POST['update'] && $update_action == 'update amount'){
+		$participant_ids = $_POST['ids'];
+                foreach($participant_ids as $id){
+                        //existing participants
+			if(array_key_exists($id,$participants)){
+
+				$info = $participants[$id];
+                                $old_amount = $info['fee_amount'];
+                                $new_amount = $info['civicrm_amount'];
+                                $status = $info['status'];
+
+                                if($status == 'Cancelled'){
+					$new_total = $new_total - $old_amount;	
+
+				}elseif($old_amount < $new_amount){
+					$add_amount = $new_amount - $old_amount;
+                                        $new_total = $new_total + $add_amount;
+
+				 }elseif($old_amount > $new_amount){
+					$deduct_amount = $old_amount - $new_amount;
+                                        $new_total = $new_total - $deduct_amount;
+                                  }
+			}else{
+				$info = $new_participants[$id];
+                                $new_total = $new_total + $info['fee_amount'];
+                         }
+                }
+
+	}
+
+?>
+      
 </body>
 </html>
