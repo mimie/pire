@@ -141,7 +141,6 @@ function getCurrentCompanyBillByEvent($orgId,$eventId){
 				   WHERE bc.event_id = ?
 				   AND bc.org_contact_id = ?
 				   AND bn.notes_id = bc.notes_id
-				   AND bc.edit_bill = '1'
 				   AND is_cancelled = '0'
 				   AND is_void = '0'
 				   GROUP BY bc.org_contact_id, bc.event_id");
