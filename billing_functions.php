@@ -721,6 +721,8 @@ function participantsLink($billingNo,$eventId,$orgId){
  */
 function getCompanyBilledParticipants(PDO $dbh,$billingNo,$eventId){
 
+  try{
+
   $sql = $dbh->prepare("SELECT bd.participant_id, bd.participant_name, bd.email, bd.fee_amount, cp.fee_amount as civicrm_amount, cp.status_id, status.label as status
                         FROM billing_details bd, civicrm_participant cp, civicrm_participant_status_type status
                         WHERE bd.billing_no = :billingNo AND bd.event_id = :eventId
@@ -729,9 +731,13 @@ function getCompanyBilledParticipants(PDO $dbh,$billingNo,$eventId){
                        ");
 
   $sql->execute(array(':billingNo'=>$billingNo,':eventId'=>$eventId));
-  $billedParticipants = $sql->fetchAll(PDO::FETCH_ASSOC);
+  $billedParticipants = $sql->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_UNIQUE);
 
   return $billedParticipants;
+
+  }catch(PDOException $error){
+	echo $error->getMessage();
+   }
 
 }
 
