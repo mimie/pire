@@ -137,10 +137,10 @@ function getCurrentCompanyBillByEvent($orgId,$eventId){
 
 	try{
 		$stmt = civicrmDB("SELECT max(cbid), bc.billing_no, bc.bir_no, bc.total_amount, bc.subtotal,bc.vat, bc.bill_date, bc.edit_bill,bc.notes_id,bc.nonvatable_type,bn.notes
-				   FROM billing_company bc, billing_notes bn
+				   FROM billing_company bc 
+                                   LEFT JOIN billing_notes bn ON bn.notes_id = bc.notes_id
 				   WHERE bc.event_id = ?
 				   AND bc.org_contact_id = ?
-				   AND bn.notes_id = bc.notes_id
 				   AND is_cancelled = '0'
 				   AND is_void = '0'
 				   GROUP BY bc.org_contact_id, bc.event_id");
@@ -152,6 +152,45 @@ function getCurrentCompanyBillByEvent($orgId,$eventId){
 		return $result;
         }catch(PDOException $error){
          	$error->getMessage();
+         }
+}
+
+function updateIncludedNameByParticipantId($participant_id,$bir_no,$new_amount){
+
+	try{
+		$stmt = civicrmDB("UPDATE billing_details SET fee_amount=?,vat='0',subtotal='0',vat='0'
+                                   WHERE bir_no=?
+                                   AND participant_id=?
+                                   AND billing_type = 'Company'
+                                   ");
+                $stmt->bindValue(1,$new_amount,PDO::PARAM_INT);
+                $stmt->bindValue(2,$bir_no,PDO::PARAM_STR);
+                $stmt->bindValue(3,$participant_id,PDO::PARAM_INT);
+                $stmt->execute();
+
+        }catch(PDOException $error){
+		echo $error->getMessage();
+        }
+}
+
+function updateCompanyBillByBIRNo($bir_no,$is_vat,$new_amount,$nonvatable_type,$notes_id){
+
+        $subtotal = $is_vat == 1 ? $new_amount/1.12 : $new_amount;
+        $vat = $new_amount - $subtotal;
+
+	try{
+		$stmt = civicrmDB("UPDATE billing_company SET total_amount=?,subtotal=?,vat=?,nonvatable_type=?,notes_id=?
+                                   WHERE bir_no=?");
+                $stmt->bindValue(1,$new_amount,PDO::PARAM_INT);
+                $stmt->bindValue(2,$subtotal,PDO::PARAM_INT);
+                $stmt->bindValue(3,$vat,PDO::PARAM_INT);
+                $stmt->bindValue(4,$nonvatable_type,PDO::PARAM_STR);
+                $stmt->bindValue(5,$notes_id,PDO::PARAM_INT);
+                $stmt->bindValue(6,$bir_no,PDO::PARAM_STR);
+                $stmt->execute();
+        echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully updated company bill.</div>";
+        }catch(PDOException $error){
+		echo "<div id='error'><img src='images/error.png' style='float:left;' height='28' width='28'>".$error->getMessage()."</div>";
          }
 }
 

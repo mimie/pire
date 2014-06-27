@@ -37,6 +37,18 @@ $(function() {
       }
     });
 });
+$(function() {
+    $( "#error" ).dialog({
+      resizable: false,
+      width:500,
+      modal: true,
+      buttons: {
+        "OK": function() {
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+});
 </script>
 </head>
 <body>
@@ -68,7 +80,7 @@ $(function() {
 	//Current Bill Information
 	$currentbill = getCurrentCompanyBillByEvent($orgId,$eventId);
         $billing_no = $currentbill['billing_no'];
-        $bir_no = "BS-".$currentbill['bir_no'];
+        $bir_no = $currentbill['bir_no'];
         $total_amount = number_format($currentbill['total_amount'],'2','.','');
         $subtotal = number_format($currentbill['subtotal'],'2','.','');
         $vat = number_format($currentbill['vat'],'2','.','');
@@ -123,7 +135,7 @@ $(function() {
         	<th>Reference No.</th><td><b><i><?=$billing_no?></i></b></td>
 	</tr>
 	<tr>
-        	<th>BS No.</th><td><b><i><?=$bir_no?></i></b></td>
+        	<th>BS No.</th><td><b><i>BS-<?=$bir_no?></i></b></td>
 	</tr>
 	<tr>
         	<th>Billing Date</th><td><b><i><?=date("F j, Y",strtotime($billing_date))?></i></b></td>
@@ -235,7 +247,7 @@ $(function() {
 
                 echo "</SELECT><input type='submit' name='update' value='UPDATE BILLING'></td>";
                 echo "</tr>";
-                $update_action = 'update_amount';
+                $update_action = 'update amount';
 ?>
                    </td>
 		</tr>
@@ -270,8 +282,11 @@ $(function() {
 
 <?php
         $new_total = $total_amount;
-	if($_POST['update'] && $update_action == 'update amount'){
+	if(isset($_POST['update']) && $update_action == 'update amount'){
 		$participant_ids = $_POST['ids'];
+                echo "<pre>";
+                print_r($participant_ids);
+                echo "</pre>";
                 foreach($participant_ids as $id){
                         //existing participants
 			if(array_key_exists($id,$participants)){
@@ -282,7 +297,8 @@ $(function() {
                                 $status = $info['status'];
 
                                 if($status == 'Cancelled'){
-					$new_total = $new_total - $old_amount;	
+					$new_total = $new_total - $old_amount;
+                                        $new_amount = 0.00;	
 
 				}elseif($old_amount < $new_amount){
 					$add_amount = $new_amount - $old_amount;
@@ -292,12 +308,18 @@ $(function() {
 					$deduct_amount = $old_amount - $new_amount;
                                         $new_total = $new_total - $deduct_amount;
                                   }
+                            updateIncludedNameByParticipantId($id,$bir_no,$new_amount);
 			}elseif(array_key_exists($id,$new_participants)){
 				$info = $new_participants[$id];
                                 $new_total = $new_total + $info['fee_amount'];
+                            updateIncludedNameByParticipantId($id,$bir_no,$new_amount);
                          }
                 }
-
+         
+              $notes_id = $_POST['notes_id'];
+              $vatable = $_POST['vat'] == 'vatable' ? 1 : 0;
+              $nonvatable_type = $_POST['vat'] == 'vatable' ? '' : $_POST['vat'];
+              updateCompanyBillByBIRNo($bir_no,$vatable,$new_total,$nonvatable_type,$notes_id);
 	}
 
 ?>
