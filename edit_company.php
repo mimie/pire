@@ -47,6 +47,7 @@ $(function() {
 	include 'company_functions.php';
 	include 'billingview_functions.php';
 	include 'editbill_functions.php';
+	include 'notes/notes_functions.php';
 
 	$dbh = civicrmConnect();
 
@@ -81,6 +82,8 @@ $(function() {
         //New Participants
         $new_participants = getNewlyAddedBillings($dbh,$eventId,$orgId);
 
+        //notes
+	$notes_opt = getNotesByCategory("Company Event Billing");
 ?>
 <div id='eventDetails'>
  <table border='1' width='100%'>
@@ -170,6 +173,8 @@ $(function() {
 
 <?php
 	}
+
+        if($new_participants){
 ?>
         <tr>
         	<th colspan='6'>NEW PARTICIPANTS</th> 
@@ -183,7 +188,6 @@ $(function() {
         </tr>
 <?php
 	//new participants
-        if($new_participants){
 		foreach($new_participants as $key=>$field){
 			$participant_id = $field["participant_id"];
 			$name = $field['name'];
@@ -206,13 +210,32 @@ $(function() {
         //conditions for edit
 	if($is_edit == 1){
 ?>
-	<tr>
-		<td colspan='6' bgcolor='#2c4f85'><input type='submit' name='update' value='UPDATE BILLING'></td>
-	</tr>
-
-
+		<tr>
+	           <td colspan='6' bgcolor='#2c4f85'><input type='submit' name='update' value='UPDATE BILLING'></td>
+		</tr>
 <?php
-        }
+		$update_action = 'update amount';		
+        }else{
+?>
+		<tr>
+            	   <td colspan='13'>Account Receivable Type:
+                       <input type='radio' name='vat' value='vatable' checked='checked'>VATABLE
+                       <input type='radio' name='vat' value='vat_exempt'>VAT-EXEMPT
+                       <input type='radio' name='vat' value='vat_zero'>VAT-ZERO
+                       </br>BS. No. : <input type='text' id='bs_no' name='bs_no' placeholder='Enter BS No. start number...' required>
+                       <SELECT name='notes_id'><option value='select'>- Select optional billing notes -</option><option>-----------------</option>
+<?php		
+                $options = '';
+		foreach($notes_opt as $key=>$field){
+    			$id = $field["notes_id"];
+    			$notes = $field["notes"];
+    			$options = $options."<option value='$id'>$notes</option>";
+                        echo $options;
+    		}
+
+                echo "</td>";
+                echo "</tr>";
+	}
 ?>
       
 </table></br></br>
