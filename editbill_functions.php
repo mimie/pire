@@ -136,7 +136,7 @@ function getCompanyNameByOrgId($orgId){
 function getCurrentCompanyBillByEvent($orgId,$eventId){
 
 	try{
-		$stmt = civicrmDB("SELECT max(cbid), bc.billing_no, bc.bir_no, bc.total_amount, bc.subtotal,bc.vat, bc.bill_date, bc.edit_bill,bc.notes_id, bn.notes
+		$stmt = civicrmDB("SELECT max(cbid), bc.billing_no, bc.bir_no, bc.total_amount, bc.subtotal,bc.vat, bc.bill_date, bc.edit_bill,bc.notes_id,bc.nonvatable_type,bn.notes
 				   FROM billing_company bc, billing_notes bn
 				   WHERE bc.event_id = ?
 				   AND bc.org_contact_id = ?
