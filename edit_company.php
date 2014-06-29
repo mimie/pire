@@ -68,7 +68,7 @@ $(function() {
 	@$eventId = $_GET["eventId"];
 	@$orgId = $_GET["orgId"];
 
-        //Event Information
+  //Event Information
 	$eventDetails = getEventDetails($dbh,$eventId);
 	$eventName = $eventDetails["event_name"];
 	$eventStartDate = $eventDetails["start_date"];
@@ -76,31 +76,31 @@ $(function() {
 	$eventTypeName = getEventTypeName($dbh,$eventId);
 	$locationDetails = getEventLocation($dbh,$eventId);
 	$eventLocation = formatEventLocation($locationDetails);
-        $orgName = getCompanyNameByOrgId($orgId);
+  $orgName = getCompanyNameByOrgId($orgId);
 
 	//Current Bill Information
 	$currentbill = getCurrentCompanyBillByEvent($orgId,$eventId);
-        $billing_no = $currentbill['billing_no'];
-        $bir_no = $currentbill['bir_no'];
-        $total_amount = number_format($currentbill['total_amount'],'2','.','');
-        $subtotal = number_format($currentbill['subtotal'],'2','.','');
-        $vat = number_format($currentbill['vat'],'2','.','');
-        $billing_date = $currentbill['bill_date'];
-        $notes = $currentbill['notes'];
-        $notes_id = $currentbill['notes_id'];
-        $is_edit = $currentbill['edit_bill'];
-        $nonvatable_type = $currentbill['nonvatable_type'];
-        $is_vatable = $nonvatable_type == NULL ? "checked='checked'" : '';
-        $is_exempt = $nonvatable_type == 'vat_exempt' ? "checked='checked'" : '';
-        $is_zero = $nonvatable_type == 'vat_zero' ? "checked='checked'" : '';
+  $billing_no = $currentbill['billing_no'];
+  $bir_no = $currentbill['bir_no'];
+  $total_amount = number_format($currentbill['total_amount'],'2','.','');
+  $subtotal = number_format($currentbill['subtotal'],'2','.','');
+  $vat = number_format($currentbill['vat'],'2','.','');
+  $billing_date = $currentbill['bill_date'];
+  $notes = $currentbill['notes'];
+  $old_notes_id = $currentbill['notes_id'];
+  $is_edit = $currentbill['edit_bill'];
+  $nonvatable_type = $currentbill['nonvatable_type'];
+  $is_vatable = $nonvatable_type == NULL ? "checked='checked'" : '';
+  $is_exempt = $nonvatable_type == 'vat_exempt' ? "checked='checked'" : '';
+  $is_zero = $nonvatable_type == 'vat_zero' ? "checked='checked'" : '';
 
-        //Billed Participants
-        $participants = getCompanyBilledParticipants($dbh,$billing_no,$eventId);
+  //Billed Participants
+  $participants = getCompanyBilledParticipants($dbh,$billing_no,$eventId);
 
-        //New Participants
-        $new_participants = getNewlyAddedBillings($dbh,$eventId,$orgId);
+  //New Participants
+  $new_participants = getNewlyAddedBillings($dbh,$eventId,$orgId);
 
-        //notes
+  //notes
 	$notes_opt = getNotesByCategory("Company Event Billing");
 ?>
 <div id='eventDetails'>
@@ -187,7 +187,7 @@ $(function() {
         	<td><?=$email?></td>
         	<td><font color='<?=$color?>'><?=$fee_amount?></font></td>
         	<td><font color='<?=$color?>'><?=$civicrm_amount?></font></td>
-                <td><?=$status?></td>
+          <td><?=$status?></td>
         </tr>
 
 <?php
@@ -241,40 +241,41 @@ $(function() {
 		foreach($notes_opt as $key=>$field){
     			$id = $field["notes_id"];
     			$notes = $field["notes"];
-                        $selected = $notes_id == $id ? 'selected' : '';
+          $selected = $old_notes_id == $id ? 'selected' : '';
     			$options = $options."<option value='$id' $selected>$notes</option>";
-                        echo $options;
+          echo $options;
     		}
 
-                echo "</SELECT><input type='submit' name='update' value='UPDATE BILLING'></td>";
-                echo "</tr>";
-                $update_action = 'update amount';
+          echo "</SELECT><input type='submit' name='update' value='UPDATE BILLING'></td>";
+          echo "</tr>";
+          $update_action = 'update amount';
 ?>
-                   </td>
-		</tr>
+
 <?php
+        echo "<tr>";
         }else{
 ?>
-		<tr>
-            	   <td colspan='13'>Account Receivable Type:
-                       <input type='radio' name='vat' value='vatable' checked='<?=$is_vat?>'>VATABLE
-                       <input type='radio' name='vat' value='vat_exempt' checked='<?=$is_exempt?>'>VAT-EXEMPT
-                       <input type='radio' name='vat' value='vat_zero' checked='<?=$is_zero?>'>VAT-ZERO
-                       </br>BS. No. : <input type='text' id='bs_no' name='bs_no' placeholder='Enter BS No. start number...' required>
-                       <SELECT name='notes_id'><option value='select'>- Select optional billing notes -</option><option>-----------------</option>
+          <td colspan='13'>Account Receivable Type:
+                <input type='radio' name='vat' value='vatable' checked='<?=$is_vat?>'>VATABLE
+                <input type='radio' name='vat' value='vat_exempt' checked='<?=$is_exempt?>'>VAT-EXEMPT
+                <input type='radio' name='vat' value='vat_zero' checked='<?=$is_zero?>'>VAT-ZERO
+                </br>BS. No. : <input type='text' id='bs_no' name='bs_no' placeholder='Enter BS No. start number...' required>
+                <SELECT name='notes_id'><option value='select'>- Select optional billing notes -</option><option>-----------------</option>
+        </tr>
+
 <?php
-                $options = '';
+    $options = '';
 		foreach($notes_opt as $key=>$field){
     			$id = $field["notes_id"];
     			$notes = $field["notes"];
-                        $selected = $notes_id == $id ? 'selected' : '';
+          $selected = $old_notes_id == $id ? 'selected' : '';
     			$options = $options."<option value='$id' $selected>$notes</option>";
-                        echo $options;
-    		}
+          echo $options;
+    }
 
-                echo "</SELECT><input type='submit' name='update' value='GENERATE BILL'></td>";
-                echo "</tr>";
-                $update_action = 'regenerate';
+    echo "</SELECT><input type='submit' name='update' value='GENERATE BILL'></td>";
+    echo "</tr>";
+    $update_action = 'regenerate';
 	}
 ?>
 </table></form>
@@ -285,7 +286,10 @@ $(function() {
   $new_total = $total_amount;
 
 	if(isset($_POST['update']) && $update_action == 'update amount'){
-		$participant_ids = isset($_POST['ids']);
+		$participant_ids = $_POST['ids'];
+    echo "<pre>";
+    print_r($participant_ids);
+    echo "</pre>";
     $notes_id = $_POST['notes_id'];
     $vatable = $_POST['vat'] == 'vatable' ? 1 : 0;
     $nonvatable_type = $_POST['vat'] == 'vatable' ? '' : $_POST['vat'];
@@ -313,6 +317,10 @@ $(function() {
                         }
 
                     updateIncludedNameByParticipantId($id,$bir_no,$new_amount);
+                    $history = array('billing_no'=>$billing_no,
+                                   'action'=>"Update participant amount to ".$new_amount."of participant no. ".$id,
+                                    'bir_no'=>$bir_no);
+                    insertBillingHistory($history);
 
             			}elseif(array_key_exists($id,$new_participants)){
             				    $info = $new_participants[$id];
@@ -325,14 +333,35 @@ $(function() {
                                          'billing_type' => 'Company',
                                          'billing_id' => $billing_no
                                         );
+                        var_dump($details);
                         generateIndividualBill($id,$details);
+                        $history = array('billing_no'=>$billing_no,
+                                       'action'=>"Added participant no. ".$id,
+                                        'bir_no'=>$bir_no);
+                        insertBillingHistory($history);
 
                     }
               }
               updateCompanyBillByBIRNo($bir_no,$vatable,$new_total,$nonvatable_type,$notes_id);
-  }
 
+              if($notes_id != $old_notes_id){
 
+                $action = "Updated notes";
+
+              }elseif($currentbill['nonvatable_type'] != $nonvatable_type){
+
+                $action = "Updated account receivable type";
+
+              }elseif($total_amount != $new_total){
+
+                $action = "Total amount is updated to ".$new_total;
+
+              }
+              $history = array('billing_no'=>$billing_no,
+                             'action'=>$action,
+                              'bir_no'=>$bir_no);
+              insertBillingHistory($history);
+   }
 ?>
 
 </body>
