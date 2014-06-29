@@ -193,11 +193,6 @@ p.issuedby{
 <p class="totalamount"><?=number_format($bill['fee_amount'],2)?></p>
 <p class="issuedby"><?=$generator?></p>
 
-<?php
-include('myFunctions.php');
-?>
-
-
 </body>
 
 </html>
@@ -209,4 +204,3 @@ include('myFunctions.php');
 
 }
 </script>
-
