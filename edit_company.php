@@ -22,7 +22,7 @@ $(function() {
                 'page': 1,
                 'links': 'buttons'
         });
-//        $("table").tablesorter( {sortList: [[0,0], [1,0]]} ); 
+//        $("table").tablesorter( {sortList: [[0,0], [1,0]]} );
 });
 $(function() {
     $( "#confirmation" ).dialog({
@@ -60,10 +60,11 @@ $(function() {
 	include 'billingview_functions.php';
 	include 'editbill_functions.php';
 	include 'notes/notes_functions.php';
+  include 'bir_functions.php';
 
 	$dbh = civicrmConnect();
 
-	@$uid = $_GET["uid"]; 
+	@$uid = $_GET["uid"];
 	@$eventId = $_GET["eventId"];
 	@$orgId = $_GET["orgId"];
 
@@ -105,7 +106,7 @@ $(function() {
 <div id='eventDetails'>
  <table border='1' width='100%'>
         <tr>
-        	<th colspan='2'>EVENT INFORMATION</th> 
+        	<th colspan='2'>EVENT INFORMATION</th>
         </tr>
 	<tr>
         	<th>Event Name</th><td><b><i><?=$eventName?></i></b></td>
@@ -129,7 +130,7 @@ $(function() {
 
 <table border='1' width='100%'>
         <tr>
-        	<th colspan='2'>BILLING INFORMATION</th> 
+        	<th colspan='2'>BILLING INFORMATION</th>
         </tr>
 	<tr>
         	<th>Reference No.</th><td><b><i><?=$billing_no?></i></b></td>
@@ -158,7 +159,7 @@ $(function() {
 
 <table border='1' width='100%'>
         <tr>
-        	<th colspan='7'>LIST OF BILLED PARTICIPANTS</th> 
+        	<th colspan='7'>LIST OF BILLED PARTICIPANTS</th>
         </tr>
         <tr>
 		<th>Select Participant Id</th>
@@ -178,7 +179,7 @@ $(function() {
                 $civicrm_amount = $status == 'Cancelled' ? '0.00' : number_format($field['civicrm_amount'],'2','.','');
                 $color = $fee_amount != $civicrm_amount ? 'red' : '';
                 $disabled = $fee_amount == $civicrm_amount ? 'disabled' : '';
-  
+
 ?>
 	<tr>
         	<td><input type='checkbox' name='ids[]' value='<?=$participant_id?>' <?=$disabled?>><?=$participant_id?></td>
@@ -195,7 +196,7 @@ $(function() {
         if($new_participants){
 ?>
         <tr>
-        	<th colspan='6'>NEW PARTICIPANTS</th> 
+        	<th colspan='6'>NEW PARTICIPANTS</th>
         </tr>
 	<tr>
         	<th>Select Participant Id</th>
@@ -227,7 +228,7 @@ $(function() {
         //conditions for edit
 	if($is_edit == 1){
 
-         
+
 ?>
 		<tr>
 	           <td colspan='6'>Account Receivable Type:
@@ -235,7 +236,7 @@ $(function() {
 	             <input type='radio' name='vat' value='vat_exempt' <?=$is_exempt?>>VAT-EXEMPT
 	             <input type='radio' name='vat' value='vat_zero' <?=$is_zero?>>VAT-ZERO</br>
                      <SELECT name='notes_id'><option value='select'>- Select optional billing notes -</option><option>-----------------</option>
-<?php		
+<?php
                 $options = '';
 		foreach($notes_opt as $key=>$field){
     			$id = $field["notes_id"];
@@ -261,7 +262,7 @@ $(function() {
                        <input type='radio' name='vat' value='vat_zero' checked='<?=$is_zero?>'>VAT-ZERO
                        </br>BS. No. : <input type='text' id='bs_no' name='bs_no' placeholder='Enter BS No. start number...' required>
                        <SELECT name='notes_id'><option value='select'>- Select optional billing notes -</option><option>-----------------</option>
-<?php		
+<?php
                 $options = '';
 		foreach($notes_opt as $key=>$field){
     			$id = $field["notes_id"];
@@ -281,48 +282,58 @@ $(function() {
 </div>
 
 <?php
-        $new_total = $total_amount;
+  $new_total = $total_amount;
+
 	if(isset($_POST['update']) && $update_action == 'update amount'){
-		$participant_ids = $_POST['ids'];
-                echo "<pre>";
-                print_r($participant_ids);
-                echo "</pre>";
-                foreach($participant_ids as $id){
-                        //existing participants
-			if(array_key_exists($id,$participants)){
+		$participant_ids = isset($_POST['ids']);
+    $notes_id = $_POST['notes_id'];
+    $vatable = $_POST['vat'] == 'vatable' ? 1 : 0;
+    $nonvatable_type = $_POST['vat'] == 'vatable' ? '' : $_POST['vat'];
 
-				$info = $participants[$id];
-                                $old_amount = $info['fee_amount'];
-                                $new_amount = $info['civicrm_amount'];
-                                $status = $info['status'];
+              foreach($participant_ids as $id){
+                  //existing participants
+            			if(array_key_exists($id,$participants)){
 
-                                if($status == 'Cancelled'){
-					$new_total = $new_total - $old_amount;
-                                        $new_amount = 0.00;	
+            				  $info = $participants[$id];
+                      $old_amount = $info['fee_amount'];
+                      $new_amount = $info['civicrm_amount'];
+                      $status = $info['status'];
 
-				}elseif($old_amount < $new_amount){
-					$add_amount = $new_amount - $old_amount;
-                                        $new_total = $new_total + $add_amount;
+                      if($status == 'Cancelled'){
+            					     $new_total = $new_total - $old_amount;
+                           $new_amount = 0.00;
 
-				 }elseif($old_amount > $new_amount){
-					$deduct_amount = $old_amount - $new_amount;
-                                        $new_total = $new_total - $deduct_amount;
-                                  }
-                            updateIncludedNameByParticipantId($id,$bir_no,$new_amount);
-			}elseif(array_key_exists($id,$new_participants)){
-				$info = $new_participants[$id];
-                                $new_total = $new_total + $info['fee_amount'];
-                            updateIncludedNameByParticipantId($id,$bir_no,$new_amount);
-                         }
-                }
-         
-              $notes_id = $_POST['notes_id'];
-              $vatable = $_POST['vat'] == 'vatable' ? 1 : 0;
-              $nonvatable_type = $_POST['vat'] == 'vatable' ? '' : $_POST['vat'];
+            				  }elseif($old_amount < $new_amount){
+            				      $add_amount = $new_amount - $old_amount;
+                          $new_total = $new_total + $add_amount;
+
+            				   }elseif($old_amount > $new_amount){
+            					    $deduct_amount = $old_amount - $new_amount;
+                          $new_total = $new_total - $deduct_amount;
+                        }
+
+                    updateIncludedNameByParticipantId($id,$bir_no,$new_amount);
+
+            			}elseif(array_key_exists($id,$new_participants)){
+            				    $info = $new_participants[$id];
+                        $new_total = $new_total + $info['fee_amount'];
+
+                        $details = array('bs_no' => $bir_no,
+                                         'vatable' => $vatable,
+                                         'notes_id' => $notes_id,
+                                         'nonvatable_type' => $nonvatable_type,
+                                         'billing_type' => 'Company',
+                                         'billing_id' => $billing_no
+                                        );
+                        generateIndividualBill($id,$details);
+
+                    }
+              }
               updateCompanyBillByBIRNo($bir_no,$vatable,$new_total,$nonvatable_type,$notes_id);
-	}
+  }
+
 
 ?>
-      
+
 </body>
 </html>
