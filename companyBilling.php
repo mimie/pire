@@ -248,7 +248,6 @@ function validator(){
 			 . "<td></td>"
 			 . "<td></td>"
 			 . "<td></td>"
-			 . "<td></td>"
 			 . "</tr>"; 
       	}
         $totals[$orgId] = number_format($total_per_org,2, '.', '');;
