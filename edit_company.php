@@ -67,6 +67,7 @@ $(function() {
 	@$uid = $_GET["uid"];
 	@$eventId = $_GET["eventId"];
 	@$orgId = $_GET["orgId"];
+        @$bir_no = $_GET['bir_no'];
 
   	//Event Information
         $eventDetails = getEventDetails($dbh,$eventId);
@@ -79,9 +80,8 @@ $(function() {
   	$orgName = getCompanyNameByOrgId($orgId);
 
 	//Current Bill Information
-	$currentbill = getCurrentCompanyBillByEvent($orgId,$eventId);
+	$currentbill = getCurrentCompanyBillByEvent($orgId,$eventId,$bir_no);
   	$billing_no = $currentbill['billing_no'];
-  	$bir_no = $currentbill['bir_no'];
 	$total_amount = number_format($currentbill['total_amount'],'2','.','');
 	$subtotal = number_format($currentbill['subtotal'],'2','.','');
 	$vat = number_format($currentbill['vat'],'2','.','');
@@ -404,6 +404,7 @@ $(function() {
                          'action'=>"Regenerated bill from bir no. ".$bir_no,
                          'bir_no'=>$new_birno);
         insertBillingHistory($history);
+        cancelCompanyBill($bir_no);
         echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully regenerated company bill.</div>";
     }
 ?>
