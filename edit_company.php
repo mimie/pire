@@ -101,7 +101,7 @@ $(function() {
   $new_participants = getNewlyAddedBillings($dbh,$eventId,$orgId);
 
   //notes
-	$notes_opt = getNotesByCategory("Company Event Billing");
+  $notes_opt = getNotesByCategory("Company Event Billing");
 ?>
 <div id='eventDetails'>
  <table border='1' width='100%'>
@@ -256,24 +256,22 @@ $(function() {
         }else{
 ?>
           <td colspan='13'>Account Receivable Type:
-                <input type='radio' name='vat' value='vatable' checked='<?=$is_vat?>'>VATABLE
-                <input type='radio' name='vat' value='vat_exempt' checked='<?=$is_exempt?>'>VAT-EXEMPT
-                <input type='radio' name='vat' value='vat_zero' checked='<?=$is_zero?>'>VAT-ZERO
+                <input type='radio' name='vat' value='vatable' <?=$is_vatable?>>VATABLE
+                <input type='radio' name='vat' value='vat_exempt' <?=$is_exempt?>>VAT-EXEMPT
+                <input type='radio' name='vat' value='vat_zero' <?=$is_zero?>>VAT-ZERO
                 </br>BS. No. : <input type='text' id='bs_no' name='bs_no' placeholder='Enter BS No. start number...' required>
                 <SELECT name='notes_id'><option value='select'>- Select optional billing notes -</option><option>-----------------</option>
-        </tr>
-
 <?php
-    $options = '';
+                $options = '';
 		foreach($notes_opt as $key=>$field){
     			$id = $field["notes_id"];
     			$notes = $field["notes"];
-          $selected = $old_notes_id == $id ? 'selected' : '';
+                        $selected = $old_notes_id == $id ? 'selected' : '';
     			$options = $options."<option value='$id' $selected>$notes</option>";
-          echo $options;
-    }
+                echo $options;
+               }
 
-    echo "</SELECT><input type='submit' name='update' value='GENERATE BILL'></td>";
+    echo "</SELECT><input type='submit' name='update' value='REGENERATE BILL'><input type='submit' name='new_bill' value='ADD NEW BILL'></td>";
     echo "</tr>";
     $update_action = 'regenerate';
 	}
@@ -354,6 +352,11 @@ $(function() {
                                'action'=>$action,
                                'bir_no'=>$bir_no);
               insertBillingHistory($history);
+    }
+
+    elseif(isset($_POST['update']) && $update_action = 'regenerate'){
+	$participants = getCompanyParticipantsByOrgId($eventId,$orgId);
+      
     }
 ?>
 
