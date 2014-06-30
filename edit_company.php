@@ -343,21 +343,16 @@ $(function() {
               updateCompanyBillByBIRNo($bir_no,$vatable,$new_total,$nonvatable_type,$notes_id);
 
               if($notes_id != $old_notes_id){
-
-                $action = "Updated notes";
-
+              		$action = "Updated notes";
               }elseif($currentbill['nonvatable_type'] != $nonvatable_type){
-
-                $action = "Updated account receivable type";
-
+                	$action = "Updated account receivable type";
               }elseif($total_amount != $new_total){
-
-                $action = "Total amount is updated to ".$new_total;
-
+              		$action = "Total amount is updated to ".$new_total;
               }
+
               $history = array('billing_no'=>$billing_no,
-                             'action'=>$action,
-                              'bir_no'=>$bir_no);
+                               'action'=>$action,
+                               'bir_no'=>$bir_no);
               insertBillingHistory($history);
     }
 ?>
