@@ -407,7 +407,7 @@ function generateCompanyBill(array $bill){
 		$stmt = civicrmDB("INSERT INTO billing_company
 				  (event_id,event_type,event_name,org_contact_id,organization_name,bill_address,billing_no,total_amount,subtotal,vat,bir_no,notes_id,generator_uid,nonvatable_type)
 				  VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-		$stmt->bindValue(1,$bill['event_id'],PDO::PARAM_IN);
+		$stmt->bindValue(1,$bill['event_id'],PDO::PARAM_INT);
 		$stmt->bindValue(2,$bill['event_type'],PDO::PARAM_STR);
 		$stmt->bindValue(3,$bill['event_name'],PDO::PARAM_STR);
 		$stmt->bindValue(4,$bill['org_id'],PDO::PARAM_INT);
