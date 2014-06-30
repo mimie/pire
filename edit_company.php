@@ -355,8 +355,52 @@ $(function() {
     }
 
     elseif(isset($_POST['update']) && $update_action = 'regenerate'){
+        $new_total = 0.00;
 	$participants = getCompanyParticipantsByOrgId($eventId,$orgId);
-      
+        $notes_id = $_POST['notes_id'];
+        $vatable = $_POST['vat'] == 'vatable' ? 1 : 0;
+        $nonvatable_type = $_POST['vat'] == 'vatable' ? '' : $_POST['vat'];
+
+        $new_birno = formatBSNo($_POST['bs_no']);
+        $max_stmt = civicrmDB("SELECT MAX(cbid) as max_id FROM billing_company");
+        $max_stmt->execute();
+        $billing_id = formatBillingNo($max_stmt->fetchColumn(0) + 1);
+        $current_year = date("y");
+        $new_billingno = $eventTypeName."-".$current_year."-".$billing_id;
+
+        foreach($participants as $participant_id=>$field){
+		$details = array('bs_no' => $new_birno,
+				 'vatable' => $vatable,
+				 'notes_id' => $notes_id,
+				 'nonvatable_type' => $nonvatable_type,
+				 'billing_type' => 'Company',
+				 'billing_id' => $new_billingno
+				  );
+		generateIndividualBill($participant_id,$details);
+		$info = getInfoByParticipantId($participant_id);
+		$new_total = $new_total + $info['fee_amount'];
+        }
+
+	$subtotal = $vatable == 1 ? $new_total/1.12 : $new_total;
+	$vat = $new_total - $subtotal;
+	$subtotal = number_format($subtotal, 2, '.', '');
+	$vat = number_format($vat, 2, '.', '');
+	$billing_information = array('event_id' => $eventId,
+				     'event_type' => $eventTypeName,
+				     'event_name' => $eventName,
+				     'org_id' => $orgId,
+				     'org_name' => $orgName,
+				     'address' => getCompleteCompanyAddress($dbh,$orgId),
+				     'billing_no' => $new_billingno,
+				     'total_amount' => $new_total,
+				     'subtotal' => $subtotal,
+				     'vat' => $vat,
+				     'bir_no' => $new_birno,
+				     'notes_id' => $note_id,
+				     'generator_uid' => $uid,
+				     'nonvatable_type' => $nonvatable_type);
+        generateCompanyBill($billing_information);
+        echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully regenerated company bill.</div>";
     }
 ?>
 
