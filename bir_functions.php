@@ -182,9 +182,9 @@ function getInfoByBillingNo($billing_no){
  */
 function generateIndividualBill($participant_id,array $details){
 
-		$generator_uid = $_GET["uid"];
-  	$participant_id = intval($participant_id);
-		$info = getInfoByParticipantId($participant_id);
+    $generator_uid = $_GET["uid"];
+    $participant_id = intval($participant_id);
+    $info = getInfoByParticipantId($participant_id);
     $event_type = $info["event_type"];
     $orgId = $info["org_contact_id"];
 
@@ -194,6 +194,7 @@ function generateIndividualBill($participant_id,array $details){
     $nonvatable_type = $details['nonvatable_type'];
     $billing_type = $details['billing_type'];
     $billing_id = $details['billing_id'];
+
 
 		try{
 
