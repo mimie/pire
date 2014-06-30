@@ -60,7 +60,7 @@ $(function() {
 	include 'billingview_functions.php';
 	include 'editbill_functions.php';
 	include 'notes/notes_functions.php';
-  include 'bir_functions.php';
+        include 'bir_functions.php';
 
 	$dbh = civicrmConnect();
 
@@ -68,31 +68,31 @@ $(function() {
 	@$eventId = $_GET["eventId"];
 	@$orgId = $_GET["orgId"];
 
-  //Event Information
-	$eventDetails = getEventDetails($dbh,$eventId);
+  	//Event Information
+        $eventDetails = getEventDetails($dbh,$eventId);
 	$eventName = $eventDetails["event_name"];
 	$eventStartDate = $eventDetails["start_date"];
 	$eventEndDate = $eventDetails["end_date"];
 	$eventTypeName = getEventTypeName($dbh,$eventId);
 	$locationDetails = getEventLocation($dbh,$eventId);
 	$eventLocation = formatEventLocation($locationDetails);
-  $orgName = getCompanyNameByOrgId($orgId);
+  	$orgName = getCompanyNameByOrgId($orgId);
 
 	//Current Bill Information
 	$currentbill = getCurrentCompanyBillByEvent($orgId,$eventId);
-  $billing_no = $currentbill['billing_no'];
-  $bir_no = $currentbill['bir_no'];
-  $total_amount = number_format($currentbill['total_amount'],'2','.','');
-  $subtotal = number_format($currentbill['subtotal'],'2','.','');
-  $vat = number_format($currentbill['vat'],'2','.','');
-  $billing_date = $currentbill['bill_date'];
-  $notes = $currentbill['notes'];
-  $old_notes_id = $currentbill['notes_id'];
-  $is_edit = $currentbill['edit_bill'];
-  $nonvatable_type = $currentbill['nonvatable_type'];
-  $is_vatable = $nonvatable_type == NULL ? "checked='checked'" : '';
-  $is_exempt = $nonvatable_type == 'vat_exempt' ? "checked='checked'" : '';
-  $is_zero = $nonvatable_type == 'vat_zero' ? "checked='checked'" : '';
+  	$billing_no = $currentbill['billing_no'];
+  	$bir_no = $currentbill['bir_no'];
+	$total_amount = number_format($currentbill['total_amount'],'2','.','');
+	$subtotal = number_format($currentbill['subtotal'],'2','.','');
+	$vat = number_format($currentbill['vat'],'2','.','');
+	$billing_date = $currentbill['bill_date'];
+	$notes = $currentbill['notes'];
+	$old_notes_id = $currentbill['notes_id'];
+	$is_edit = $currentbill['edit_bill'];
+	$nonvatable_type = $currentbill['nonvatable_type'];
+	$is_vatable = $nonvatable_type == NULL ? "checked='checked'" : '';
+	$is_exempt = $nonvatable_type == 'vat_exempt' ? "checked='checked'" : '';
+	$is_zero = $nonvatable_type == 'vat_zero' ? "checked='checked'" : '';
 
   //Billed Participants
   $participants = getCompanyBilledParticipants($dbh,$billing_no,$eventId);
@@ -287,16 +287,14 @@ $(function() {
 
 	if(isset($_POST['update']) && $update_action == 'update amount'){
 		$participant_ids = $_POST['ids'];
-    echo "<pre>";
-    print_r($participant_ids);
-    echo "</pre>";
-    $notes_id = $_POST['notes_id'];
-    $vatable = $_POST['vat'] == 'vatable' ? 1 : 0;
-    $nonvatable_type = $_POST['vat'] == 'vatable' ? '' : $_POST['vat'];
+    		$notes_id = $_POST['notes_id'];
+    		$vatable = $_POST['vat'] == 'vatable' ? 1 : 0;
+    		$nonvatable_type = $_POST['vat'] == 'vatable' ? '' : $_POST['vat'];
 
               foreach($participant_ids as $id){
                   //existing participants
-            			if(array_key_exists($id,$participants)){
+            			
+                  if(array_key_exists($id,$participants)){
 
             				  $info = $participants[$id];
                       $old_amount = $info['fee_amount'];
@@ -304,43 +302,44 @@ $(function() {
                       $status = $info['status'];
 
                       if($status == 'Cancelled'){
-            					     $new_total = $new_total - $old_amount;
+                           $new_total = $new_total - $old_amount;
                            $new_amount = 0.00;
-
-            				  }elseif($old_amount < $new_amount){
-            				      $add_amount = $new_amount - $old_amount;
-                          $new_total = $new_total + $add_amount;
-
-            				   }elseif($old_amount > $new_amount){
-            					    $deduct_amount = $old_amount - $new_amount;
-                          $new_total = $new_total - $deduct_amount;
-                        }
+            	      }
+                      elseif($old_amount < $new_amount){
+            		   $add_amount = $new_amount - $old_amount;
+                           $new_total = $new_total + $add_amount;
+            	      }elseif($old_amount > $new_amount){
+            		   $deduct_amount = $old_amount - $new_amount;
+                           $new_total = $new_total - $deduct_amount;
+                      }
 
                     updateIncludedNameByParticipantId($id,$bir_no,$new_amount);
                     $history = array('billing_no'=>$billing_no,
-                                   'action'=>"Update participant amount to ".$new_amount."of participant no. ".$id,
-                                    'bir_no'=>$bir_no);
+                                     'action'=>"Update participant amount to ".$new_amount."of participant no. ".$id,
+                                     'bir_no'=>$bir_no);
                     insertBillingHistory($history);
 
-            			}elseif(array_key_exists($id,$new_participants)){
-            				    $info = $new_participants[$id];
-                        $new_total = $new_total + $info['fee_amount'];
+                  }
+                  elseif(array_key_exists($id,$new_participants)){
+            	        $info = $new_participants[$id];
+                  	$new_total = $new_total + $info['fee_amount'];
 
-                        $details = array('bs_no' => $bir_no,
+                   	$details = array('bs_no' => $bir_no,
                                          'vatable' => $vatable,
                                          'notes_id' => $notes_id,
                                          'nonvatable_type' => $nonvatable_type,
                                          'billing_type' => 'Company',
                                          'billing_id' => $billing_no
                                         );
-                        generateIndividualBill($id,$details);
-                        $history = array('billing_no'=>$billing_no,
-                                       'action'=>"Added participant no. ".$id,
-                                        'bir_no'=>$bir_no);
-                        insertBillingHistory($history);
+                         generateIndividualBill($id,$details);
+                         $history = array('billing_no'=>$billing_no,
+                                          'action'=>"Added participant no. ".$id,
+                                          'bir_no'=>$bir_no);
+                         insertBillingHistory($history);
 
-                    }
+                  }
               }
+
               updateCompanyBillByBIRNo($bir_no,$vatable,$new_total,$nonvatable_type,$notes_id);
 
               if($notes_id != $old_notes_id){
@@ -360,7 +359,7 @@ $(function() {
                              'action'=>$action,
                               'bir_no'=>$bir_no);
               insertBillingHistory($history);
-   }
+    }
 ?>
 
 </body>
