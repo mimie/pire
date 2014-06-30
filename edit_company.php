@@ -279,6 +279,11 @@ $(function() {
 ?>
 </table></form>
 </br></br>
+<?php
+	if($is_cancelled == 1){
+		echo "<img src='images/cancelled.jpg' align='center'>";
+        }
+?>
 </div>
 
 <?php
