@@ -203,32 +203,37 @@ function validator(){
         $total_fee = number_format($total_fee,2);
 
         if($bill_info){
-                //bill_total = generated bill totatl
-                //total_fee = actual civicrm amount
-                $bill_total = number_format($bill_info['total_amount'],2);
-                $color = $bill_total != $total_fee || $bill_total == 0.00 || $total_fee == 0.00 ? "red" : "";
-                $notes_id = $bill_info['notes_id'];
-                $notes = $notes_collection[$notes_id];
-                $billing_no = $bill_info['billing_no'];
 
-                $bill_date = date("F j, Y",strtotime($bill_info['bill_date']));
-                $img_link = "<a href='edit_company.php?eventId=$eventId&orgId=$orgId&uid=$uid' onclick=\"window.open(this.href,'edit_company.php?eventId=$eventId&orgId=$orgId&uid=$uid','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=900,height=900');return false;\"><img src='images/edit_bill.png'></a>";
+            foreach($bill_info as $key=>$field){
+
+                //bill_total = generated bill total
+                //total_fee = actual civicrm amount
+                $bill_total = number_format($field['total_amount'],2);
+                $color = $bill_total != $total_fee || $bill_total == 0.00 || $total_fee == 0.00 ? "red" : "";
+                $notes_id = $field['notes_id'];
+                $notes = $notes_collection[$notes_id];
+                $billing_no = $field['billing_no'];
+                $bir_no = $field['bir_no'];
+
+                $bill_date = date("F j, Y",strtotime($field['bill_date']));
+                $img_link = "<a href='edit_company.php?eventId=$eventId&orgId=$orgId&bir_no=$bir_no&uid=$uid' onclick=\"window.open(this.href,'edit_company.php?eventId=$eventId&orgId=$orgId&uid=$uid','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=900,height=900');return false;\"><img src='images/edit_bill.png'></a>";
                 
 		$display = $display."<tr>"
 			 . "<td><input type='checkbox' name='ids[]' value='$orgId' disabled>".$orgName."</td>"
 			 . "<td><font color='$color'>$bill_total</font></td>"
 			 . "<td><font color='$color'>$total_fee</font></td>"
-			 . "<td><font color='$color'>".number_format($bill_info['subtotal'],2)."</font></td>"
-			 . "<td><font color='$color'>".number_format($bill_info['vat'],2)."</font></td>"
+			 . "<td><font color='$color'>".number_format($field['subtotal'],2)."</font></td>"
+			 . "<td><font color='$color'>".number_format($field['vat'],2)."</font></td>"
 			 . "<td><a href='#'><img src='images/preview.png' width='30' height='30'></a>"
                          . "<a href='#'><img src='printer-icon.png' width='30' height='30'></a></td>"
-			 . "<td>".number_format($bill_info['amount_paid'],2)."</td>"
+			 . "<td>".number_format($field['amount_paid'],2)."</td>"
 			 . "<td>$billing_no</td>"
-			 . "<td>".$bill_info['bir_no']."</td>"
+			 . "<td>".$bir_no."</td>"
 			 . "<td>".$bill_date."</td>"
 			 . "<td>".$notes."</td>"
 			 . "<td>".$img_link."</td>"
 			 . "</tr>"; 
+           }
         }else{
 
                 $disabled = $total_fee == 0.00 || $orgName == NULL ? 'disabled' : '';
