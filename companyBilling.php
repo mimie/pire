@@ -266,11 +266,11 @@ function validator(){
         $vatable = $_POST['vat'] == 'vatable' ? 1 : 0;
         $nonvatable_type = $_POST['vat'] == 'vatable' ? '' : $_POST['vat'];
         $bs_no = $_POST['bs_no'];
-        $bir_no = formatBSNo($bs_no);
         
         foreach($orgIds as $id){
                 $participants = $comp_participants[$id];
            
+                $bir_no = formatBSNo($bs_no);
 		$max_stmt = civicrmDB("SELECT MAX(cbid) as max_id FROM billing_company");
 		$max_stmt->execute();
 		$billing_id = formatBillingNo($max_stmt->fetchColumn(0) + 1);
