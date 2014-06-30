@@ -95,6 +95,18 @@ function getIndividualBilledParticipantsByEventId($eventId){
        return $participants;
 }
 
+function checkIndividualBillGenerated($participant_id,$eventId){
+
+	$stmt = civicrmDB("SELECT * FROM billing_details WHERE participant_id=? AND event_id=?");
+        $stmt->bindValue(1,$participant_id,PDO::PARAM_INT);
+        $stmt->bindValue(2,$eventId,PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+
+}
+
 function getBIRDetails($billing_no){
 
 	$stmt = civicrmDB("SELECT cc.sort_name,ce.title as event_name,ce.start_date,ce.end_date,bill.bir_no,bill.fee_amount,
