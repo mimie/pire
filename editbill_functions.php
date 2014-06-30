@@ -136,7 +136,7 @@ function getCompanyNameByOrgId($orgId){
 function getCurrentCompanyBillByEvent($orgId,$eventId,$bir_no){
 
 	try{
-		$stmt = civicrmDB("SELECT cbid, bc.billing_no, bc.bir_no, bc.total_amount, bc.subtotal,bc.vat, bc.bill_date, bc.edit_bill,bc.notes_id,bc.nonvatable_type,bn.notes
+		$stmt = civicrmDB("SELECT cbid, bc.billing_no, bc.bir_no, bc.total_amount, bc.subtotal,bc.vat, bc.bill_date, bc.edit_bill,bc.is_cancelled,bc.notes_id,bc.nonvatable_type,bn.notes
 				   FROM billing_company bc 
                                    LEFT JOIN billing_notes bn ON bn.notes_id = bc.notes_id
 				   WHERE bc.event_id = ?
@@ -196,11 +196,11 @@ function updateCompanyBillByBIRNo($bir_no,$is_vat,$new_amount,$nonvatable_type,$
 function cancelCompanyBill($bir_no){
 
 	try{
-		$stmt = civicrmDB("UPDATE billing_company SET is_cancelled = '1' WHERE bir_no=?");
+		$stmt = civicrmDB("UPDATE billing_company SET is_cancelled = '1',edit_bill = '0' WHERE bir_no=?");
                 $stmt->bindValue(1,$bir_no,PDO::PARAM_STR);
                 $stmt->execute();
 
-                $cancel_stmt = civicrmDB("UPDATE billing_details SET is_cancelled = '1' WHERE bir_no=?");
+                $cancel_stmt = civicrmDB("UPDATE billing_details SET is_cancelled = '1',edit_bill = '0' WHERE bir_no=?");
                 $cancel_stmt->bindValue(1,$bir_no,PDO::PARAM_STR);
                 $cancel_stmt->execute();
 	}
