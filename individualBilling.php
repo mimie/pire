@@ -151,7 +151,7 @@ function validator(){
    $display = "<table id='billings' style='width:100%;'>"
             . "<thead>"
             . "<tr>"
-            . "<td colspan='14'><a href='#' onclick='reloadPage()' id='reload'><img src='images/reload.png'></a><br>Account Receivable Type : "
+            . "<td colspan='15'><a href='#' onclick='reloadPage()' id='reload'><img src='images/reload.png'></a><br>Account Receivable Type : "
             . "<input type='radio' name='vat' value='vatable' checked='checked'>VATABLE "
             . "<input type='radio' name='vat' value='vat-exempt'>VAT-EXEMPT "
             . "<input type='radio' name='vat' value='vat-zero'>VAT-ZERO "
