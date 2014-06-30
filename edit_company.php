@@ -400,6 +400,10 @@ $(function() {
 				     'generator_uid' => $uid,
 				     'nonvatable_type' => $nonvatable_type);
         generateCompanyBill($billing_information);
+        $history = array('billing_no'=>$new_billingno,
+                         'action'=>"Regenerated bill from bir no. ".$bir_no,
+                         'bir_no'=>$new_birno);
+        insertBillingHistory($history);
         echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully regenerated company bill.</div>";
     }
 ?>
