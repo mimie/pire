@@ -190,63 +190,80 @@ function validator(){
              . "<tbody>";
    
    $participants = getIndividualParticipantsByEventId($eventId);
-   $billedParticipants = getIndividualBilledParticipantsByEventId($eventId);
 
    foreach($participants as $key => $field){
-        $bill = array();
         $participant_id = $field['participant_id']; 
         $status_id = $field['status_id'];
         $status = $field['status'];
         $orgname = $field["organization_name"];
         $civicrm_amount = $field['fee_amount'];
 
-        $bill = $billedParticipants[$participant_id];
-        $is_post = $bill['post_bill'];
-        $is_generated = $bill['generated_bill'];
-        $subtotal = $bill['subtotal'];
-        $vat = $bill['vat'];
-        $billing_no = $bill['billing_no'];
-        $paid = $bill['amount_paid'];
-        $bir_no = $bill['bir_no'];
-        $date = $bill['bill_date'];
-        $notes_id = $bill['notes_id'];
-        $bill_amount = $bill['fee_amount'];
-        $color = $civicrm_amount != $bill_amount ? 'red' : '';
-        $bill_amount = number_format($bill_amount,2,'.','');
+        $billing_details = checkIndividualBillGenerated($participant_id,$eventId);
+        $count = count($billing_details);
 
-        //update amount if status is cancelled 
-        $civicrm_amount = $status_id == 4 ? 0 : $civicrm_amount;
+        if($count > 0){
+            foreach($billing_details as $key=>$bill){
+                $participant_id = $bill['participant_id'];
+		$is_post = $bill['post_bill'];
+		$is_generated = $bill['generated_bill'];
+		$subtotal = $bill['subtotal'];
+		$vat = $bill['vat'];
+		$billing_no = $bill['billing_no'];
+		$paid = $bill['amount_paid'];
+		$bir_no = $bill['bir_no'];
+		$date = $bill['bill_date'];
+		$notes_id = $bill['notes_id'];
+		$bill_amount = $bill['fee_amount'];
+		$color = $civicrm_amount != $bill_amount ? 'red' : '';
+		$bill_amount = number_format($bill_amount,2,'.','');
+		//update amount if status is cancelled 
+		$civicrm_amount = $status_id == 4 ? number_format(0,2,'.','') : $civicrm_amount;
 
-        $checkbox = (array_key_exists($participant_id,$billedParticipants) && $is_post == 1) || (array_key_exists($participant_id,$billedParticipants) && $is_generated == 1) || $civicrm_amount == 0 ? "" : "class='checkbox'";
-        $disabled = (array_key_exists($participant_id,$billedParticipants) && $is_post == 1) || (array_key_exists($participant_id,$billedParticipants) && $is_generated == 1) || $civicrm_amount == 0 ? 'disabled' : '';
+                if($status_id == 4){
+		    updateAmountCancelledBill($billing_no,$participant_id);
+                }
 
-        //status = 4 = Cancelled - Strike the column if the participant status is cancelled.
-        $strike = $status_id == 4 || $status_id == 7 || $status_id == 15 ? '<strike>' : '';
-        $endstrike = $status_id == 4 || $status_id == 7 || $status_id == 15 ? '</strike>' : '';
+		$checkbox = $is_post == 1 || $is_generated == 1|| $civicrm_amount == 0 ? "" : "class='checkbox'";
+		$disabled = $is_post == 1 || $is_generated == 1 || $civicrm_amount == 0 ? 'disabled' : '';
 
-	$display = $display."<tr>"
-                 . "<td>$strike<input type='checkbox' $checkbox $disabled name='ids[]' value='".$participant_id."'>".$field['sort_name']."$endstrike</td>"
-                 . "<td>$strike".$status."$endstrike</td>"
-                 . "<td>$strike".$orgname."$endstrike</td>";
-
-        if(array_key_exists($participant_id,$billedParticipants)){
-
-            if($status_id == 4){
-		updateAmountCancelledBill($billing_no,$participant_id);
-            }
-            $display = $display. "<td><font color='$color'>".$bill_amount."</font></td>"
-                     . "<td><font color='$color'>$strike".$civicrm_amount."$endstrike</font></td>"
-                     . "<td>$strike".$subtotal."$endstrike</td>"
-                     . "<td>$strike".$vat."$endstrike</td>"
-                     . "<td><a href='BIRForm/BIRForm.php?event_id=$eventId&billing_no=".$billing_no."&uid=$uid' target='_blank'><img src='images/preview.png' width='30' height='30'></a>"
-                     . "<a href='BIRForm/print_bir.php?event_id=$eventId&billing_no=".$billing_no."&uid=$uid' target='_blank'><img src='printer-icon.png' width='30' height='30'></a></td>"
-                     . "<td>$strike".number_format($paid,2)."$endstrike</td>"
-                     . "<td>$strike".$billing_no."$endstrike</td>"
-                     . "<td>$strike".$bir_no."$endstrike</td>"
-                     . "<td>$strike".date("F j, Y",strtotime($date))."$endstrike</td>";
-            $note = $notes_collection[$notes_id];
-            $img_link = "<a href='edit_individual.php?billing_no=$billing_no&uid=$uid' onclick=\"window.open(this.href,'edit_individual.php?billing_no=$billing_no','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=900,height=900');return false;\"><img src='images/edit_bill.png'></a>";
-         }else{
+		//status = 4 = Cancelled - Strike the column if the participant status is cancelled.
+		$strike = $status_id == 4 || $status_id == 7 || $status_id == 15 ? '<strike>' : '';
+		$endstrike = $status_id == 4 || $status_id == 7 || $status_id == 15 ? '</strike>' : '';
+	        $display = $display."<tr>"
+		         . "<td>$strike<input type='checkbox' $checkbox $disabled name='ids[]' value='".$participant_id."'>".$field['sort_name']."$endstrike</td>"
+		         . "<td>$strike".$status."$endstrike</td>"
+		         . "<td>$strike".$orgname."$endstrike</td>";
+                 $display = $display. "<td><font color='$color'>$strike".$bill_amount."$endstrike</font></td>"
+                          . "<td><font color='$color'>$strike".$civicrm_amount."$endstrike</font></td>"
+                          . "<td>$strike".$subtotal."$endstrike</td>"
+                          . "<td>$strike".$vat."$endstrike</td>"
+                          . "<td><a href='BIRForm/BIRForm.php?event_id=$eventId&billing_no=".$billing_no."&uid=$uid' target='_blank'><img src='images/preview.png' width='30' height='30'></a>"
+                          . "<a href='BIRForm/print_bir.php?event_id=$eventId&billing_no=".$billing_no."&uid=$uid' target='_blank'><img src='printer-icon.png' width='30' height='30'></a></td>"
+                          . "<td>$strike".number_format($paid,2)."$endstrike</td>"
+                          . "<td>$strike".$billing_no."$endstrike</td>"
+                          . "<td>$strike".$bir_no."$endstrike</td>"
+                          . "<td>$strike".date("F j, Y",strtotime($date))."$endstrike</td>";
+                  $note = $notes_collection[$notes_id];
+                  $img_link = "<a href='edit_individual.php?billing_no=$billing_no&uid=$uid' onclick=\"window.open(this.href,'edit_individual.php?billing_no=$billing_no','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=900,height=900');return false;\"><img src='images/edit_bill.png'></a>";
+                 $display = $display. "<td>$strike".$field['street_address']." ".$field['city_address']."$endstrike</td>"
+                     . "<td>$strike".$note."$endstrike</td>"
+                     . "<td>$img_link</td>"
+                     . "</tr>";	
+           }
+       }
+       
+      elseif($count == 0){
+           
+           $strike = $status_id == 4 ? '<strike>' : '';
+           $endstrike = $status_id == 4 ? '</strike>' : '';
+           $checkbox = $status_id == 4 || $civicrm_amount == 0 ? "" : "class='checkbox'";
+           $disabled = $status_id == 4 || $civicrm_amount == 0 ? 'disabled' : '';
+           $civicrm_amount = $status_id == 4 ? number_format(0,2,'.','') : $civicrm_amount;
+	   $display = $display."<tr>"
+		    . "<td>$strike<input type='checkbox' $checkbox $disabled name='ids[]' value='".$participant_id."'>".$field['sort_name']."$endstrike</td>"
+		    . "<td>$strike".$status."$endstrike</td>"
+		    . "<td>$strike".$orgname."$endstrike</td>";
+           $note = "";
            $img_link = "";
            $display = $display. "<td></td>"
                  . "<td>$civicrm_amount</td>"
@@ -257,13 +274,12 @@ function validator(){
                  . "<td></td>"
                  . "<td></td>"
                  . "<td></td>";
-            $note = "";
-          }
+            $display = $display. "<td>$strike".$field['street_address']." ".$field['city_address']."$endstrike</td>"
+                     . "<td>$note</td>"
+                     . "<td>$img_link</td>"
+                     . "</tr>";	
+      }
 
-           $display = $display. "<td>$strike".$field['street_address']." ".$field['city_address']."$endstrike</td>"
-                    . "<td>$note</td>"
-                    . "<td>$img_link</td>"
-                    . "</tr>";	
    }//end of foreach
    $display = $display."</tbody></table>";
    echo $display;
