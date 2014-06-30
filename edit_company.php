@@ -254,7 +254,7 @@ $(function() {
 
 <?php
         echo "<tr>";
-        }elseif($is_edit = 0 && $is_cancelled = 0){
+        }elseif($is_edit == 0 && $is_cancelled == 0){
 ?>
           <td colspan='13'>Account Receivable Type:
                 <input type='radio' name='vat' value='vatable' <?=$is_vatable?>>VATABLE
@@ -272,7 +272,7 @@ $(function() {
                 echo $options;
                }
 
-    echo "</SELECT><input type='submit' name='update' value='REGENERATE BILL'><input type='submit' name='new_bill' value='ADD NEW BILL'></td>";
+    echo "</SELECT><input type='submit' name='update' value='REGENERATE BILL'><input type='submit' name='update' value='ADD NEW BILL'></td>";
     echo "</tr>";
     $update_action = 'regenerate';
 	}
@@ -362,7 +362,7 @@ $(function() {
 
     elseif(isset($_POST['update']) && $update_action = 'regenerate'){
         $new_total = 0.00;
-	$participants = getCompanyParticipantsByOrgId($eventId,$orgId);
+	$participants = $_POST['update'] == 'REGENERATE BILL' ? getCompanyParticipantsByOrgId($eventId,$orgId) : $_POST['ids'];
         $notes_id = $_POST['notes_id'];
         $vatable = $_POST['vat'] == 'vatable' ? 1 : 0;
         $nonvatable_type = $_POST['vat'] == 'vatable' ? '' : $_POST['vat'];
@@ -374,18 +374,37 @@ $(function() {
         $current_year = date("y");
         $new_billingno = $eventTypeName."-".$current_year."-".$billing_id;
 
-        foreach($participants as $participant_id=>$field){
-		$details = array('bs_no' => $new_birno,
-				 'vatable' => $vatable,
-				 'notes_id' => $notes_id,
-				 'nonvatable_type' => $nonvatable_type,
-				 'billing_type' => 'Company',
-				 'billing_id' => $new_billingno
-				  );
-		generateIndividualBill($participant_id,$details);
-		$info = getInfoByParticipantId($participant_id);
-		$new_total = $new_total + $info['fee_amount'];
-        }
+        if($_POST['update'] == 'REGENERATE BILL'){
+
+		foreach($participants as $participant_id=>$field){
+			$details = array('bs_no' => $new_birno,
+					 'vatable' => $vatable,
+					 'notes_id' => $notes_id,
+					 'nonvatable_type' => $nonvatable_type,
+					 'billing_type' => 'Company',
+					 'billing_id' => $new_billingno
+					  );
+			generateIndividualBill($participant_id,$details);
+			$info = getInfoByParticipantId($participant_id);
+			$new_total = $new_total + $info['fee_amount'];
+		}
+         }
+
+         elseif($_POST['update'] == 'ADD NEW BILL'){
+
+		foreach($participants as $participant_id){
+			$details = array('bs_no' => $new_birno,
+					 'vatable' => $vatable,
+					 'notes_id' => $notes_id,
+					 'nonvatable_type' => $nonvatable_type,
+					 'billing_type' => 'Company',
+					 'billing_id' => $new_billingno
+					  );
+			generateIndividualBill($participant_id,$details);
+			$info = getInfoByParticipantId($participant_id);
+			$new_total = $new_total + $info['fee_amount'];
+		}
+          }
 
 	$subtotal = $vatable == 1 ? $new_total/1.12 : $new_total;
 	$vat = $new_total - $subtotal;
@@ -406,13 +425,18 @@ $(function() {
 				     'generator_uid' => $uid,
 				     'nonvatable_type' => $nonvatable_type);
         generateCompanyBill($billing_information);
+        $action = $_POST['update'] == 'REGENERATE BILL' ? "Regenerated bill from bir no. ".$bir_no : "Generate new bill";
         $history = array('billing_no'=>$new_billingno,
-                         'action'=>"Regenerated bill from bir no. ".$bir_no,
+                         'action'=>$action,
                          'bir_no'=>$new_birno);
         insertBillingHistory($history);
-        cancelCompanyBill($bir_no);
+
+        if($_POST['update'] == 'REGENERATE BILL'){
+            cancelCompanyBill($bir_no);
+         }
         echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully regenerated company bill.</div>";
     }
+
 ?>
 
 </body>
