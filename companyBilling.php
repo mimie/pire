@@ -185,7 +185,6 @@ function validator(){
             . "<th>Billing Date</th>"
             . "<th>Notes</th>"
             . "<th>Edit</th>"
-            . "<th>Billed Participants</th>"
             . "</tr>"
             . "</thead><tbody>";
 
@@ -229,7 +228,6 @@ function validator(){
 			 . "<td>".$bill_date."</td>"
 			 . "<td>".$notes."</td>"
 			 . "<td>".$img_link."</td>"
-			 . "<td>".participantsLink($billing_no,$eventId,$orgId)."</td>"
 			 . "</tr>"; 
         }else{
 
