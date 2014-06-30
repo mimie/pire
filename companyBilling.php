@@ -303,7 +303,7 @@ function validator(){
                                          'notes_id' => $note_id,
                                          'nonvatable_type' => $nonvatable_type,
                                          'billing_type' => 'Company',
-                                         'billing_id' => $billing_id
+                                         'billing_id' => $billing_no
                                           );
                 	generateIndividualBill($participant_id,$details);
                 }
