@@ -194,4 +194,20 @@ function updateCompanyBillByBIRNo($bir_no,$is_vat,$new_amount,$nonvatable_type,$
          }
 }
 
+function cancelCompanyBill($bir_no){
+
+	try{
+		$stmt = civicrmDB("UPDATE billing_company SET is_cancelled = '1' WHERE bir_no=?");
+                $stmt->bindValue(1,$bir_no,PDO::PARAM_STR);
+                $stmt->execute();
+
+                $cancel_stmt = civicrmDB("UPDATE billing_details SET is_cancelled = '1' WHERE bir_no=?");
+                $cancel_stmt->bindValue(1,$bir_no,PDO::PARAM_STR);
+                $cancel_stmt->execute();
+	}
+        catch(PDOException $error){
+		echo $error->getMessage();
+        }
+}
+
 ?>
