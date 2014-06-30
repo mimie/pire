@@ -333,7 +333,6 @@ $(function() {
                                          'billing_type' => 'Company',
                                          'billing_id' => $billing_no
                                         );
-                        var_dump($details);
                         generateIndividualBill($id,$details);
                         $history = array('billing_no'=>$billing_no,
                                        'action'=>"Added participant no. ".$id,
