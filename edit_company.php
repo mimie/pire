@@ -88,6 +88,7 @@ $(function() {
 	$billing_date = $currentbill['bill_date'];
 	$notes = $currentbill['notes'];
 	$old_notes_id = $currentbill['notes_id'];
+        $is_cancelled = $currentbill['is_cancelled'];
 	$is_edit = $currentbill['edit_bill'];
 	$nonvatable_type = $currentbill['nonvatable_type'];
 	$is_vatable = $nonvatable_type == NULL ? "checked='checked'" : '';
@@ -253,7 +254,7 @@ $(function() {
 
 <?php
         echo "<tr>";
-        }else{
+        }elseif($is_edit = 0 && $is_cancelled = 0){
 ?>
           <td colspan='13'>Account Receivable Type:
                 <input type='radio' name='vat' value='vatable' <?=$is_vatable?>>VATABLE
