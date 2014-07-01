@@ -59,6 +59,7 @@ $(function() {
         $eventId = $bill['event_id'];
         $notes_id = $bill['notes_id'];
         $allowedEdit_info = $isEdit == '0' || ($isEdit == 1 && $civicrm_amount == $current_amount) ? 'Billing information cannot be updated.' : 'Update Billing Information';
+        $is_cancelled = $bill['is_cancelled'];
 ?>
       <div align='center'>
 	<table>
@@ -130,7 +131,7 @@ $(function() {
                echo "<input type='submit' name='update' value='UPDATE BILL'></td></tr>";
                $update_action = 'update amount';
            
-        }elseif($status !='Cancelled' && $current_amount!=$civicrm_amount && $isEdit == 0){
+        }elseif($status !='Cancelled' && $current_amount!=$civicrm_amount && $isEdit == 0 && $is_cancelled == 0){
 	       echo "<tr>";
                echo "<td>Generate Bill</td>";
                echo "<td>Account Receivable Type:";
@@ -141,8 +142,6 @@ $(function() {
                echo "<input type='submit' name='update' value='GENERATE BILL'></td></tr>";
                $update_action = 'regenerate';
           }
-         
-
 ?>
 </form>
 	</table>

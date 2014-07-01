@@ -107,7 +107,7 @@ function checkIndividualBillGenerated($participant_id,$eventId){
 
 }
 
-function getBIRDetails($billing_no){
+function getBIRDetails($billing_no,$bir_no){
 
 	$stmt = civicrmDB("SELECT cc.sort_name,ce.title as event_name,ce.start_date,ce.end_date,bill.bir_no,bill.fee_amount,
                            bill.subtotal,bill.vat,bill.bill_date,bn.notes_id,bd. street_address__company__3 as street_address,
@@ -115,10 +115,12 @@ function getBIRDetails($billing_no){
                            FROM billing_details bill,billing_notes bn,civicrm_event ce,civicrm_contact cc
                            LEFT JOIN civicrm_value_business_data_1 bd ON bd.entity_id = cc.id
                            WHERE bill.billing_no = ?
+                           AND bill.bir_no = ?
                            AND bill.event_id = ce.id
                            AND bill.contact_id = cc.id
                            ");
 	$stmt->bindValue(1,$billing_no,PDO::PARAM_STR);
+        $stmt->bindValue(2,$bir_no,PDO::PARAM_STR);
         $stmt->execute();
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -163,7 +165,7 @@ function getInfoByBillingNo($billing_no,$bir_no){
 
 	$stmt = civicrmDB("SELECT cp.contact_id, cp.id as participant_id,cp.event_id, cov.label as event_type,ce.title as event_name, cc.sort_name,cc.employer_id,
                            em.email,cc.organization_name, bd.street_address__company__3 as street_address, bd.city__company__5 as city_address,
-                           cc.employer_id as org_contact_id, bill.bir_no,bill.edit_bill,bill.notes_id,bill.fee_amount as current_amount,cp.fee_amount as civicrm_amount, cps.label as participant_status
+                           cc.employer_id as org_contact_id, bill.bir_no,bill.edit_bill,bill.notes_id,bill.fee_amount as current_amount,cp.fee_amount as civicrm_amount, bill.is_cancelled,cps.label as participant_status
                            FROM civicrm_participant cp, billing_details bill,civicrm_event ce, civicrm_option_value cov, civicrm_participant_status_type cps,civicrm_contact cc
                            LEFT JOIN civicrm_value_business_data_1 bd ON bd.entity_id = cc.id
                            LEFT JOIN civicrm_email em ON em.contact_id = bd.entity_id AND is_primary = '1'
