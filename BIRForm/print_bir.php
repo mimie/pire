@@ -161,7 +161,8 @@ p.issuedby{
   @$uid = $_GET["uid"];
   $generator = getGeneratorName($uid);
   @$billing_no = $_GET["billing_no"];
-  $bill = getBIRDetails($billing_no);
+  @$bir_no = $_GET["bir_no"];
+  $bill = getBIRDetails($billing_no,$bir_no);
   $address = $bill['street_address']." ".$bill['city_address'];
   $location = formatEventLocation(getEventLocation($dbh,$eventId));
 
@@ -171,7 +172,7 @@ p.issuedby{
 <p class="myaddress"><?=$address?></p>
 <p class="mytin">Tin</p>
 <p class="lbltxn">Txn. No:</p>
-<p class="myrefno"><?=$billing_no?>/BS-<?=$bill['bir_no']?></p>
+<p class="myrefno"><?=$billing_no?>/BS-<?=$bir_no?></p>
 <p class="mybilldate"><?=date("F j, Y",strtotime($bill['bill_date']))?></p>
 <p class="myduedate"><?=date("F j, Y",strtotime($bill['start_date']))?></p>
 <p class="myparticulars">
