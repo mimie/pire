@@ -135,21 +135,44 @@ function getCompanyNameByOrgId($orgId){
 
 function getCurrentCompanyBillByEvent($orgId,$eventId,$bir_no,$billing_no){
 
-        $add_query = $bir_no == NULL ? 'AND bc.billing_no = ?' : 'AND bc.bir_no = ?';
-        $param = $bir_no == NULL ? $billing_no : $bir_no;
-
 	try{
-		$stmt = civicrmDB("SELECT cbid, bc.billing_no, bc.bir_no, bc.total_amount, bc.subtotal,bc.vat, bc.bill_date, bc.edit_bill,bc.is_cancelled,bc.notes_id,bc.nonvatable_type,bn.notes
-				   FROM billing_company bc 
+
+	      if($bir_no == NULL){
+		$stmt = civicrmDB("SELECT cbid, cc.organization_name,bc.billing_no, bc.bir_no, bc.total_amount, bc.subtotal,bc.vat, bc.bill_date, bc.edit_bill,bc.is_cancelled,bc.notes_id,bc.nonvatable_type,bn.notes
+				   FROM civicrm_contact cc, billing_company bc
                                    LEFT JOIN billing_notes bn ON bn.notes_id = bc.notes_id
 				   WHERE bc.event_id = ?
 				   AND bc.org_contact_id = ?
-                                   $add_query");
+                                   AND bc.billing_no = ?
+                                   AND bc.org_contact_id = cc.id
+                                   AND cc.contact_type = 'Organization'
+                                   AND cc.is_deleted = 0
+                                  ");
 		$stmt->bindValue(1,$eventId,PDO::PARAM_INT);
 		$stmt->bindValue(2,$orgId,PDO::PARAM_INT);
-                $stmt->bindValue(3,$param,PDO::PARAM_STR);
+                $stmt->bindValue(3,$billing_no,PDO::PARAM_STR);
 		$stmt->execute();
 		$result = $stmt->fetch(PDO::FETCH_ASSOC);
+              }
+
+              else{
+
+		$stmt = civicrmDB("SELECT cbid, cc.organization_name,bc.billing_no, bc.bir_no, bc.total_amount, bc.subtotal,bc.vat, bc.bill_date, bc.edit_bill,bc.is_cancelled,bc.notes_id,bc.nonvatable_type,bn.notes
+				   FROM civicrm_contact cc,billing_company bc
+                                   LEFT JOIN billing_notes bn ON bn.notes_id = bc.notes_id
+				   WHERE bc.event_id = ?
+				   AND bc.org_contact_id = ?
+                                   AND bc.bir_no = ?
+                                   AND bc.org_contact_id = cc.id
+                                   AND cc.contact_type = 'Organization'
+                                   AND cc.is_deleted = 0
+                                  ");
+		$stmt->bindValue(1,$eventId,PDO::PARAM_INT);
+		$stmt->bindValue(2,$orgId,PDO::PARAM_INT);
+                $stmt->bindValue(3,$bir_no,PDO::PARAM_STR);
+		$stmt->execute();
+		$result = $stmt->fetch(PDO::FETCH_ASSOC);
+            }
 
 		return $result;
         }catch(PDOException $error){
