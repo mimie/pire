@@ -24,12 +24,15 @@ href="IIAP%20Billing%20Form%20(rev2_2014%20ATP)_files/filelist.xml">
 
   $dbh = civicrmConnect();
   @$eventId = $_GET["event_id"];
-
+  @$bir_no = $_GET["bir_no"];
+  @$billing_no = $_GET["billing_no"];
   @$uid = $_GET["uid"];
   $generator = getGeneratorName($uid);
-  @$bir_no = $_GET["bir_no"];
-  $bill = getBillDetailsByBIRNo($bir_no);
-  $address = $bill['street_address']." ".$bill['city_address'];
+
+  $currentbill = getCurrentCompanyBillByEvent($orgId,$eventId,$bir_no,$billing_no);
+  echo "<pre>";
+  print_r($currentbill);
+  echo "</pre>";
 
 ?>
 
