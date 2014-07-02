@@ -138,7 +138,7 @@ function getCurrentCompanyBillByEvent($orgId,$eventId,$bir_no,$billing_no){
 	try{
 
 	      if($bir_no == NULL){
-		$stmt = civicrmDB("SELECT cbid, cc.organization_name,ce.start_date,bc.billing_no, bc.bir_no, bc.total_amount, bc.subtotal,bc.vat, bc.bill_date, bc.edit_bill,bc.is_cancelled,bc.notes_id,bc.nonvatable_type,bn.notes
+		$stmt = civicrmDB("SELECT cbid, cc.organization_name,ce.start_date,ce.end_date,ce.title as event_name,bc.billing_no, bc.bir_no, bc.total_amount, bc.subtotal,bc.vat, bc.bill_date, bc.edit_bill,bc.is_cancelled,bc.notes_id,bc.nonvatable_type,bn.notes
 				   FROM civicrm_contact cc, civicrm_event ce,billing_company bc
                                    LEFT JOIN billing_notes bn ON bn.notes_id = bc.notes_id
 				   WHERE bc.event_id = ?
@@ -158,7 +158,7 @@ function getCurrentCompanyBillByEvent($orgId,$eventId,$bir_no,$billing_no){
 
               else{
 
-		$stmt = civicrmDB("SELECT cbid, cc.organization_name,ce.start_date,bc.billing_no, bc.bir_no, bc.total_amount, bc.subtotal,bc.vat, bc.bill_date, bc.edit_bill,bc.is_cancelled,bc.notes_id,bc.nonvatable_type,bn.notes
+		$stmt = civicrmDB("SELECT cbid, cc.organization_name,ce.end_date,ce.start_date,ce.title as event_name,bc.billing_no, bc.bir_no, bc.total_amount, bc.subtotal,bc.vat, bc.bill_date, bc.edit_bill,bc.is_cancelled,bc.notes_id,bc.nonvatable_type,bn.notes
 				   FROM civicrm_contact cc,civicrm_event ce,billing_company bc
                                    LEFT JOIN billing_notes bn ON bn.notes_id = bc.notes_id
 				   WHERE bc.event_id = ?
