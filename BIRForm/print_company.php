@@ -248,33 +248,42 @@ x:publishsource="Excel">
   <td class=xl655352552></td>
   <td colspan=8 class=xl1582552 style='border-right:.5pt solid black'>
   <?php
-      $infobill = getEventBillDetailsByBIRNo($bir_no);
-      $amounts = array();
-      foreach($infobill as $key=>$field){
-           echo $field['event_name']."</br>";
-           if($field['end_date']){
-           	echo "On ".date("F j,Y",strtotime($field['start_date']))." to ".date("F j, Y",strtotime($field['end_date']))."</br>"; 
-           }else{
-		echo "On ".date("F j,Y",strtotime($field['start_date']))."</br>";
-	    }
+       echo $bill["event_name"]."<br/>";
+       if($bill["start_date"] != $bill["end_date"]){
+		$date_range = "On ".date("F j,Y",strtotime($bill["start_date"]))."to ".date("F j,Y",strtotime($bill["end_date"]));
+       }
 
-           $location = formatEventLocation(getEventLocation($dbh,$eventId));
-  
-           if($location){
-              echo "At ".$location."<br>";
-              $amounts[] = "</br></br>".number_format($field['fee_amount'],2);
-           }else{
-              $amounts[] = "</br>".number_format($field['fee_amount'],2);
-            }
-           echo "</br></br>";      
-      }
+       else{
+ 		$date_range = "On ".date("F j,Y",strtotime($bill["start_date"]));
+       }
+       $location = formatEventLocation(getEventLocation($dbh,$eventId));
+       $location = $location == NULL ? '' : "At ".$location;
+?>
+       <?=$date_range?></br>
+       <?=$location?></br></br>
+       <div style="width: 100%; overflow: hidden;">
+          <div style="width: 30%; float: left;"></div>
+          <div style="margin-left: 5%;">Billing of the ff. participants:</div>
+       </div></br>
+       <div style="width: 100%; overflow: hidden;">
+          <div style="width: 30%; float: left;"></div>
+          <div style="margin-left: 10%;">firstname</br>Second</br></div>
+       </div>
+<?php
+       
   ?>
   </td>
   <td class=xl1582552 style='border-right:.5pt solid black'>
+  </br></br></br></br>
+    <div style="width: 100%; overflow: hidden;">
+          <div style="width: 30%; float: left;"></div>
+          <div style="margin-left: 20%;">first amount</br>second amount</div>
+       </div>
+
   <?php
-      foreach($amounts as $display_amount){
+     /* foreach($amounts as $display_amount){
         echo $display_amount."</br></br></br>";
-      }
+      }*/
   ?>
   </td>
   <td class=xl655352552></td>
