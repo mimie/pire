@@ -179,8 +179,8 @@ function validator(){
              . "<th>12% VAT</th>"
              . "<th>Print Bill</th>"
              . "<th>Amount Paid</th>"
-             . "<th>Billing Reference</th>"
-             . "<th>BS No.</th>"
+             . "<th>Registration No.</th>"
+             . "<th>ATP</th>"
              . "<th>Billing Date</th>"
              . "<th>Billing Address</th>"
              . "<th>Notes</th>"
@@ -241,7 +241,7 @@ function validator(){
                           . "<a href='BIRForm/print_bir.php?event_id=$eventId&billing_no=".$billing_no."&bir_no=$bir_no&uid=$uid' target='_blank'><img src='printer-icon.png' width='30' height='30'></a></td>"
                           . "<td>$strike".number_format($paid,2)."$endstrike</td>"
                           . "<td>$strike".$billing_no."$endstrike</td>"
-                          . "<td>$strike".$bir_no."$endstrike</td>"
+                          . "<td>BS-".$strike."".$bir_no."$endstrike</td>"
                           . "<td>$strike".date("F j, Y",strtotime($date))."$endstrike</td>";
                   $note = $notes_collection[$notes_id];
                   $img_link = "<a href='edit_individual.php?billing_no=$billing_no&bir_no=$bir_no&uid=$uid' onclick=\"window.open(this.href,'edit_individual.php?billing_no=$billing_no&bir_no=$bir_no&uid=$uid','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=900,height=900');return false;\"><img src='images/edit_bill.png'></a>";
