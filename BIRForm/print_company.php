@@ -37,7 +37,8 @@ href="IIAP%20Billing%20Form%20(rev2_2014%20ATP)_files/filelist.xml">
   $address = getCompanyAddress($dbh,$orgId);
   $complete_address = $address["street_address"]." ".$adress["city"];
   $nonvatable_type = $bill["nonvatable_type"];
-  
+
+  $participants = getCompanyBilledParticipants($dbh,$billing_no,$eventId);
 
 ?>
 
@@ -267,7 +268,16 @@ x:publishsource="Excel">
        </div></br>
        <div style="width: 100%; overflow: hidden;">
           <div style="width: 30%; float: left;"></div>
-          <div style="margin-left: 10%;">firstname</br>Second</br></div>
+          <div style="margin-left: 10%;">
+<?php
+        $amounts = array();
+	foreach($participants as $participant_id=>$field){
+		$amounts[] = $field["fee_amount"];
+                echo $field["participant_name"]."</br>";
+        }
+
+?>
+          </div>
        </div>
 <?php
        
@@ -277,14 +287,15 @@ x:publishsource="Excel">
   </br></br></br></br>
     <div style="width: 100%; overflow: hidden;">
           <div style="width: 30%; float: left;"></div>
-          <div style="margin-left: 20%;">first amount</br>second amount</div>
-       </div>
+          <div style="margin-left: 20%;">
+<?php
+	foreach($amounts as $fee){
+		echo number_format($fee,2)."</br>";
+        }
 
-  <?php
-     /* foreach($amounts as $display_amount){
-        echo $display_amount."</br></br></br>";
-      }*/
-  ?>
+?>
+          </div>
+       </div>
   </td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
