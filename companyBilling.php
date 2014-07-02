@@ -224,7 +224,7 @@ function validator(){
 			 . "<td><font color='$color'>$total_fee</font></td>"
 			 . "<td><font color='$color'>".number_format($field['subtotal'],2)."</font></td>"
 			 . "<td><font color='$color'>".number_format($field['vat'],2)."</font></td>"
-			 . "<td><a href='#'><a href='BIRForm/print_company.php?orgId=$orgId&event_id=$event_id&bir_no=$bir_no&billing_no=$billing_no&uid=$uid'><img src='images/preview.png' width='30' height='30'></a>"
+			 . "<td><a href='#'><a href='BIRForm/print_company.php?orgId=$orgId&event_id=$eventId&bir_no=$bir_no&billing_no=$billing_no&uid=$uid' target='_blank'><img src='images/preview.png' width='30' height='30'></a>"
                          . "<a href='#'><img src='printer-icon.png' width='30' height='30'></a></td>"
 			 . "<td>".number_format($field['amount_paid'],2)."</td>"
 			 . "<td>$billing_no</td>"
