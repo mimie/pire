@@ -726,6 +726,7 @@ function getCompanyBilledParticipants(PDO $dbh,$billingNo,$eventId){
                         WHERE bd.billing_no = :billingNo AND bd.event_id = :eventId
                         AND cp.status_id = status.id
                         AND cp.id = bd.participant_id
+                        AND bd.fee_amount != 0
                        ");
 
   $sql->execute(array(':billingNo'=>$billingNo,':eventId'=>$eventId));
