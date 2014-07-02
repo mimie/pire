@@ -138,12 +138,13 @@ function getCurrentCompanyBillByEvent($orgId,$eventId,$bir_no,$billing_no){
 	try{
 
 	      if($bir_no == NULL){
-		$stmt = civicrmDB("SELECT cbid, cc.organization_name,bc.billing_no, bc.bir_no, bc.total_amount, bc.subtotal,bc.vat, bc.bill_date, bc.edit_bill,bc.is_cancelled,bc.notes_id,bc.nonvatable_type,bn.notes
-				   FROM civicrm_contact cc, billing_company bc
+		$stmt = civicrmDB("SELECT cbid, cc.organization_name,ce.start_date,bc.billing_no, bc.bir_no, bc.total_amount, bc.subtotal,bc.vat, bc.bill_date, bc.edit_bill,bc.is_cancelled,bc.notes_id,bc.nonvatable_type,bn.notes
+				   FROM civicrm_contact cc, civicrm_event ce,billing_company bc
                                    LEFT JOIN billing_notes bn ON bn.notes_id = bc.notes_id
 				   WHERE bc.event_id = ?
 				   AND bc.org_contact_id = ?
                                    AND bc.billing_no = ?
+                                   AND bc.event_id = ce.id
                                    AND bc.org_contact_id = cc.id
                                    AND cc.contact_type = 'Organization'
                                    AND cc.is_deleted = 0
@@ -157,12 +158,13 @@ function getCurrentCompanyBillByEvent($orgId,$eventId,$bir_no,$billing_no){
 
               else{
 
-		$stmt = civicrmDB("SELECT cbid, cc.organization_name,bc.billing_no, bc.bir_no, bc.total_amount, bc.subtotal,bc.vat, bc.bill_date, bc.edit_bill,bc.is_cancelled,bc.notes_id,bc.nonvatable_type,bn.notes
-				   FROM civicrm_contact cc,billing_company bc
+		$stmt = civicrmDB("SELECT cbid, cc.organization_name,ce.start_date,bc.billing_no, bc.bir_no, bc.total_amount, bc.subtotal,bc.vat, bc.bill_date, bc.edit_bill,bc.is_cancelled,bc.notes_id,bc.nonvatable_type,bn.notes
+				   FROM civicrm_contact cc,civicrm_event ce,billing_company bc
                                    LEFT JOIN billing_notes bn ON bn.notes_id = bc.notes_id
 				   WHERE bc.event_id = ?
 				   AND bc.org_contact_id = ?
                                    AND bc.bir_no = ?
+                                   AND ce.id = bc.event_id
                                    AND bc.org_contact_id = cc.id
                                    AND cc.contact_type = 'Organization'
                                    AND cc.is_deleted = 0

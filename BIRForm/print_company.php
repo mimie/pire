@@ -21,18 +21,19 @@ href="IIAP%20Billing%20Form%20(rev2_2014%20ATP)_files/filelist.xml">
   include '../notes/notes_functions.php';
   include '../packages/packagebill_functions.php';
   include '../billing_functions.php';
+  include '../editbill_functions.php';
 
   $dbh = civicrmConnect();
   @$eventId = $_GET["event_id"];
   @$bir_no = $_GET["bir_no"];
   @$billing_no = $_GET["billing_no"];
+  @$orgId = $_GET["orgId"];
   @$uid = $_GET["uid"];
   $generator = getGeneratorName($uid);
 
-  $currentbill = getCurrentCompanyBillByEvent($orgId,$eventId,$bir_no,$billing_no);
-  echo "<pre>";
-  print_r($currentbill);
-  echo "</pre>";
+  $bill = getCurrentCompanyBillByEvent($orgId,$eventId,$bir_no,$billing_no);
+  $ref_no = $bir_no != NULL ? "BS-".$bir_no."/".$billing_no : $billing_no;
+  
 
 ?>
 
@@ -188,9 +189,9 @@ x:publishsource="Excel">
   <td class=xl655352552></td>
   <td class=xl1012552>Name</td>
   <td class=xl992552>:</td>
-  <td colspan=5 class=xl1632552>&nbsp;<?=$bill['sort_name']?></td>
+  <td colspan=5 class=xl1632552>&nbsp;<?=$bill['organization_name']?></td>
   <td class=xl1022552>REFERENCE NO.</td>
-  <td class=xl1242552>BS-<?=$bir_no?></td>
+  <td class=xl1242552><?=$ref_no?></td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
  </tr>
@@ -606,8 +607,13 @@ x:publishsource="Excel">
   <td class=xl1142552>&nbsp;</td>
   <td class=xl1142552>&nbsp;</td>
   <td class=xl1142552>&nbsp;</td>
-  <td rowspan=2 class=xl1342552>BS No.</td>
-  <td rowspan=2 class=xl1352552><?=$bir_no?></td>
+  <td rowspan=2 class=xl1342552>
+  <?php
+  	$transaction_label = $bir_no == NULL ? '' : 'BS No.';
+        echo $transaction_label;
+  ?> 
+  </td>
+  <td rowspan=2 class=xl1352552><?=$transaction_no = $bir_no == NULL ? '' : $bir_no?></td>
   <td class=xl1142552>&nbsp;</td>
   <td class=xl655352552></td>
  </tr>
@@ -642,16 +648,14 @@ x:publishsource="Excel">
  <tr height=18 style='mso-height-source:userset;height:14.1pt'>
   <td height=18 class=xl655352552 style='height:14.1pt'></td>
   <td class=xl655352552></td>
-  <td colspan=9 class=xl1362552>THIS DOCUMENT IS NOT VALID FOR CLAIMING INPUT
-  TAXES&quot;</td>
+  <td colspan=9 class=xl1362552><?=$disclaimer = $bir_no == NULL ? '' : "THIS DOCUMENT IS NOT VALID FOR CLAIMING INPUT TAXES"?></td>
   <td class=xl1082552>&nbsp;</td>
   <td class=xl655352552></td>
  </tr>
  <tr height=18 style='mso-height-source:userset;height:14.1pt'>
   <td height=18 class=xl655352552 style='height:14.1pt'></td>
   <td class=xl655352552></td>
-  <td colspan=9 class=xl1372552>&quot;THIS BILLING STATEMENT SHALL BE VALID FOR
-  (5) YEARS FROM THE DATE OF ATP&quot;</td>
+  <td colspan=9 class=xl1372552><?=$disclaimer = $bir_no == NULL ? '' : "THIS BILLING STATEMENT SHALL BE VALID FOR (5) YEARS FROM THE DATE OF ATP&quot;"?></td>
   <td class=xl1082552>&nbsp;</td>
   <td class=xl655352552></td>
  </tr>
