@@ -68,6 +68,7 @@ $(function() {
 	@$eventId = $_GET["eventId"];
 	@$orgId = $_GET["orgId"];
         @$bir_no = $_GET['bir_no'];
+  	@$billing_no = $_GET['billing_no'];
 
   	//Event Information
         $eventDetails = getEventDetails($dbh,$eventId);
@@ -80,9 +81,8 @@ $(function() {
   	$orgName = getCompanyNameByOrgId($orgId);
 
 	//Current Bill Information
-	$currentbill = getCurrentCompanyBillByEvent($orgId,$eventId,$bir_no);
-  	$billing_no = $currentbill['billing_no'];
-	$total_amount = number_format($currentbill['total_amount'],'2','.','');
+	$currentbill = getCurrentCompanyBillByEvent($orgId,$eventId,$bir_no,$billing_no);
+        $total_amount = number_format($currentbill['total_amount'],'2','.','');
 	$subtotal = number_format($currentbill['subtotal'],'2','.','');
 	$vat = number_format($currentbill['vat'],'2','.','');
 	$billing_date = $currentbill['bill_date'];
