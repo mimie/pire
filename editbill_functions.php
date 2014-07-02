@@ -133,7 +133,7 @@ function getCompanyNameByOrgId($orgId){
 	return $orgName;
 }
 
-function getCurrentCompanyBillByEvent($orgId,$eventId,$bir_no){
+function getCurrentCompanyBillByEvent($orgId,$eventId,$bir_no,$billing_no){
 
 	try{
 		$stmt = civicrmDB("SELECT cbid, bc.billing_no, bc.bir_no, bc.total_amount, bc.subtotal,bc.vat, bc.bill_date, bc.edit_bill,bc.is_cancelled,bc.notes_id,bc.nonvatable_type,bn.notes
@@ -141,10 +141,12 @@ function getCurrentCompanyBillByEvent($orgId,$eventId,$bir_no){
                                    LEFT JOIN billing_notes bn ON bn.notes_id = bc.notes_id
 				   WHERE bc.event_id = ?
 				   AND bc.org_contact_id = ?
-				   AND bir_no = ?");
+				   AND bir_no = ?
+                                   AND bc.billing_no = ?");
 		$stmt->bindValue(1,$eventId,PDO::PARAM_INT);
 		$stmt->bindValue(2,$orgId,PDO::PARAM_INT);
                 $stmt->bindValue(3,$bir_no,PDO::PARAM_STR);
+                $stmt->bindValue(4,$billing_no,PDO::PARAM_STR);
 		$stmt->execute();
 		$result = $stmt->fetch(PDO::FETCH_ASSOC);
 
