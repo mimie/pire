@@ -203,6 +203,7 @@ function validator(){
 
         if($count > 0){
             foreach($billing_details as $key=>$bill){
+                $billing_id = $bill['id'];
                 $participant_id = $bill['participant_id'];
 		$is_post = $bill['post_bill'];
 		$is_generated = $bill['generated_bill'];
@@ -245,7 +246,7 @@ function validator(){
                           . "<td>".$strike."".$atp_no."$endstrike</td>"
                           . "<td>$strike".date("F j, Y",strtotime($date))."$endstrike</td>";
                   $note = $notes_collection[$notes_id];
-                  $img_link = "<a href='edit_individual.php?billing_no=$billing_no&bir_no=$bir_no&uid=$uid' onclick=\"window.open(this.href,'edit_individual.php?billing_no=$billing_no&bir_no=$bir_no&uid=$uid','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=900,height=900');return false;\"><img src='images/edit_bill.png'></a>";
+                  $img_link = "<a href='edit_individual.php?billing_no=$billing_no&bir_no=$bir_no&billing_id=$billing_id&uid=$uid' onclick=\"window.open(this.href,'edit_individual.php?billing_no=$billing_no&bir_no=$bir_no&billing_id=$billing_id&uid=$uid','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=900,height=900');return false;\"><img src='images/edit_bill.png'></a>";
                  $display = $display. "<td>$strike".$field['street_address']." ".$field['city_address']."$endstrike</td>"
                      . "<td>$strike".$note."$endstrike</td>"
                      . "<td>$img_link</td>"

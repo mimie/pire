@@ -48,7 +48,8 @@ $(function() {
        
         $billing_no = $_GET['billing_no'];
         $bir_no = $_GET['bir_no'];
-        $bill = getInfoByBillingNo($billing_no,$bir_no);
+        $billing_id = $_GET['billing_id'];
+        $bill = getInfoByBillingNo($billing_id);
         $participant_no = $bill['participant_id'];
         $employer_id = $bill['employer_id'];
         $address = $bill['street_address']." ".$bill['city_address'];
