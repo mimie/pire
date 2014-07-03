@@ -52,8 +52,9 @@ function getParticipantWithSameCompany($eventId,$employer_id){
 /*
  * $info - details of the participant
  */
-function updateParticipant($bir_no,array $info,$is_vat,$nonvatable_type){
+function updateParticipant($new_birno,$bir_no,array $info,$is_vat,$nonvatable_type){
 
+   $new_birno = $new_birno == $bir_no ? $bir_no : $new_birno;
 	
    try{
 	$stmt = civicrmDB("UPDATE billing_details
@@ -70,7 +71,9 @@ function updateParticipant($bir_no,array $info,$is_vat,$nonvatable_type){
                            fee_amount = ?,
                            subtotal = ?,
                            vat = ?,
-                           nonvatable_type = ?
+                           nonvatable_type = ?,
+                           edit_bill = '1',
+                           bir_no = ?
                            WHERE bir_no = ?
                           ");
 
@@ -94,7 +97,8 @@ function updateParticipant($bir_no,array $info,$is_vat,$nonvatable_type){
         $stmt->bindValue(12,$subtotal,PDO::PARAM_INT);
         $stmt->bindValue(13,$tax,PDO::PARAM_INT);
         $stmt->bindValue(14,$nonvatable_type,PDO::PARAM_STR);
-        $stmt->bindValue(15,$bir_no,PDO::PARAM_STR);
+        $stmt->bindValue(15,$new_birno,PDO::PARAM_STR);
+        $stmt->bindValue(16,$bir_no,PDO::PARAM_STR);
         
         $stmt->execute();
     }

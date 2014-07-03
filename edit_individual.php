@@ -119,7 +119,7 @@ $(function() {
                 echo "<input type='radio' name='vat' value='vat-exempt' $disabled>VAT-EXEMPT ";
                 echo "<input type='radio' name='vat' value='vat-zero' $disabled>VAT-ZERO </br>";
                 $readonly = $isEdit == 0 ? 'readonly' : '';
-                echo "BS No. : <input type='text' value='$bir_no' $readonly>";
+                echo "BS No. : <input type='text' name='new_birno' value='$bir_no' $readonly>";
                 echo "<SELECT name='participant_id'>";
                 foreach($participants as $key=>$field){
                         $participant_id = $field['participant_id'];
@@ -166,10 +166,11 @@ $(function() {
            $info = getInfoByParticipantId($selected_participantId);
            $nonvatable_type = $_POST['vat'] == 'vatable' ? '' : $_POST['vat'];
            $is_vat = $_POST['vat'] == 'vatable' ? 1 : 0 ;
-           updateParticipant($bir_no,$info,$is_vat,$nonvatable_type);
+           $new_birno = $_POST["new_birno"];
+           updateParticipant($new_birno,$bir_no,$info,$is_vat,$nonvatable_type);
            $history = array('billing_no'=>$billing_no,
                             'action'=>"Change participant no. ".$participant_no." to ".$selected_participantId,
-                             'bir_no'=>$bir_no);
+                             'bir_no'=>$new_birno);
            insertBillingHistory($history);
            echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully change participant name.</div>";
 
