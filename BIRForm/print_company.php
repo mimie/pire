@@ -273,7 +273,7 @@ x:publishsource="Excel">
         $amounts = array();
 	foreach($participants as $participant_id=>$field){
 		$amounts[] = $field["fee_amount"];
-                echo $field["participant_name"]."</br>";
+                echo $field["participant_name"]." / Participant No. ".$participant_id."</br>";
         }
 
 ?>
