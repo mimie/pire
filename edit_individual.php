@@ -45,6 +45,7 @@ $(function() {
         include 'bir_functions.php';
         include 'editbill_functions.php';
         include 'billing_functions.php';
+	include 'notes/notes_functions.php';
        
         $billing_no = $_GET['billing_no'];
         $bir_no = $_GET['bir_no'];
@@ -58,13 +59,15 @@ $(function() {
         $current_amount = sprintf('%0.2f', $bill['current_amount']);
         $civicrm_amount = $bill['civicrm_amount'];
         $eventId = $bill['event_id'];
-        $notes_id = $bill['notes_id'];
+        $old_notes_id = $bill['notes_id'];
         $allowed_edit = $current_amount == $civicrm_amount && $isEdit == 0 ? 'Billing information cannot be updated.' : "Update Billing Information";
         $is_cancelled = $bill['is_cancelled'];
         $nonvatable_type = $bill["nonvatable_type"];
 	$is_vatable = $nonvatable_type == NULL ? "checked='checked'" : '';
 	$is_exempt = $nonvatable_type == 'vat_exempt' ? "checked='checked'" : '';
 	$is_zero = $nonvatable_type == 'vat_zero' ? "checked='checked'" : '';
+        //notes
+        $notes_opt = getNotesByCategory("Individual Event Billing");
 ?>
       <div align='center'>
 	<table>
@@ -155,19 +158,49 @@ $(function() {
 
         }elseif($status !='Cancelled' && $current_amount!=$civicrm_amount && $isEdit == 1){
                echo "<tr>";
-               echo "<td>Change Amount</td><td><input type='text' name='new_amount' value='$civicrm_amount' readonly>";
-               echo "<input type='submit' name='update' value='UPDATE BILL'></td></tr>";
+               echo "<td>Change Amount</td><td><input type='text' name='new_amount' value='$civicrm_amount' readonly></br></br>";
+               echo "Account Receivable Type:";
+               echo "<input type='radio' name='vat' value='vatable' $is_vatable>VATABLE ";
+               echo "<input type='radio' name='vat' value='vat-exempt' $is_exempt>VAT-EXEMPT ";
+               echo "<input type='radio' name='vat' value='vat-zero' $is_zero>VAT-ZERO </br>";
+               echo "BS No. : <input type='text' name='new_birno' value='$bir_no'>";
+               echo "<SELECT name='notes_id'><option value='select'>- Select optional billing notes -</option><option>-----------------</option>";
+               $options = '';
+
+	       foreach($notes_opt as $key=>$field){
+    			$id = $field["notes_id"];
+    			$notes = $field["notes"];
+                        $selected = $old_notes_id == $id ? 'selected' : '';
+    			$options = $options."<option value='$id' $selected>$notes</option>";
+               }
+
+               echo $options;
+               echo "</SELECT><input type='submit' name='update' value='UPDATE BILL'></td></tr?";
                $update_action = 'update amount';
            
         }elseif($status !='Cancelled' && $current_amount!=$civicrm_amount && $isEdit == 0 && $is_cancelled == 0){
 	       echo "<tr>";
                echo "<td>Generate Bill</td>";
                echo "<td>Account Receivable Type:";
-               echo "<input type='radio' name='vat' value='vatable' checked='checked'>VATABLE ";
-               echo "<input type='radio' name='vat' value='vat_exempt'>VAT-EXEMPT ";
-               echo "<input type='radio' name='vat' value='vat_zero'>VAT-ZERO </br>";
+               echo "<input type='radio' name='vat' value='vatable' $is_vatable>VATABLE ";
+               echo "<input type='radio' name='vat' value='vat_exempt' $is_exempt>VAT-EXEMPT ";
+               echo "<input type='radio' name='vat' value='vat_zero' $is_zero>VAT-ZERO </br>";
                echo "<input type='text' name='bs_no' placeholder='Enter BS No.' required/>";
-               echo "<input type='submit' name='update' value='GENERATE BILL'></td></tr>";
+               echo "<SELECT name='notes_id'><option value='select'>- Select optional billing notes -</option><option>-----------------</option>";
+               $options = '';
+
+	       foreach($notes_opt as $key=>$field){
+    			$id = $field["notes_id"];
+    			$notes = $field["notes"];
+                        $selected = $old_notes_id == $id ? 'selected' : '';
+    			$options = $options."<option value='$id' $selected>$notes</option>";
+               }
+
+               echo $options;
+               echo "</SELECT><input type='submit' name='update' value='GENERATE BILL'>";
+               echo "</td>";
+               echo "</tr>";
+               echo "</td></tr>";
                $update_action = 'regenerate';
 
         }elseif($status !='Cancelled' && $isEdit == 1){
@@ -178,6 +211,18 @@ $(function() {
                echo "<input type='radio' name='vat' value='vat-exempt' $is_exempt>VAT-EXEMPT ";
                echo "<input type='radio' name='vat' value='vat-zero' $is_zero>VAT-ZERO </br>";
                echo "BS No. : <input type='text' name='new_birno' value='$bir_no'>";
+               echo "<SELECT name='notes_id'><option value='select'>- Select optional billing notes -</option><option>-----------------</option>";
+               $options = '';
+
+	       foreach($notes_opt as $key=>$field){
+    			$id = $field["notes_id"];
+    			$notes = $field["notes"];
+                        $selected = $old_notes_id == $id ? 'selected' : '';
+    			$options = $options."<option value='$id' $selected>$notes</option>";
+               }
+
+               echo $options;
+               echo "</SELECT><input type='submit' name='update' value='UPDATE BILL'>";
                echo "</td>";
                echo "</tr>";
 
@@ -212,7 +257,7 @@ $(function() {
          }elseif($_POST['update'] && $update_action == 'regenerate'){
 	     $bs_no = $_POST["bs_no"];
 	     $nonvatable_type = $_POST['vat'] == 'vatable' ? '' : $_POST['vat'];
-	     $is_vatable = $_POST["vat"] == 'vat-exempt' || $_POST['vat-zero'] ? 0 : 1;
+	     $is_vatable = $_POST["vat"] == 'vat_exempt' || $_POST['vat_zero'] ? 0 : 1;
 	     $newBIR_no = formatBSNo($bs_no);
 
              $details = array('bs_no' => $newBIR_no,
