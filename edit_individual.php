@@ -98,10 +98,19 @@ $(function() {
 			<th>Current Amount</th><td><?=$current_amount?></td>
 		</tr>
 		<tr>
+			<th>Subtotal</th><td><?=$bill['subtotal']?></td>
+		</tr>
+		<tr>
+			<th>VAT</th><td><?=$bill['vat']?></td>
+		</tr>
+		<tr>
 			<th>Civicrm Amount</th><td><?=$civicrm_amount?></td>
 		</tr>
 		<tr>
 			<th>Participant Status</th><td><?=$status?></td>
+		</tr>
+		<tr>
+			<th>Notes</th><td><?=$bill['notes']?></td>
 		</tr>
                 <tr>
                 	<th colspan='2'><?=$allowed_edit?></th>
