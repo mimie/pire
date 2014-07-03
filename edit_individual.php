@@ -22,7 +22,7 @@ $(function() {
                 'page': 1,
                 'links': 'buttons'
         });
-//        $("table").tablesorter( {sortList: [[0,0], [1,0]]} ); 
+//        $("table").tablesorter( {sortList: [[0,0], [1,0]]} );
 });
 $(function() {
     $( "#confirmation" ).dialog({
@@ -46,7 +46,7 @@ $(function() {
         include 'editbill_functions.php';
         include 'billing_functions.php';
 	include 'notes/notes_functions.php';
-       
+
         $billing_no = $_GET['billing_no'];
         $bir_no = $_GET['bir_no'];
         $billing_id = $_GET['billing_id'];
@@ -147,12 +147,12 @@ $(function() {
 		echo "</SELECT>";
                 echo "<input type='submit' name='update' value='UPDATE BILL'>";
                 $update_action = 'change name';
-                echo "</td>";         
+                echo "</td>";
              }
              else{
                  echo "<td colspan='2'>No availabe participant to be replaced for this bill.</td>";
-             }    
-            
+             }
+
              echo "</tr>";
 
 
@@ -177,15 +177,15 @@ $(function() {
                echo $options;
                echo "</SELECT><input type='submit' name='update' value='UPDATE BILL'></td></tr?";
                $update_action = 'update amount';
-           
-        }elseif($status !='Cancelled' && $current_amount!=$civicrm_amount && $isEdit == 0 && $is_cancelled == 0){
+
+        }elseif($status !='Cancelled' && $current_amount!=$civicrm_amount && $isEdit == 0){
 	       echo "<tr>";
                echo "<td>Generate Bill</td>";
                echo "<td>Account Receivable Type:";
                echo "<input type='radio' name='vat' value='vatable' $is_vatable>VATABLE ";
                echo "<input type='radio' name='vat' value='vat_exempt' $is_exempt>VAT-EXEMPT ";
                echo "<input type='radio' name='vat' value='vat_zero' $is_zero>VAT-ZERO </br>";
-               echo "<input type='text' name='bs_no' placeholder='Enter BS No.' required/>";
+               echo "<input type='text' name='bs_no' placeholder='Enter BS No.'/>";
                echo "<SELECT name='notes_id'><option value='select'>- Select optional billing notes -</option><option>-----------------</option>";
                $options = '';
 
@@ -204,12 +204,12 @@ $(function() {
                $update_action = 'regenerate';
 
         }elseif($status !='Cancelled' && $isEdit == 1){
-               echo "<tr>"; 
+               echo "<tr>";
                echo "<td colspan=2>";
                echo "Account Receivable Type:";
                echo "<input type='radio' name='vat' value='vatable' $is_vatable>VATABLE ";
-               echo "<input type='radio' name='vat' value='vat-exempt' $is_exempt>VAT-EXEMPT ";
-               echo "<input type='radio' name='vat' value='vat-zero' $is_zero>VAT-ZERO </br>";
+               echo "<input type='radio' name='vat' value='vat_exempt' $is_exempt>VAT-EXEMPT ";
+               echo "<input type='radio' name='vat' value='vat_zero' $is_zero>VAT-ZERO </br>";
                echo "BS No. : <input type='text' name='new_birno' value='$bir_no'>";
                echo "<SELECT name='notes_id'><option value='select'>- Select optional billing notes -</option><option>-----------------</option>";
                $options = '';
@@ -226,6 +226,7 @@ $(function() {
                echo "</td>";
                echo "</tr>";
 
+           $update_action = 'normal update';
          }
 ?>
 </form>
@@ -246,8 +247,23 @@ $(function() {
            echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully change participant name.</div>";
 
         }elseif($_POST['update'] && $update_action == 'update amount'){
-		updateAmountByBIRNo($bir_no,$_POST['new_amount']);
-                
+		      $new_birno = $_POST['new_birno'];
+          $new_birno = $new_birno == NULL ? '' : formatBSNo($new_birno);
+          $nonvatable_type = $_POST['vat'] == 'vatable' ? '' : $_POST['vat'];
+          $is_vatable = $_POST["vat"] == 'vat_exempt' || $_POST['vat_zero'] ? 0 : 1;
+          $notes_id = $_POST['notes_id'];
+          $new_amount = $_POST['new_amount'];
+
+          $details = array('new_birno' => $new_birno,
+                           'withVat' => $is_vatable,
+                           'amount' => $new_amount,
+                           'nonvatable_type' => $nonvatable_type,
+                           'notes_id' => $notes_id,
+                           'billing_no' => $billing_no);
+
+           updateIndividualParticipant($details);
+           echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully generated bill.</div>";
+
            	$history = array('billing_no'=>$billing_no,
                             'action'=>"Update participant amount to ".$_POST['new_amount'],
                              'bir_no'=>$bir_no);
@@ -255,25 +271,45 @@ $(function() {
            	echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully updated bill amount information.</div>";
 
          }elseif($_POST['update'] && $update_action == 'regenerate'){
+       $notes_id = $_POST['notes_id'];
 	     $bs_no = $_POST["bs_no"];
 	     $nonvatable_type = $_POST['vat'] == 'vatable' ? '' : $_POST['vat'];
 	     $is_vatable = $_POST["vat"] == 'vat_exempt' || $_POST['vat_zero'] ? 0 : 1;
-	     $newBIR_no = formatBSNo($bs_no);
+	     $new_birno = $bs_no == NULL ? '' : formatBSNo($bs_no);
 
-             $details = array('bs_no' => $newBIR_no,
+             $details = array('bs_no' => $new_birno,
                               'vatable' => $is_vatable,
-                              'notes_id' => $note_id,
+                              'notes_id' => $notes_id,
                               'nonvatable_type' => $nonvatable_type,
                               'billing_type' => 'Individual',
                               'billing_id' => NULL);
+        var_dump($details);
 
 	     generateIndividualBill($participant_no,$details);
              $history = array('billing_no'=>$billing_no,
                               'action'=>"Updated participant amount and regenerate new bir no. ".$newBIR_no,
                               'bir_no'=>$bir_no);
              insertBillingHistory($history);
-             echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully generated bill.</div>";
-   }
+             //echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully generated bill.</div>";
+
+       }elseif($_POST['update'] && $update_action == 'normal update'){
+         $new_birno = $_POST['new_birno'];
+         $new_birno = $new_birno == NULL ? '' : formatBSNo($new_birno);
+         $nonvatable_type = $_POST['vat'] == 'vatable' ? '' : $_POST['vat'];
+         $is_vatable = $_POST["vat"] == 'vat_exempt' || $_POST['vat_zero'] ? 0 : 1;
+         $notes_id = $_POST['notes_id'];
+
+         $details = array('new_birno' => $new_birno,
+                          'withVat' => $is_vatable,
+                          'amount' => $current_amount,
+                          'nonvatable_type' => $nonvatable_type,
+                          'notes_id' => $notes_id,
+                          'billing_no' => $billing_no);
+
+          updateIndividualParticipant($details);
+          echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully generated bill.</div>";
+
+       }
 ?>
 </body>
 </html>
