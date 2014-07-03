@@ -450,7 +450,7 @@ x:publishsource="Excel">
   <td colspan=6 class=xl1382552>INSTITUTE OF INTERNAL AUDITORS PHILIPPINES INC.</td>
   <td class=xl1102552>&nbsp;</td>
   <td rowspan=2 class=xl1402552>VAT-EXEMPT SALES</td>
-  <td rowspan=2 class=xl1422552 style='border-bottom:.5pt solid black;border-top:none'><?=$subtotal = $nonvatable_type == 'vat-exempt' ? $bill_subtotal : ''?> </td>
+  <td rowspan=2 class=xl1422552 style='border-bottom:.5pt solid black;border-top:none'><?=$subtotal = $nonvatable_type == 'vat_exempt' ? $bill_subtotal : ''?> </td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
  </tr>
@@ -470,7 +470,7 @@ x:publishsource="Excel">
   PAYMENT CENTER, pls. indicate BS reference number in the payment slip.</td>
   <td class=xl1102552>&nbsp;</td>
   <td rowspan=2 class=xl1402552>VAT-ZERO RATED SALES</td>
-  <td rowspan=2 class=xl1422552 style='border-bottom:.5pt solid black;border-top:none'><?=$subtotal = $nonvatable_type == 'vat-zero' ? $bill_subtotal : ''?></td>
+  <td rowspan=2 class=xl1422552 style='border-bottom:.5pt solid black;border-top:none'><?=$subtotal = $nonvatable_type == 'vat_zero' ? $bill_subtotal : ''?></td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
  </tr>
