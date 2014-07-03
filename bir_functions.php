@@ -163,7 +163,7 @@ function getInfoByBillingNo($billing_id){
 
 	$stmt = civicrmDB("SELECT cp.contact_id, cp.id as participant_id,cp.event_id, cov.label as event_type,ce.title as event_name, cc.sort_name,cc.employer_id,
                            em.email,cc.organization_name, bd.street_address__company__3 as street_address, bd.city__company__5 as city_address,
-                           cc.employer_id as org_contact_id, bill.bir_no,bill.edit_bill,bill.notes_id,bn.notes,bill.subtotal,bill.vat,bill.fee_amount as current_amount,cp.fee_amount as civicrm_amount, bill.is_cancelled,cps.label as participant_status
+                           cc.employer_id as org_contact_id, bill.bir_no,bill.edit_bill,bill.notes_id,bn.notes,bill.subtotal,bill.vat,bill.fee_amount as current_amount,bill.nonvatable_type,cp.fee_amount as civicrm_amount, bill.is_cancelled,cps.label as participant_status
                            FROM civicrm_participant cp, civicrm_event ce, civicrm_option_value cov, civicrm_participant_status_type cps,civicrm_contact cc
                            LEFT JOIN civicrm_value_business_data_1 bd ON bd.entity_id = cc.id
                            LEFT JOIN civicrm_email em ON em.contact_id = bd.entity_id AND is_primary = '1'
