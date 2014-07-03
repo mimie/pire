@@ -27,10 +27,11 @@ href="IIAP%20Billing%20Form%20(rev2_2014%20ATP)_files/filelist.xml">
   @$uid = $_GET["uid"];
   $generator = getGeneratorName($uid);
   @$billing_no = $_GET["billing_no"];
-  @$bir_no = $_GET["bir_no"];
-  $bill = getBIRDetails($billing_no,$bir_no);
+  $bill = getBIRDetails($billing_no);
   $address = $bill['street_address']." ".$bill['city_address'];
   $location = formatEventLocation(getEventLocation($dbh,$eventId));
+  $nonvatable_type = $bill['nonvatable_type'];
+  $bill_subtotal = number_format($bill['subtotal'],2);
 
 ?>
 
@@ -188,7 +189,7 @@ x:publishsource="Excel">
   <td class=xl992552>:</td>
   <td colspan=5 class=xl1632552>&nbsp;<?=$bill['sort_name']?></td>
   <td class=xl1022552>REFERENCE NO.</td>
-  <td class=xl1242552><?=$billing_no?>/BS-<?=$bill['bir_no']?></td>
+  <td class=xl1242552><?=$reference_no = $bill['bir_no'] == NULL ? $billing_no : $billing_no."/BS-".$bill['bir_no']?></td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
  </tr>
@@ -239,23 +240,38 @@ x:publishsource="Excel">
  <tr height=26 style='mso-height-source:userset;height:20.1pt'>
   <td height=26 class=xl655352552 style='height:20.1pt'></td>
   <td class=xl655352552></td>
-  <td colspan=8 class=xl1582552 style='border-right:.5pt solid black'>&nbsp;<?=$bill['event_name']?></td>
-  <td class=xl1272552>&nbsp;</td>
+  <td colspan=8 class=xl1582552 style='border-right:.5pt solid black'>
+    <?=$bill['event_name']?></br>
+<?php
+
+	if($bill['start_date']==$bill['end_date']){
+                $date_range = "On ".date("F j, Y",strtotime($bill['start_date']));
+        }
+        else{
+		$date_range = "On ".date("F j, Y",strtotime($bill['start_date']))." to ".date("F j, Y",strtotime($bill['end_date']));
+        }
+        echo $date_range."</br>";
+        $location = $location == NULL ? '' : $location;
+        echo $location;
+
+?>
+  </td>
+  <td class=xl1272552><?=number_format($bill['fee_amount'],2)?></td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
  </tr>
  <tr height=26 style='mso-height-source:userset;height:20.1pt'>
   <td height=26 class=xl655352552 style='height:20.1pt'></td>
   <td class=xl655352552></td>
-  <td colspan=8 class=xl1572552 style='border-right:.5pt solid black'>&nbsp;On&nbsp;<?=date("F j,Y",strtotime($bill['start_date']))?>&nbsp;to&nbsp;<?=date("F j, Y",strtotime($bill['end_date']))?></td>
-  <td class=xl1282552>&nbsp;<?=number_format($bill['fee_amount'],2)?></td>
+  <td colspan=8 class=xl1572552 style='border-right:.5pt solid black'></td>
+  <td class=xl1282552></td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
  </tr>
  <tr height=26 style='mso-height-source:userset;height:20.1pt'>
   <td height=26 class=xl655352552 style='height:20.1pt'></td>
   <td class=xl655352552></td>
-  <td colspan=8 class=xl1572552 style='border-right:.5pt solid black'>&nbsp;At&nbsp;<?=$location?></td>
+  <td colspan=8 class=xl1572552 style='border-right:.5pt solid black'></td>
   <td class=xl1282552>&nbsp;</td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
@@ -411,7 +427,7 @@ x:publishsource="Excel">
   <td class=xl1052552>&nbsp;</td>
   <td class=xl1062552>&nbsp;</td>
   <td rowspan=2 class=xl1562552>VAT-ABLE SALES</td>
-  <td rowspan=2 class=xl1422552 style='border-bottom:.5pt solid black'>&nbsp;<?=number_format($bill['subtotal'],2)?></td>
+  <td rowspan=2 class=xl1422552 style='border-bottom:.5pt solid black'>&nbsp;<?=$subtotal = $nonvatable_type == NULL ? $bill_subtotal : ''?></td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
  </tr>
@@ -433,8 +449,7 @@ x:publishsource="Excel">
   <td colspan=6 class=xl1382552>INSTITUTE OF INTERNAL AUDITORS PHILIPPINES INC.</td>
   <td class=xl1102552>&nbsp;</td>
   <td rowspan=2 class=xl1402552>VAT-EXEMPT SALES</td>
-  <td rowspan=2 class=xl1422552 style='border-bottom:.5pt solid black;
-  border-top:none'>&nbsp;</td>
+  <td rowspan=2 class=xl1422552 style='border-bottom:.5pt solid black;border-top:none'><?=$subtotal = $nonvatable_type == 'vat-exempt' ? $bill_subtotal : ''?> </td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
  </tr>
@@ -454,8 +469,7 @@ x:publishsource="Excel">
   PAYMENT CENTER, pls. indicate BS reference number in the payment slip.</td>
   <td class=xl1102552>&nbsp;</td>
   <td rowspan=2 class=xl1402552>VAT-ZERO RATED SALES</td>
-  <td rowspan=2 class=xl1422552 style='border-bottom:.5pt solid black;
-  border-top:none'>&nbsp;</td>
+  <td rowspan=2 class=xl1422552 style='border-bottom:.5pt solid black;border-top:none'><?=$subtotal = $nonvatable_type == 'vat-zero' ? $bill_subtotal : ''?></td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
  </tr>
@@ -575,8 +589,8 @@ x:publishsource="Excel">
   <td class=xl1142552>&nbsp;</td>
   <td class=xl1142552>&nbsp;</td>
   <td class=xl1142552>&nbsp;</td>
-  <td rowspan=2 class=xl1342552>BS No.</td>
-  <td rowspan=2 class=xl1352552><?=$bir_no?></td>
+  <td rowspan=2 class=xl1342552><?=$bir_label = $bill['bir_no'] == NULL ? '' : 'BS No.'?></td>
+  <td rowspan=2 class=xl1352552><?=$bill['bir_no']?></td>
   <td class=xl1142552>&nbsp;</td>
   <td class=xl655352552></td>
  </tr>
@@ -611,16 +625,14 @@ x:publishsource="Excel">
  <tr height=18 style='mso-height-source:userset;height:14.1pt'>
   <td height=18 class=xl655352552 style='height:14.1pt'></td>
   <td class=xl655352552></td>
-  <td colspan=9 class=xl1362552>THIS DOCUMENT IS NOT VALID FOR CLAIMING INPUT
-  TAXES&quot;</td>
+  <td colspan=9 class=xl1362552><?=$disclaimer = $bill['bir_no'] == NULL ? '' : "THIS DOCUMENT IS NOT VALID FOR CLAIMING INPUT TAXES"?></td>
   <td class=xl1082552>&nbsp;</td>
   <td class=xl655352552></td>
  </tr>
  <tr height=18 style='mso-height-source:userset;height:14.1pt'>
   <td height=18 class=xl655352552 style='height:14.1pt'></td>
   <td class=xl655352552></td>
-  <td colspan=9 class=xl1372552>&quot;THIS BILLING STATEMENT SHALL BE VALID FOR
-  (5) YEARS FROM THE DATE OF ATP&quot;</td>
+  <td colspan=9 class=xl1372552><?=$disclaimer = $bill['bir_no'] == NULL ? '' : "THIS BILLING STATEMENT SHALL BE VALID FOR (5) YEARS FROM THE DATE OF ATP"?></td>
   <td class=xl1082552>&nbsp;</td>
   <td class=xl655352552></td>
  </tr>
