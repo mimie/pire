@@ -108,14 +108,18 @@ $(function() {
 <form action='' method='POST'>
 <?php
 	if($status == 'Cancelled' && ($isEdit == 0 || $isEdit == 1)){
-	     $participants = $isEdit == 1 ? getParticipantWithSameAmount($eventId,$civicrm_amount,$employer_id) : getParticipantWithSameCompany($eventId,$employerId);
+
+	     $participants = $isEdit == 0 ? getParticipantWithSameAmount($eventId,$civicrm_amount,$employer_id) : getParticipantWithSameCompany($eventId,$employer_id);
              if($participants){
                 echo "<tr>";
 	        echo "<td>Change Name</td><td>";
                 echo "Account Receivable Type:";
-                echo "<input type='radio' name='vat' value='vatable' checked='checked'>VATABLE ";
-                echo "<input type='radio' name='vat' value='vat-exempt'>VAT-EXEMPT ";
-                echo "<input type='radio' name='vat' value='vat-zero'>VAT-ZERO </br>";
+                $disabled = $isEdit == 0 ? 'disabled' : '';
+                echo "<input type='radio' name='vat' value='vatable' checked='checked' $disabled>VATABLE ";
+                echo "<input type='radio' name='vat' value='vat-exempt' $disabled>VAT-EXEMPT ";
+                echo "<input type='radio' name='vat' value='vat-zero' $disabled>VAT-ZERO </br>";
+                $readonly = $isEdit == 0 ? 'readonly' : '';
+                echo "BS No. : <input type='text' value='$bir_no' $readonly>";
                 echo "<SELECT name='participant_id'>";
                 foreach($participants as $key=>$field){
                         $participant_id = $field['participant_id'];
@@ -123,14 +127,17 @@ $(function() {
                         $amount = $field['fee_amount'];
 			echo "<option value='".$participant_id."'>".$name."-".$amount."</option>";
                 }
-		echo "</SELECT><input type='submit' name='update' value='UPDATE BILL'>";
+		echo "</SELECT>";
+                echo "<input type='submit' name='update' value='UPDATE BILL'>";
                 $update_action = 'change name';
+                echo "</td>";         
              }
              else{
-                 echo "No availabe participant to be replaced for this bill.";
+                 echo "<td colspan='2'>No availabe participant to be replaced for this bill.</td>";
              }    
+            
+             echo "</tr>";
 
-             echo "</td></tr>";         
 
         }elseif($status !='Cancelled' && $current_amount!=$civicrm_amount && $isEdit == 1){
                echo "<tr>";
