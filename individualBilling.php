@@ -229,6 +229,7 @@ function validator(){
 		//status = 4 = Cancelled - Strike the column if the participant status is cancelled.
 		$strike = $status_id == 4 || $status_id == 7 || $status_id == 15 ? '<strike>' : '';
 		$endstrike = $status_id == 4 || $status_id == 7 || $status_id == 15 ? '</strike>' : '';
+                $atp_no = $bir_no == NULL ? '' : "BS-".$bir_no;
 	        $display = $display."<tr>"
 		         . "<td>$strike<input type='checkbox' $checkbox $disabled name='ids[]' value='".$participant_id."'>".$field['sort_name']."$endstrike</td>"
 		         . "<td>$strike".$status."$endstrike</td>"
@@ -241,7 +242,7 @@ function validator(){
                           . "<a href='BIRForm/print_bir.php?event_id=$eventId&billing_no=".$billing_no."&uid=$uid' target='_blank'><img src='printer-icon.png' width='30' height='30'></a></td>"
                           . "<td>$strike".number_format($paid,2)."$endstrike</td>"
                           . "<td>$strike".$billing_no."$endstrike</td>"
-                          . "<td>BS-".$strike."".$bir_no."$endstrike</td>"
+                          . "<td>".$strike."".$atp_no."$endstrike</td>"
                           . "<td>$strike".date("F j, Y",strtotime($date))."$endstrike</td>";
                   $note = $notes_collection[$notes_id];
                   $img_link = "<a href='edit_individual.php?billing_no=$billing_no&bir_no=$bir_no&uid=$uid' onclick=\"window.open(this.href,'edit_individual.php?billing_no=$billing_no&bir_no=$bir_no&uid=$uid','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=900,height=900');return false;\"><img src='images/edit_bill.png'></a>";

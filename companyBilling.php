@@ -214,6 +214,7 @@ function validator(){
                 $notes = $notes_collection[$notes_id];
                 $billing_no = $field['billing_no'];
                 $bir_no = $field['bir_no'];
+                $atp_no = $bir_no == NULL ? '' : "BS-".$bir_no;
 
                 $bill_date = date("F j, Y",strtotime($field['bill_date']));
                 $img_link = "<a href='edit_company.php?eventId=$eventId&orgId=$orgId&bir_no=$bir_no&billing_no=$billing_no&uid=$uid' onclick=\"window.open(this.href,'edit_company.php?eventId=$eventId&orgId=$orgId&bir_no=$bir_no&billing_no=$billing_no&uid=$uid','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=900,height=900');return false;\"><img src='images/edit_bill.png'></a>";
@@ -228,7 +229,7 @@ function validator(){
                          . "<a href='#'><img src='printer-icon.png' width='30' height='30'></a></td>"
 			 . "<td>".number_format($field['amount_paid'],2)."</td>"
 			 . "<td>$billing_no</td>"
-			 . "<td>BS-".$bir_no."</td>"
+			 . "<td>".$atp_no."</td>"
 			 . "<td>".$bill_date."</td>"
 			 . "<td>".$notes."</td>"
 			 . "<td>".$img_link."</td>"
