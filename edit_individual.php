@@ -107,7 +107,9 @@ $(function() {
                 </tr>
 <form action='' method='POST'>
 <?php
-	if($status == 'Cancelled' && $isEdit == 1){
+	if($status == 'Cancelled' && ($isEdit == 0 || $isEdit == 1)){
+	     $participants = $isEdit == 1 ? getParticipantWithSameAmount($eventId,$civicrm_amount,$employer_id) : getParticipantWithSameCompany($eventId,$employerId);
+             if($participants){
                 echo "<tr>";
 	        echo "<td>Change Name</td><td>";
                 echo "Account Receivable Type:";
@@ -115,15 +117,20 @@ $(function() {
                 echo "<input type='radio' name='vat' value='vat-exempt'>VAT-EXEMPT ";
                 echo "<input type='radio' name='vat' value='vat-zero'>VAT-ZERO </br>";
                 echo "<SELECT name='participant_id'>";
-		$participants = getParticipantWithSameAmount($eventId,$civicrm_amount,$employer_id);
                 foreach($participants as $key=>$field){
                         $participant_id = $field['participant_id'];
                         $name = $field['sort_name'];
                         $amount = $field['fee_amount'];
 			echo "<option value='".$participant_id."'>".$name."-".$amount."</option>";
                 }
-		echo "</SELECT><input type='submit' name='update' value='UPDATE BILL'></td></tr>";
+		echo "</SELECT><input type='submit' name='update' value='UPDATE BILL'>";
                 $update_action = 'change name';
+             }
+             else{
+                 echo "No availabe participant to be replaced for this bill.";
+             }    
+
+             echo "</td></tr>";         
 
         }elseif($status !='Cancelled' && $current_amount!=$civicrm_amount && $isEdit == 1){
                echo "<tr>";
