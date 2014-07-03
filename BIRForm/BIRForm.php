@@ -122,8 +122,9 @@ x:publishsource="Excel">
   vglayout2'>
   <table cellpadding=0 cellspacing=0>
    <tr>
-    <td colspan=6 height=30 class=xl1672552 width=476 style='height:23.1pt;
-    width:358pt'>Institute of Internal Auditors Philippines Inc.</td>
+    <td class=xl1672552 style='height:23.1;width:358'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      Institute of Internal Auditors Philippines Inc. 
+    </td>
    </tr>
   </table>
   </span></td>
