@@ -157,7 +157,7 @@ function getInfoByParticipantId($participant_id){
 
 }
 
-function getInfoByBillingNo($billing_no,$bir_no){
+function getInfoByBillingNo($billing_id){
 
      try{
 
@@ -173,9 +173,8 @@ function getInfoByBillingNo($billing_no,$bir_no){
                            AND cp.contact_id = cc.id
                            AND cps.id = cp.status_id
                            AND bill.participant_id = cp.id
-                           AND bill.billing_no = ? AND bill.bir_no = ? ORDER BY bill.id DESC");
-         $stmt->bindValue(1,$billing_no,PDO::PARAM_INT);
-         $stmt->bindValue(2,$bir_no,PDO::PARAM_INT);
+                           AND bill.id = ? ORDER BY bill.id DESC");
+         $stmt->bindValue(1,$billing_id,PDO::PARAM_INT);
          $stmt->execute();
          $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
