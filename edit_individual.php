@@ -61,6 +61,10 @@ $(function() {
         $notes_id = $bill['notes_id'];
         $allowed_edit = $current_amount == $civicrm_amount && $isEdit == 0 ? 'Billing information cannot be updated.' : "Update Billing Information";
         $is_cancelled = $bill['is_cancelled'];
+        $nonvatable_type = $bill["nonvatable_type"];
+	$is_vatable = $nonvatable_type == NULL ? "checked='checked'" : '';
+	$is_exempt = $nonvatable_type == 'vat_exempt' ? "checked='checked'" : '';
+	$is_zero = $nonvatable_type == 'vat_zero' ? "checked='checked'" : '';
 ?>
       <div align='center'>
 	<table>
@@ -160,8 +164,8 @@ $(function() {
                echo "<td>Generate Bill</td>";
                echo "<td>Account Receivable Type:";
                echo "<input type='radio' name='vat' value='vatable' checked='checked'>VATABLE ";
-               echo "<input type='radio' name='vat' value='vat-exempt'>VAT-EXEMPT ";
-               echo "<input type='radio' name='vat' value='vat-zero'>VAT-ZERO </br>";
+               echo "<input type='radio' name='vat' value='vat_exempt'>VAT-EXEMPT ";
+               echo "<input type='radio' name='vat' value='vat_zero'>VAT-ZERO </br>";
                echo "<input type='text' name='bs_no' placeholder='Enter BS No.' required/>";
                echo "<input type='submit' name='update' value='GENERATE BILL'></td></tr>";
                $update_action = 'regenerate';
@@ -170,9 +174,9 @@ $(function() {
                echo "<tr>"; 
                echo "<td colspan=2>";
                echo "Account Receivable Type:";
-               echo "<input type='radio' name='vat' value='vatable' checked='checked'>VATABLE ";
-               echo "<input type='radio' name='vat' value='vat-exempt'>VAT-EXEMPT ";
-               echo "<input type='radio' name='vat' value='vat-zero'>VAT-ZERO </br>";
+               echo "<input type='radio' name='vat' value='vatable' $is_vatable>VATABLE ";
+               echo "<input type='radio' name='vat' value='vat-exempt' $is_exempt>VAT-EXEMPT ";
+               echo "<input type='radio' name='vat' value='vat-zero' $is_zero>VAT-ZERO </br>";
                echo "BS No. : <input type='text' name='new_birno' value='$bir_no'>";
                echo "</td>";
                echo "</tr>";
