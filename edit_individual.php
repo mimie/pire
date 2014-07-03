@@ -58,7 +58,7 @@ $(function() {
         $civicrm_amount = $bill['civicrm_amount'];
         $eventId = $bill['event_id'];
         $notes_id = $bill['notes_id'];
-        $allowedEdit_info = $isEdit == '0' || ($isEdit == 1 && $civicrm_amount == $current_amount) ? 'Billing information cannot be updated.' : 'Update Billing Information';
+        $allowed_edit = $current_amount == $civicrm_amount && $isEdit == 0 ? 'Billing information cannot be updated.' : "Update Billing Information";
         $is_cancelled = $bill['is_cancelled'];
 ?>
       <div align='center'>
@@ -103,7 +103,7 @@ $(function() {
 			<th>Participant Status</th><td><?=$status?></td>
 		</tr>
                 <tr>
-                	<th colspan='2'><?=$allowedEdit_info?></th>
+                	<th colspan='2'><?=$allowed_edit?></th>
                 </tr>
 <form action='' method='POST'>
 <?php
@@ -155,7 +155,19 @@ $(function() {
                echo "<input type='text' name='bs_no' placeholder='Enter BS No.' required/>";
                echo "<input type='submit' name='update' value='GENERATE BILL'></td></tr>";
                $update_action = 'regenerate';
-          }
+
+        }elseif($status !='Cancelled' && $isEdit == 1){
+               echo "<tr>"; 
+               echo "<td colspan=2>";
+               echo "Account Receivable Type:";
+               echo "<input type='radio' name='vat' value='vatable' checked='checked'>VATABLE ";
+               echo "<input type='radio' name='vat' value='vat-exempt'>VAT-EXEMPT ";
+               echo "<input type='radio' name='vat' value='vat-zero'>VAT-ZERO </br>";
+               echo "BS No. : <input type='text' name='new_birno' value='$bir_no'>";
+               echo "</td>";
+               echo "</tr>";
+
+         }
 ?>
 </form>
 	</table>
