@@ -20,7 +20,7 @@ $(function() {
                 'page': 1,
                 'links': 'buttons'
         });
-//        $("table").tablesorter( {sortList: [[0,0], [1,0]]} ); 
+//        $("table").tablesorter( {sortList: [[0,0], [1,0]]} );
 });
 $(function() {
     $( "#confirmation" ).dialog({
@@ -53,13 +53,13 @@ function isCheck(elem, helperMsg){
 	for(var i=0;i<elem.length;i++){
            length = elem[i].checked ? length + 1 : length;
         }
-        
+
         if(length == 0){
           alert(helperMsg);
           return false;
         }else{
           return true;
-         } 
+         }
 }
 
 function validator(){
@@ -90,7 +90,7 @@ function validator(){
   include 'notes/notes_functions.php';
 
   $dbh = civicrmConnect();
- 
+
   $logout = logoutDiv($dbh);
   echo $logout;
   echo "<br>";
@@ -135,16 +135,16 @@ function validator(){
 
 ?>
 
-<?php 
+<?php
 
    echo "<table width='100%'>";
    echo "<tr>";
    echo "<td align='center'><a href='individualBilling.php?eventId=$eventId&billingType=individual&uid=".$uid."'>INDIVIDUAL BILLING</a></td>";
    echo "<td align='center' bgcolor='#084B8A'><a href='companyBilling.php?eventId=$eventId&billingType=company&uid=".$uid."'>COMPANY BILLING</td>";
    echo "</tr>";
-   echo "</table></br>"; 
+   echo "</table></br>";
 
-   echo "<form action='' method='POST' onsubmit=\"return validator()\">"; 
+   echo "<form action='' method='POST' onsubmit=\"return validator()\">";
 
    $display = "<table id='billings' style='width:100%;'>"
             . "<thead>"
@@ -186,11 +186,11 @@ function validator(){
              . "<tr>"
              . "</thead>"
              . "<tbody>";
-   
+
    $participants = getIndividualParticipantsByEventId($eventId);
 
    foreach($participants as $key => $field){
-        $participant_id = $field['participant_id']; 
+        $participant_id = $field['participant_id'];
         $status_id = $field['status_id'];
         $status = $field['status'];
         $orgname = $field["organization_name"];
@@ -215,7 +215,7 @@ function validator(){
 		$bill_amount = $bill['fee_amount'];
 		$color = $civicrm_amount != $bill_amount ? 'red' : '';
 		$bill_amount = number_format($bill_amount,2,'.','');
-		//update amount if status is cancelled 
+		//update amount if status is cancelled
 		$civicrm_amount = $status_id == 4 ? number_format(0,2,'.','') : $civicrm_amount;
 
                 if($status_id == 4){
@@ -251,12 +251,12 @@ function validator(){
                  $display = $display. "<td>$strike".$field['street_address']." ".$field['city_address']."$endstrike</td>"
                      . "<td>$strike".$note."$endstrike</td>"
                      . "<td>$img_link</td>"
-                     . "</tr>";	
+                     . "</tr>";
            }
        }
-       
+
       elseif($count == 0){
-           
+
            $strike = $status_id == 4 ? '<strike>' : '';
            $endstrike = $status_id == 4 ? '</strike>' : '';
            $checkbox = $status_id == 4 || $civicrm_amount == 0 ? "" : "class='checkbox'";
@@ -280,7 +280,7 @@ function validator(){
             $display = $display. "<td>$strike".$field['street_address']." ".$field['city_address']."$endstrike</td>"
                      . "<td>$note</td>"
                      . "<td>$img_link</td>"
-                     . "</tr>";	
+                     . "</tr>";
       }
 
    }//end of foreach
@@ -295,9 +295,9 @@ function validator(){
      $nonvatable_type = $_POST['vat'] == 'vatable' ? '' : $_POST['vat'];
      $is_vatable = $_POST["vat"] == 'vat-exempt' || $_POST['vat-zero'] ? 0 : 1;
      $notes_id = $_POST["notes"] == 'select' ? NULL : $_POST["notes"];
-     
+
      foreach($participantIds as $id){
-        $bir_no = formatBSNo($bs_no);
+        $bir_no = $bs_no == NULL ? '' : formatBSNo($bs_no);
         $details = array('bs_no' => $bir_no,
                          'vatable' => $is_vatable,
                          'notes_id' => $notes_id,
@@ -305,9 +305,9 @@ function validator(){
                          'billing_type' => 'Individual',
                          'billing_id' => NULL);
      	generateIndividualBill($id,$details);
-        $bs_no++;
+      $bs_no = $bs_no == NULL ? '' : $bs_no++;
      }
-     
+
      echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully generated bill.</div>";
    }
 ?>

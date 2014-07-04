@@ -55,7 +55,7 @@ function getParticipantWithSameCompany($eventId,$employer_id){
 function updateParticipant($new_birno,$bir_no,array $info,$is_vat,$nonvatable_type){
 
    $new_birno = $new_birno == $bir_no ? $bir_no : $new_birno;
-	
+
    try{
 	$stmt = civicrmDB("UPDATE billing_details
                            SET participant_id = ?,
@@ -99,7 +99,7 @@ function updateParticipant($new_birno,$bir_no,array $info,$is_vat,$nonvatable_ty
         $stmt->bindValue(14,$nonvatable_type,PDO::PARAM_STR);
         $stmt->bindValue(15,$new_birno,PDO::PARAM_STR);
         $stmt->bindValue(16,$bir_no,PDO::PARAM_STR);
-        
+
         $stmt->execute();
     }
 
@@ -113,7 +113,7 @@ function updateParticipant($new_birno,$bir_no,array $info,$is_vat,$nonvatable_ty
 function insertBillingHistory(array $hist_details){
 
 	try{
-		
+
 		$stmt = civicrmDB("INSERT INTO billing_history(billing_no,action_taken,generator_uid,bir_no)
                                    VALUES(?,?,?,?)
                                   ");
@@ -263,6 +263,32 @@ function cancelCompanyBill($bir_no){
         catch(PDOException $error){
 		echo $error->getMessage();
         }
+}
+
+function updateIndividualParticipant(array $details){
+
+	$subtotal = $details['withVat'] == 1 ? $details['amount']/1.12 : $details['amount'];
+	$vat = $details['amount'] - round($subtotal,2);
+	$subtotal = number_format($subtotal,2,'.','');
+	$vat = number_format($vat,2,'.','');
+
+	try{
+		$stmt = civicrmDB("UPDATE billing_details
+			                 SET bir_no=?,fee_amount=?,subtotal=?,vat=?,nonvatable_type=?,notes_id=?
+											 WHERE billing_no=?");
+		$stmt->bindValue(1,$details['new_birno'],PDO::PARAM_STR);
+		$stmt->bindValue(2,$details['amount'],PDO::PARAM_INT);
+		$stmt->bindValue(3,$subtotal,PDO::PARAM_INT);
+		$stmt->bindValue(4,$vat,PDO::PARAM_INT);
+		$stmt->bindValue(5,$details['nonvatable_type'],PDO::PARAM_STR);
+		$stmt->bindValue(6,$details['notes_id'],PDO::PARAM_INT);
+		$stmt->bindValue(7,$details['billing_no'],PDO::PARAM_STR);
+		$stmt->execute();
+	}
+
+	catch(PDOException $error){
+		echo $error->getMessage();
+	}
 }
 
 ?>
