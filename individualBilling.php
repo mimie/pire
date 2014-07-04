@@ -201,6 +201,7 @@ function validator(){
 
         if($count > 0){
             foreach($billing_details as $key=>$bill){
+
                 $billing_id = $bill['id'];
                 $participant_id = $bill['participant_id'];
 		$is_post = $bill['post_bill'];
