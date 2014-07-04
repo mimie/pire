@@ -188,8 +188,8 @@ p.issuedby{
 </p>
 <p class="myamount"><?=number_format($bill['fee_amount'],2)?></p>
 <p class="vatsales"><?=number_format($bill['subtotal'],2)?></p>
-<p class="vatexempt">VatExempt</p>
-<p class="vatzero">VatZero</p>
+<p class="vatexempt"></p>
+<p class="vatzero"></p>
 <p class="vatamount"><?=number_format($bill['vat'],2)?></p>
 <p class="totalamount"><?=number_format($bill['fee_amount'],2)?></p>
 <p class="issuedby"><?=$generator?></p>
