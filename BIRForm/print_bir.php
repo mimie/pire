@@ -167,6 +167,10 @@ p.issuedby{
   $nonvatable_type = $bill['nonvatable_type'];
   $bill_subtotal = number_format($bill['subtotal'],2);
 
+  $stmt = civicrmDB("UPDATE billing_details SET edit_bill = '0' WHERE billing_no=?");
+  $stmt->bindValue(1,$billing_no,PDO::PARAM_STR);
+  $stmt->execute();
+
 ?>
 <p class="myname"><?=$bill['sort_name']?></p>
 <p class="myaddress"><?=$address?></p>
