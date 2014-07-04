@@ -225,6 +225,9 @@ function validator(){
 		$checkbox = $is_post == 1 || $is_generated == 1|| $civicrm_amount == 0 ? "" : "class='checkbox'";
 		$disabled = $is_post == 1 || $is_generated == 1 || $civicrm_amount == 0 ? 'disabled' : '';
 
+                $print_link="<a href='BIRForm/print_bir.php?event_id=$eventId&billing_no=".$billing_no."&uid=$uid' target='_blank'><img src='printer-icon.png' width='30' height='30'></a>";
+                $print_link = $bill['edit_bill'] == 0 ? '' : $print_link;
+
 		//status = 4 = Cancelled - Strike the column if the participant status is cancelled.
 		$strike = $status_id == 4 || $status_id == 7 || $status_id == 15 ? '<strike>' : '';
 		$endstrike = $status_id == 4 || $status_id == 7 || $status_id == 15 ? '</strike>' : '';
@@ -238,7 +241,7 @@ function validator(){
                           . "<td>$strike".$subtotal."$endstrike</td>"
                           . "<td>$strike".$vat."$endstrike</td>"
                           . "<td><a href='BIRForm/BIRForm.php?event_id=$eventId&billing_no=".$billing_no."&uid=$uid' target='_blank'><img src='images/preview.png' width='30' height='30'></a>"
-                          . "<a href='BIRForm/print_bir.php?event_id=$eventId&billing_no=".$billing_no."&uid=$uid' target='_blank'><img src='printer-icon.png' width='30' height='30'></a></td>"
+                          . "$print_link</td>"
                           . "<td>$strike".number_format($paid,2)."$endstrike</td>"
                           . "<td>$strike".$billing_no."$endstrike</td>"
                           . "<td>".$strike."".$atp_no."$endstrike</td>"
