@@ -161,32 +161,43 @@ p.issuedby{
   @$uid = $_GET["uid"];
   $generator = getGeneratorName($uid);
   @$billing_no = $_GET["billing_no"];
-  @$bir_no = $_GET["bir_no"];
-  $bill = getBIRDetails($billing_no,$bir_no);
+  $bill = getBIRDetails($billing_no);
   $address = $bill['street_address']." ".$bill['city_address'];
   $location = formatEventLocation(getEventLocation($dbh,$eventId));
-
+  $nonvatable_type = $bill['nonvatable_type'];
+  $bill_subtotal = number_format($bill['subtotal'],2);
 
 ?>
 <p class="myname"><?=$bill['sort_name']?></p>
 <p class="myaddress"><?=$address?></p>
 <p class="mytin">Tin</p>
 <p class="lbltxn">Txn. No:</p>
-<p class="myrefno"><?=$billing_no?>/BS-<?=$bir_no?></p>
+<p class="myrefno"><?=$reference_no = $bill['bir_no'] == NULL ? $billing_no : "BS-".$bill['bir_no']."/".$billing_no?></p>
 <p class="mybilldate"><?=date("F j, Y",strtotime($bill['bill_date']))?></p>
 <p class="myduedate"><?=date("F j, Y",strtotime($bill['start_date']))?></p>
 <p class="myparticulars">
-   <?=$bill['event_name']?></br>
-   On <?=date("F j, Y",strtotime($bill['start_date']))?> to <?=date("F j, Y",strtotime($bill['end_date']))?></br>
-   <?=$location?>
+  <?=$bill['event_name']?></br>
+<?php
+
+if($bill['start_date']==$bill['end_date']){
+              $date_range = "On ".date("F j, Y",strtotime($bill['start_date']));
+      }
+      else{
+  $date_range = "On ".date("F j, Y",strtotime($bill['start_date']))." to ".date("F j, Y",strtotime($bill['end_date']));
+      }
+      echo $date_range."</br>";
+      $location = $location == NULL ? '' : $location;
+      echo $location;
+
+?>
 </p>
 <p class="notes">
 <?php
 	$notes = getNoteById($dbh,$bill['notes_id']);
-        echo $notes['notes'];
+  echo $notes['notes'];
 ?>
 </p>
-<p class="myamount"><?=number_format($bill['fee_amount'],2)?></p>
+<p class="myamount"></br></br><?=number_format($bill['fee_amount'],2)?></p>
 <p class="vatsales"><?=number_format($bill['subtotal'],2)?></p>
 <p class="vatexempt">VatExempt</p>
 <p class="vatzero">VatZero</p>

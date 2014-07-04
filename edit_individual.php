@@ -283,7 +283,6 @@ $(function() {
                               'nonvatable_type' => $nonvatable_type,
                               'billing_type' => 'Individual',
                               'billing_id' => NULL);
-        var_dump($details);
 
 	     generateIndividualBill($participant_no,$details);
              $history = array('billing_no'=>$billing_no,
