@@ -190,7 +190,7 @@ x:publishsource="Excel">
   <td class=xl992552>:</td>
   <td colspan=5 class=xl1632552>&nbsp;<?=$bill['sort_name']?></td>
   <td class=xl1022552>REFERENCE NO.</td>
-  <td class=xl1242552><?=$reference_no = $bill['bir_no'] == NULL ? $billing_no : $billing_no."/BS-".$bill['bir_no']?></td>
+  <td class=xl1242552><?=$reference_no = $bill['bir_no'] == NULL ? $billing_no : "BS-".$bill['bir_no']."/".$billing_no?></td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
  </tr>
@@ -411,7 +411,11 @@ x:publishsource="Excel">
   <td colspan=8 class=xl1572552 style='border-right:.5pt solid black'>&nbsp;
   <?php
      $notes = getNoteById($dbh,$bill['notes_id']);
-     echo $notes['notes'];
+     if($notes != NULL){
+	     echo "<div style='border: 1px solid #0B2161; padding: 4px 4px 4px 4px;background-color:#A9BCF5;' align='center'>";
+	     echo "<b><font color='#0A0A2A'><i>Notes: </i>".$notes['notes']."</font></b>";
+	     echo "</div></br>";
+     }
   ?>
 
   </td>
