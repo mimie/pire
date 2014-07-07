@@ -198,7 +198,10 @@ if($bill['start_date']==$bill['end_date']){
 <p class="notes">
 <?php
 	$notes = getNoteById($dbh,$bill['notes_id']);
-  echo $notes['notes'];
+     if($notes != NULL){
+	     echo "<b><font color='#0A0A2A'><i>Notes: </i>".$notes['notes']."</font></b>";
+	     echo "</br>";
+     }
 ?>
 </p>
 <p class="myamount"></br></br><?=number_format($bill['fee_amount'],2)?></p>
