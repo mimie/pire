@@ -294,7 +294,7 @@ function validator(){
      $participantIds = $_POST["ids"];
      $bs_no = $_POST["bs_no"];
      $nonvatable_type = $_POST['vat'] == 'vatable' ? '' : $_POST['vat'];
-     $is_vatable = $_POST["vat"] == 'vat-exempt' || $_POST['vat-zero'] ? 0 : 1;
+     $is_vatable = $_POST["vat"] == 'vat_exempt' || 'vat_zero' ? 0 : 1;
      $notes_id = $_POST["notes"] == 'select' ? NULL : $_POST["notes"];
 
      foreach($participantIds as $id){
