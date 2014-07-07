@@ -211,17 +211,20 @@ function getCurrentCompanyBillByEvent($orgId,$eventId,$bir_no,$billing_no){
          }
 }
 
-function updateIncludedNameByParticipantId($participant_id,$bir_no,$new_amount){
+function updateIncludedNameByParticipantId($participant_id,$bir_no,$new_amount,$new_birno,$billing_no){
+
 
 	try{
-		$stmt = civicrmDB("UPDATE billing_details SET fee_amount=?,vat='0',subtotal='0',vat='0'
-                                   WHERE bir_no=?
+                $new_birno = $bir_no == $new_birno ? $bir_no : $new_birno;
+		$stmt = civicrmDB("UPDATE billing_details SET fee_amount=?,vat='0',subtotal='0',vat='0',bir_no=?
+                                   WHERE billing_no=?
                                    AND participant_id=?
                                    AND billing_type = 'Company'
                                    ");
                 $stmt->bindValue(1,$new_amount,PDO::PARAM_INT);
-                $stmt->bindValue(2,$bir_no,PDO::PARAM_STR);
-                $stmt->bindValue(3,$participant_id,PDO::PARAM_INT);
+                $stmt->bindValue(2,$new_birno,PDO::PARAM_STR);
+                $stmt->bindValue(3,$billing_no,PDO::PARAM_STR);
+                $stmt->bindValue(4,$participant_id,PDO::PARAM_INT);
                 $stmt->execute();
 
         }catch(PDOException $error){
@@ -229,20 +232,24 @@ function updateIncludedNameByParticipantId($participant_id,$bir_no,$new_amount){
         }
 }
 
-function updateCompanyBillByBIRNo($bir_no,$is_vat,$new_amount,$nonvatable_type,$notes_id){
+function updateCompanyBillByBillingNo($bir_no,$is_vat,$new_amount,$nonvatable_type,$notes_id,$new_birno,$billing_no){
 
+        $new_amount = $is_vat == 1 ? $new_amount : round($new_amount/1.12,2);
         $subtotal = $is_vat == 1 ? $new_amount/1.12 : $new_amount;
         $vat = $new_amount - $subtotal;
 
+        $new_birno = $bir_no == $new_birno ? $bir_no : $new_birno;
+
 	try{
-		$stmt = civicrmDB("UPDATE billing_company SET total_amount=?,subtotal=?,vat=?,nonvatable_type=?,notes_id=?
-                                   WHERE bir_no=?");
+		$stmt = civicrmDB("UPDATE billing_company SET total_amount=?,subtotal=?,vat=?,nonvatable_type=?,notes_id=?,bir_no=?
+                                   WHERE billing_no=?");
                 $stmt->bindValue(1,$new_amount,PDO::PARAM_INT);
                 $stmt->bindValue(2,$subtotal,PDO::PARAM_INT);
                 $stmt->bindValue(3,$vat,PDO::PARAM_INT);
                 $stmt->bindValue(4,$nonvatable_type,PDO::PARAM_STR);
                 $stmt->bindValue(5,$notes_id,PDO::PARAM_INT);
-                $stmt->bindValue(6,$bir_no,PDO::PARAM_STR);
+                $stmt->bindValue(6,$new_birno,PDO::PARAM_STR);
+                $stmt->bindValue(7,$billing_no,PDO::PARAM_STR);
                 $stmt->execute();
         echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully updated company bill.</div>";
         }catch(PDOException $error){
@@ -291,6 +298,21 @@ function updateIndividualParticipant(array $details){
 	catch(PDOException $error){
 		echo $error->getMessage();
 	}
+}
+
+function getTotalAmountByBillingNo($billing_no){
+
+	$stmt = civicrmDB("SELECT fee_amount FROM billing_details WHERE billing_no=? AND billing_type='Company'");
+        $stmt->bindValue(1,$billing_no,PDO::PARAM_STR);
+        $stmt->execute();
+        $amounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $total = 0;
+        foreach($amounts as $key=>$field){
+        	$total = $total + $field["fee_amount"];
+        }
+
+        return $total;
 }
 
 ?>
