@@ -124,7 +124,7 @@ $(function() {
                 </tr>
 <form action='' method='POST'>
 <?php
-	if($status == 'Cancelled' && ($isEdit == 0 || $isEdit == 1) && $is_cancelled != 1){
+	if($status == 'Cancelled' && ($isEdit == 0 || $isEdit == 1)){
 
 	     $participants = $isEdit == 0 ? getParticipantWithSameAmount($eventId,$civicrm_amount,$employer_id) : getParticipantWithSameCompany($eventId,$employer_id);
              if($participants){
@@ -233,7 +233,7 @@ $(function() {
 </form>
 </table>
 </div>
-	 <?=$cancelled_img = $is_cancelled == 1 ? "<div align='center'><img src='images/cancelled.jpg'></div>" : ""?>;	
+	 <?=$cancelled_img = $is_cancelled == 1 && $is_edit == 0 ? "<div align='center'><img src='images/cancelled.jpg'></div>" : ""?>;	
          
 <?php
 	if($_POST['update'] && $update_action == 'change name'){
