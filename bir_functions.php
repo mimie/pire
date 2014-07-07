@@ -110,7 +110,7 @@ function checkIndividualBillGenerated($participant_id,$eventId){
 function getBIRDetails($billing_no){
 
 	$stmt = civicrmDB("SELECT cc.sort_name,ce.title as event_name,ce.start_date,ce.end_date,bill.bir_no,bill.fee_amount,
-                           bill.subtotal,bill.vat,bill.bill_date,bill.nonvatable_type,bn.notes_id,bd. street_address__company__3 as street_address,
+                           bill.subtotal,bill.vat,bill.bill_date,bill.nonvatable_type,bill.notes_id,bd. street_address__company__3 as street_address,
                            city__company__5 as city_address
                            FROM billing_details bill,billing_notes bn,civicrm_event ce,civicrm_contact cc
                            LEFT JOIN civicrm_value_business_data_1 bd ON bd.entity_id = cc.id
