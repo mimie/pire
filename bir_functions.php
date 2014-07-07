@@ -219,8 +219,9 @@ function generateIndividualBill($participant_id,array $details){
 
 			$bill_address = $info["street_address"]." ".$info["city_address"];
 
-			$subtotal = $vatable == 1 ? round($info["fee_amount"]/1.12,2) : $info["fee_amount"];
-			$vat = $info["fee_amount"] - $subtotal;
+                        $fee_amount = $vatable == 1 ? $info["fee_amount"] : round($info["fee_amount"]/1.12,2);
+			$subtotal = $vatable == 1 ? round($fee_amount/1.12,2) : $fee_amount;
+			$vat = $fee_amount - $subtotal;
 			$billing_no = $billing_type == 'Individual' ? $event_type."-".date("y")."-".formatBillingNo($participant_id) : $billing_id;
 
 			$stmt->bindValue(1,$participant_id,PDO::PARAM_INT);
@@ -234,7 +235,7 @@ function generateIndividualBill($participant_id,array $details){
 			$stmt->bindValue(9,$info["organization_name"],PDO::PARAM_STR);
 			$stmt->bindValue(10,$orgId,PDO::PARAM_INT);
 			$stmt->bindValue(11,$billing_type,PDO::PARAM_STR);
-			$stmt->bindValue(12,$info["fee_amount"],PDO::PARAM_INT);
+			$stmt->bindValue(12,$fee_amount,PDO::PARAM_INT);
 			$stmt->bindValue(13,$subtotal,PDO::PARAM_INT);
 			$stmt->bindValue(14,$vat,PDO::PARAM_INT);
 			$stmt->bindValue(15,$billing_no,PDO::PARAM_STR);
