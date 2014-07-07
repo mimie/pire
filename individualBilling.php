@@ -227,7 +227,7 @@ function validator(){
 		$disabled = $is_post == 1 || $is_generated == 1 || $civicrm_amount == 0 ? 'disabled' : '';
 
                 $print_link="<a href='BIRForm/print_bir.php?event_id=$eventId&billing_no=".$billing_no."&uid=$uid' target='_blank'><img src='printer-icon.png' width='30' height='30'></a>";
-                $print_link = $bill['edit_bill'] == 0 || $atp_no == NULL ? '' : $print_link;
+                $print_link = $bill['edit_bill'] == 0 || $bir_no == NULL ? '' : $print_link;
 
 		//status = 4 = Cancelled - Strike the column if the participant status is cancelled.
 		$strike = $status_id == 4 || $status_id == 7 || $status_id == 15 || $bill_amount == 0 ? '<strike>' : '';
