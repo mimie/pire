@@ -290,6 +290,9 @@ x:publishsource="Excel">
           <div style="margin-left: 20%;">
 <?php
 	foreach($amounts as $fee){
+                if($nonvatable_type != NULL){
+                   $fee = round($fee/1.12,2);
+                }
 		echo number_format($fee,2)."</br>";
         }
 
@@ -467,7 +470,7 @@ x:publishsource="Excel">
   <td class=xl1052552>&nbsp;</td>
   <td class=xl1062552>&nbsp;</td>
   <td rowspan=2 class=xl1562552>VAT-ABLE SALES</td>
-  <td rowspan=2 class=xl1422552 style='border-bottom:.5pt solid black'>&nbsp;<?=$subtotal = $nonvatale_type == NULL ? number_format($bill['subtotal'],2) : ''?></td>
+  <td rowspan=2 class=xl1422552 style='border-bottom:.5pt solid black'>&nbsp;<?=$subtotal = $nonvatable_type == NULL ? number_format($bill['subtotal'],2) : ''?></td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
  </tr>
