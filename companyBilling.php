@@ -67,11 +67,10 @@ function validator(){
 	var checkbox = document.getElementsByName('ids[]');
         var bs_no = document.getElementById('bs_no');
 
-        if(isNumeric(bs_no,"Please enter a valid number for BS No. field.")){
            if(isCheck(checkbox,"Please select a company name.")){
              return true;
            }
-        }
+ 
 
         return false;
 }
@@ -156,7 +155,7 @@ function validator(){
             . "Account Receivable Type: <input type='radio' name='vat' value='vatable' checked='checked'>VATABLE  "
             . "<input type='radio' name='vat' value='vat_exempt'>VAT-EXEMPT "
             . "<input type='radio' name='vat' value='vat_zero'>VAT-ZERO "
-            . "</br>BS. No. : <input type='text' id='bs_no' name='bs_no' placeholder='Enter BS No. start number...' required>";
+            . "</br>BS. No. : <input type='text' id='bs_no' name='bs_no' placeholder='Enter BS No. start number...'>";
 
     $notes_opt = getNotesByCategory("Company Event Billing");
     $notes_collection = array();
@@ -276,14 +275,15 @@ function validator(){
         foreach($orgIds as $id){
                 $participants = $comp_participants[$id];
            
-                $bir_no = formatBSNo($bs_no);
+                $bir_no = $bs_no == NULL ? '' : formatBSNo($bs_no);
 		$max_stmt = civicrmDB("SELECT MAX(cbid) as max_id FROM billing_company");
 		$max_stmt->execute();
 		$billing_id = formatBillingNo($max_stmt->fetchColumn(0) + 1);
 		$current_year = date("y");
 		$billing_no = $eventTypeName."-".$current_year."-".$billing_id;
-                $subtotal = $vatable == 1 ? $totals[$id]/1.12 : $totals[$id];
-                $vat = $totals[$id] - $subtotal;
+                $total_bill = $vatable == 1 ? $totals[$id] : round($totals[$id]/1.12,2);
+                $subtotal = $vatable == 1 ? $total_bill/1.12 : $total_bill;
+                $vat = $total_bill - $subtotal;
                 $subtotal = number_format($subtotal, 2, '.', '');
                 $vat = number_format($vat, 2, '.', ''); 
                 $billing_information = array('event_id' => $eventId,
@@ -293,7 +293,7 @@ function validator(){
                                              'org_name' => $comp_names[$id],
                                              'address' => getCompleteCompanyAddress($dbh,$id),
                                              'billing_no' => $billing_no,
-                                             'total_amount' => $totals[$id],
+                                             'total_amount' => $total_bill,
                                              'subtotal' => $subtotal,
                                              'vat' => $vat,
                                              'bir_no' => $bir_no, 
@@ -313,7 +313,7 @@ function validator(){
                                           );
                 	generateIndividualBill($participant_id,$details);
                 }
-                $bs_no++;
+                $bs_no = $bs_no == NULL ? '' : $bs_no++;
         }
         
         echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully generated company bill.</div>";
