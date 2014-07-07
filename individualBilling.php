@@ -227,7 +227,7 @@ function validator(){
 		$disabled = $is_post == 1 || $is_generated == 1 || $civicrm_amount == 0 ? 'disabled' : '';
 
                 $print_link="<a href='BIRForm/print_bir.php?event_id=$eventId&billing_no=".$billing_no."&uid=$uid' target='_blank'><img src='printer-icon.png' width='30' height='30'></a>";
-                $print_link = $bill['edit_bill'] == 0 ? '' : $print_link;
+                $print_link = $bill['edit_bill'] == 0 || $atp_no == NULL ? '' : $print_link;
 
 		//status = 4 = Cancelled - Strike the column if the participant status is cancelled.
 		$strike = $status_id == 4 || $status_id == 7 || $status_id == 15 || $bill_amount == 0 ? '<strike>' : '';
@@ -294,7 +294,7 @@ function validator(){
      $participantIds = $_POST["ids"];
      $bs_no = $_POST["bs_no"];
      $nonvatable_type = $_POST['vat'] == 'vatable' ? '' : $_POST['vat'];
-     $is_vatable = $_POST["vat"] == 'vat_exempt' || 'vat_zero' ? 0 : 1;
+     $is_vatable = $_POST["vat"] == 'vat_exempt' || $_POST["vat"] == 'vat_zero' ? 0 : 1;
      $notes_id = $_POST["notes"] == 'select' ? NULL : $_POST["notes"];
 
      foreach($participantIds as $id){
