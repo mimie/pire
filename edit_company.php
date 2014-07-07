@@ -32,7 +32,8 @@ $(function() {
       buttons: {
         "OK": function() {
           //$( this ).dialog( "close" );
-          reloadPage();
+          //reloadPage();
+          window.close();
         }
       }
     });
@@ -236,15 +237,16 @@ $(function() {
 	             <input type='radio' name='vat' value='vatable' <?=$is_vatable?>>VATABLE
 	             <input type='radio' name='vat' value='vat_exempt' <?=$is_exempt?>>VAT-EXEMPT
 	             <input type='radio' name='vat' value='vat_zero' <?=$is_zero?>>VAT-ZERO</br>
+                     BS No.:&nbsp;<input type='text'  name='new_birno' value='<?=$bir_no?>'>
                      <SELECT name='notes_id'><option value='select'>- Select optional billing notes -</option><option>-----------------</option>
 <?php
                 $options = '';
 		foreach($notes_opt as $key=>$field){
     			$id = $field["notes_id"];
     			$notes = $field["notes"];
-          $selected = $old_notes_id == $id ? 'selected' : '';
+                        $selected = $old_notes_id == $id ? 'selected' : '';
     			$options = $options."<option value='$id' $selected>$notes</option>";
-          echo $options;
+                        echo $options;
     		}
 
           echo "</SELECT><input type='submit' name='update' value='UPDATE BILLING'></td>";
@@ -272,9 +274,9 @@ $(function() {
                 echo $options;
                }
 
-    echo "</SELECT><input type='submit' name='update' value='REGENERATE BILL'><input type='submit' name='update' value='ADD NEW BILL'></td>";
-    echo "</tr>";
-    $update_action = 'regenerate';
+          echo "</SELECT><input type='submit' name='update' value='REGENERATE BILL'><input type='submit' name='update' value='ADD NEW BILL'></td>";
+          echo "</tr>";
+          $update_action = 'regenerate';
 	}
 ?>
 </table></form>
@@ -290,17 +292,17 @@ $(function() {
   $new_total = $total_amount;
 
 	if(isset($_POST['update']) && $update_action == 'update amount'){
+                $new_birno = $new_birno == NULL ? '' : formatBSNo($_POST['new_birno']);
 		$participant_ids = $_POST['ids'];
     		$notes_id = $_POST['notes_id'];
     		$vatable = $_POST['vat'] == 'vatable' ? 1 : 0;
     		$nonvatable_type = $_POST['vat'] == 'vatable' ? '' : $_POST['vat'];
 
               foreach($participant_ids as $id){
-                  //existing participants
             			
                   if(array_key_exists($id,$participants)){
 
-            				  $info = $participants[$id];
+            	      $info = $participants[$id];
                       $old_amount = $info['fee_amount'];
                       $new_amount = $info['civicrm_amount'];
                       $status = $info['status'];
@@ -309,15 +311,8 @@ $(function() {
                            $new_total = $new_total - $old_amount;
                            $new_amount = 0.00;
             	      }
-                      elseif($old_amount < $new_amount){
-            		   $add_amount = $new_amount - $old_amount;
-                           $new_total = $new_total + $add_amount;
-            	      }elseif($old_amount > $new_amount){
-            		   $deduct_amount = $old_amount - $new_amount;
-                           $new_total = $new_total - $deduct_amount;
-                      }
 
-                    updateIncludedNameByParticipantId($id,$bir_no,$new_amount);
+                    updateIncludedNameByParticipantId($id,$bir_no,$new_amount,$new_birno,$billing_no);
                     $history = array('billing_no'=>$billing_no,
                                      'action'=>"Update participant amount to ".$new_amount."of participant no. ".$id,
                                      'bir_no'=>$bir_no);
@@ -326,7 +321,6 @@ $(function() {
                   }
                   elseif(array_key_exists($id,$new_participants)){
             	        $info = $new_participants[$id];
-                  	$new_total = $new_total + $info['fee_amount'];
 
                    	$details = array('bs_no' => $bir_no,
                                          'vatable' => $vatable,
@@ -344,7 +338,9 @@ $(function() {
                   }
               }
 
-              updateCompanyBillByBIRNo($bir_no,$vatable,$new_total,$nonvatable_type,$notes_id);
+              $new_total = getTotalAmountByBillingNo($billing_no);
+
+              updateCompanyBillByBillingNo($bir_no,$vatable,$new_total,$nonvatable_type,$notes_id,$new_birno,$billing_no);
 
               if($notes_id != $old_notes_id){
               		$action = "Updated notes";
@@ -406,6 +402,7 @@ $(function() {
 		}
           }
 
+        $new_total = $vatable == 1 ? $new_total : round($new_total/1.12,2);
 	$subtotal = $vatable == 1 ? $new_total/1.12 : $new_total;
 	$vat = $new_total - $subtotal;
 	$subtotal = number_format($subtotal, 2, '.', '');
