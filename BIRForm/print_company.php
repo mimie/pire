@@ -453,7 +453,11 @@ x:publishsource="Excel">
   <td colspan=8 class=xl1572552 style='border-right:.5pt solid black'>&nbsp;
   <?php
      
-     echo $bill['notes'];
+     if($bill["notes"] != NULL){
+	     echo "<div style='border: 1px solid #0B2161; padding: 4px 4px 4px 4px;background-color:#A9BCF5;' align='center'>";
+	     echo "<b><font color='#0A0A2A'><i>Notes: </i>".$bill['notes']."</font></b>";
+	     echo "</div></br>";
+     }
   ?>
 
   </td>
