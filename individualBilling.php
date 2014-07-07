@@ -230,8 +230,8 @@ function validator(){
                 $print_link = $bill['edit_bill'] == 0 ? '' : $print_link;
 
 		//status = 4 = Cancelled - Strike the column if the participant status is cancelled.
-		$strike = $status_id == 4 || $status_id == 7 || $status_id == 15 ? '<strike>' : '';
-		$endstrike = $status_id == 4 || $status_id == 7 || $status_id == 15 ? '</strike>' : '';
+		$strike = $status_id == 4 || $status_id == 7 || $status_id == 15 || $bill_amount == 0 ? '<strike>' : '';
+		$endstrike = $status_id == 4 || $status_id == 7 || $status_id == 15 || $bill_amount == 0 ? '</strike>' : '';
                 $atp_no = $bir_no == NULL ? '' : "BS-".$bir_no;
 	        $display = $display."<tr>"
 		         . "<td>$strike<input type='checkbox' $checkbox $disabled name='ids[]' value='".$participant_id."'>".$field['sort_name']."$endstrike</td>"
