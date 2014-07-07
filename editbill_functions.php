@@ -78,9 +78,10 @@ function updateParticipant($new_birno,$bir_no,array $info,$is_vat,$nonvatable_ty
                           ");
 
         $billing_no = $info['event_type']."-".date("y")."-".formatBillingNo($info['participant_id']);
-        $subtotal = $is_vat == 0 ? $info['fee_amount'] : $info['fee_amount']/1.12;
+        $fee_amount = $is_vat == 1 ? $info['fee_amount'] : round($info['fee_amount']/1.12,2);
+        $subtotal = $is_vat == 0 ? $fee_amount : $fee_amount/1.12;
         $subtotal = round($subtotal,2);
-        $tax = $info['fee_amount'] - $subtotal;
+        $tax = $fee_amount - $subtotal;
 
         $address = $info['street_address']." ".$info['city_address'];
         $stmt->bindValue(1,$info['participant_id'],PDO::PARAM_INT);
@@ -93,7 +94,7 @@ function updateParticipant($new_birno,$bir_no,array $info,$is_vat,$nonvatable_ty
         $stmt->bindValue(8,$billing_no,PDO::PARAM_STR);
         $stmt->bindValue(9,$info['participant_status'],PDO::PARAM_STR);
         $stmt->bindValue(10,$_GET['uid'],PDO::PARAM_INT);
-        $stmt->bindValue(11,$info['fee_amount'],PDO::PARAM_INT);
+        $stmt->bindValue(11,$fee_amount,PDO::PARAM_INT);
         $stmt->bindValue(12,$subtotal,PDO::PARAM_INT);
         $stmt->bindValue(13,$tax,PDO::PARAM_INT);
         $stmt->bindValue(14,$nonvatable_type,PDO::PARAM_STR);
@@ -267,7 +268,8 @@ function cancelCompanyBill($bir_no){
 
 function updateIndividualParticipant(array $details){
 
-	$subtotal = $details['withVat'] == 1 ? $details['amount']/1.12 : $details['amount'];
+        $fee_amount = $details['withVat'] == 1 ? $details['amount'] : round($details['amount']/1.12,2);
+	$subtotal = $details['withVat'] == 1 ? $fee_amount/1.12 : $fee_amount;
 	$vat = $details['amount'] - round($subtotal,2);
 	$subtotal = number_format($subtotal,2,'.','');
 	$vat = number_format($vat,2,'.','');
@@ -277,7 +279,7 @@ function updateIndividualParticipant(array $details){
 			                 SET bir_no=?,fee_amount=?,subtotal=?,vat=?,nonvatable_type=?,notes_id=?
 											 WHERE billing_no=?");
 		$stmt->bindValue(1,$details['new_birno'],PDO::PARAM_STR);
-		$stmt->bindValue(2,$details['amount'],PDO::PARAM_INT);
+		$stmt->bindValue(2,$fee_amount,PDO::PARAM_INT);
 		$stmt->bindValue(3,$subtotal,PDO::PARAM_INT);
 		$stmt->bindValue(4,$vat,PDO::PARAM_INT);
 		$stmt->bindValue(5,$details['nonvatable_type'],PDO::PARAM_STR);
