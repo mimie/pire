@@ -217,6 +217,7 @@ function validator(){
 
                 $bill_date = date("F j, Y",strtotime($field['bill_date']));
                 $img_link = "<a href='edit_company.php?eventId=$eventId&orgId=$orgId&bir_no=$bir_no&billing_no=$billing_no&uid=$uid' onclick=\"window.open(this.href,'edit_company.php?eventId=$eventId&orgId=$orgId&bir_no=$bir_no&billing_no=$billing_no&uid=$uid','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=900,height=900');return false;\"><img src='images/edit_bill.png'></a>";
+		$print_link = $bir_no == NULL ? '' : "<img src='printer-icon.png' width='30' height='30'></a>";
                 
 		$display = $display."<tr>"
 			 . "<td><input type='checkbox' name='ids[]' value='$orgId' disabled>".$orgName."</td>"
@@ -225,7 +226,7 @@ function validator(){
 			 . "<td><font color='$color'>".number_format($field['subtotal'],2)."</font></td>"
 			 . "<td><font color='$color'>".number_format($field['vat'],2)."</font></td>"
 			 . "<td><a href='#'><a href='BIRForm/print_company.php?orgId=$orgId&event_id=$eventId&bir_no=$bir_no&billing_no=$billing_no&uid=$uid' target='_blank'><img src='images/preview.png' width='30' height='30'></a>"
-                         . "<a href='#'><img src='printer-icon.png' width='30' height='30'></a></td>"
+                         . "$print_link</td>"
 			 . "<td>".number_format($field['amount_paid'],2)."</td>"
 			 . "<td>$billing_no</td>"
 			 . "<td>".$atp_no."</td>"
