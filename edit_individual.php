@@ -253,7 +253,7 @@ $(function() {
 		      $new_birno = $_POST['new_birno'];
           $new_birno = $new_birno == NULL ? '' : formatBSNo($new_birno);
           $nonvatable_type = $_POST['vat'] == 'vatable' ? '' : $_POST['vat'];
-          $is_vatable = $_POST["vat"] == 'vat_exempt' || 'vat_zero' ? 0 : 1;
+          $is_vatable = $_POST["vat"] == 'vat_exempt' || $_POST["vat"] == 'vat_zero' ? 0 : 1;
           $notes_id = $_POST['notes_id'];
           $new_amount = $_POST['new_amount'];
 
@@ -277,7 +277,7 @@ $(function() {
              $notes_id = $_POST['notes_id'];
 	     $bs_no = $_POST["bs_no"];
 	     $nonvatable_type = $_POST['vat'] == 'vatable' ? '' : $_POST['vat'];
-	     $is_vatable = $_POST["vat"] == 'vat_exempt' || 'vat_zero' ? 0 : 1;
+	     $is_vatable = $_POST["vat"] == 'vat_exempt' || $_POST["vat"] == 'vat_zero' ? 0 : 1;
 	     $new_birno = $bs_no == NULL ? '' : formatBSNo($bs_no);
 
              $details = array('bs_no' => $new_birno,
@@ -302,7 +302,7 @@ $(function() {
          $new_birno = $_POST['new_birno'];
          $new_birno = $new_birno == NULL ? '' : formatBSNo($new_birno);
          $nonvatable_type = $_POST['vat'] == 'vatable' ? '' : $_POST['vat'];
-         $is_vatable = $_POST["vat"] == 'vat_exempt' || $_POST['vat_zero'] ? 0 : 1;
+         $is_vatable = $_POST["vat"] == 'vat_exempt' || $_POST["vat"] == 'vat_zero' ? 0 : 1;
          $notes_id = $_POST['notes_id'];
 
          $details = array('new_birno' => $new_birno,
