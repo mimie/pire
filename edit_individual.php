@@ -60,8 +60,8 @@ $(function() {
         $civicrm_amount = $bill['civicrm_amount'];
         $eventId = $bill['event_id'];
         $old_notes_id = $bill['notes_id'];
-        $allowed_edit = $current_amount == $civicrm_amount && $isEdit == 0 ? 'Billing information cannot be updated.' : "Update Billing Information";
         $is_cancelled = $bill['is_cancelled'];
+        $allowed_edit = $current_amount == $civicrm_amount && $isEdit == 0 || $is_cancelled == 1 ? 'Billing information cannot be updated.' : "Update Billing Information";
         $nonvatable_type = $bill["nonvatable_type"];
 	$is_vatable = $nonvatable_type == NULL ? "checked='checked'" : '';
 	$is_exempt = $nonvatable_type == 'vat_exempt' ? "checked='checked'" : '';
@@ -124,7 +124,7 @@ $(function() {
                 </tr>
 <form action='' method='POST'>
 <?php
-	if($status == 'Cancelled' && ($isEdit == 0 || $isEdit == 1)){
+	if($status == 'Cancelled' && ($isEdit == 0 || $isEdit == 1) && $is_cancelled != 1){
 
 	     $participants = $isEdit == 0 ? getParticipantWithSameAmount($eventId,$civicrm_amount,$employer_id) : getParticipantWithSameCompany($eventId,$employer_id);
              if($participants){
@@ -156,7 +156,7 @@ $(function() {
              echo "</tr>";
 
 
-        }elseif($status !='Cancelled' && $current_amount!=$civicrm_amount && $isEdit == 1){
+        }elseif($status !='Cancelled' && $current_amount!=$civicrm_amount && $isEdit == 1 && $is_cancelled != 1){
                echo "<tr>";
                echo "<td>Change Amount</td><td><input type='text' name='new_amount' value='$civicrm_amount' readonly></br></br>";
                echo "Account Receivable Type:";
@@ -178,7 +178,7 @@ $(function() {
                echo "</SELECT><input type='submit' name='update' value='UPDATE BILL'></td></tr?";
                $update_action = 'update amount';
 
-        }elseif($status !='Cancelled' && $current_amount!=$civicrm_amount && $isEdit == 0){
+        }elseif($status !='Cancelled' && $current_amount!=$civicrm_amount && $isEdit == 0 && $is_cancelled != 1){
 	       echo "<tr>";
                echo "<td>Generate Bill</td>";
                echo "<td>Account Receivable Type:";
@@ -203,7 +203,7 @@ $(function() {
                echo "</td></tr>";
                $update_action = 'regenerate';
 
-        }elseif($status !='Cancelled' && $isEdit == 1){
+        }elseif($status !='Cancelled' && $isEdit == 1 && $is_cancelled != 1){
                echo "<tr>";
                echo "<td colspan=2>";
                echo "Account Receivable Type:";
@@ -227,11 +227,14 @@ $(function() {
                echo "</tr>";
 
            $update_action = 'normal update';
+
          }
 ?>
 </form>
-	</table>
-      </div>
+</table>
+</div>
+	 <?=$cancelled_img = $is_cancelled == 1 ? "<div align='center'><img src='images/cancelled.jpg'></div>" : ""?>;	
+         
 <?php
 	if($_POST['update'] && $update_action == 'change name'){
            $selected_participantId = $_POST['participant_id'];
@@ -271,7 +274,7 @@ $(function() {
            	echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully updated bill amount information.</div>";
 
          }elseif($_POST['update'] && $update_action == 'regenerate'){
-       $notes_id = $_POST['notes_id'];
+             $notes_id = $_POST['notes_id'];
 	     $bs_no = $_POST["bs_no"];
 	     $nonvatable_type = $_POST['vat'] == 'vatable' ? '' : $_POST['vat'];
 	     $is_vatable = $_POST["vat"] == 'vat_exempt' || $_POST['vat_zero'] ? 0 : 1;
@@ -289,7 +292,11 @@ $(function() {
                               'action'=>"Updated participant amount and regenerate new bir no. ".$newBIR_no,
                               'bir_no'=>$bir_no);
              insertBillingHistory($history);
-             //echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully generated bill.</div>";
+             //cancel previous bill
+             $stmt = civicrmDB("UPDATE billing_details SET is_cancelled='1',fee_amount=0,subtotal=0,vat=0 WHERE id=?");
+             $stmt->bindValue(1,$billing_id,PDO::PARAM_INT);
+             $stmt->execute();
+             echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully generated bill.</div>";
 
        }elseif($_POST['update'] && $update_action == 'normal update'){
          $new_birno = $_POST['new_birno'];
