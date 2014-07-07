@@ -133,8 +133,8 @@ $(function() {
                 echo "Account Receivable Type:";
                 $disabled = $isEdit == 0 ? 'disabled' : '';
                 echo "<input type='radio' name='vat' value='vatable' checked='checked' $disabled>VATABLE ";
-                echo "<input type='radio' name='vat' value='vat-exempt' $disabled>VAT-EXEMPT ";
-                echo "<input type='radio' name='vat' value='vat-zero' $disabled>VAT-ZERO </br>";
+                echo "<input type='radio' name='vat' value='vat_exempt' $disabled>VAT-EXEMPT ";
+                echo "<input type='radio' name='vat' value='vat_zero' $disabled>VAT-ZERO </br>";
                 $readonly = $isEdit == 0 ? 'readonly' : '';
                 echo "BS No. : <input type='text' name='new_birno' value='$bir_no' $readonly>";
                 echo "<SELECT name='participant_id'>";
@@ -161,8 +161,8 @@ $(function() {
                echo "<td>Change Amount</td><td><input type='text' name='new_amount' value='$civicrm_amount' readonly></br></br>";
                echo "Account Receivable Type:";
                echo "<input type='radio' name='vat' value='vatable' $is_vatable>VATABLE ";
-               echo "<input type='radio' name='vat' value='vat-exempt' $is_exempt>VAT-EXEMPT ";
-               echo "<input type='radio' name='vat' value='vat-zero' $is_zero>VAT-ZERO </br>";
+               echo "<input type='radio' name='vat' value='vat_exempt' $is_exempt>VAT-EXEMPT ";
+               echo "<input type='radio' name='vat' value='vat_zero' $is_zero>VAT-ZERO </br>";
                echo "BS No. : <input type='text' name='new_birno' value='$bir_no'>";
                echo "<SELECT name='notes_id'><option value='select'>- Select optional billing notes -</option><option>-----------------</option>";
                $options = '';
@@ -253,7 +253,7 @@ $(function() {
 		      $new_birno = $_POST['new_birno'];
           $new_birno = $new_birno == NULL ? '' : formatBSNo($new_birno);
           $nonvatable_type = $_POST['vat'] == 'vatable' ? '' : $_POST['vat'];
-          $is_vatable = $_POST["vat"] == 'vat_exempt' || $_POST['vat_zero'] ? 0 : 1;
+          $is_vatable = $_POST["vat"] == 'vat_exempt' || 'vat_zero' ? 0 : 1;
           $notes_id = $_POST['notes_id'];
           $new_amount = $_POST['new_amount'];
 
@@ -277,7 +277,7 @@ $(function() {
              $notes_id = $_POST['notes_id'];
 	     $bs_no = $_POST["bs_no"];
 	     $nonvatable_type = $_POST['vat'] == 'vatable' ? '' : $_POST['vat'];
-	     $is_vatable = $_POST["vat"] == 'vat_exempt' || $_POST['vat_zero'] ? 0 : 1;
+	     $is_vatable = $_POST["vat"] == 'vat_exempt' || 'vat_zero' ? 0 : 1;
 	     $new_birno = $bs_no == NULL ? '' : formatBSNo($bs_no);
 
              $details = array('bs_no' => $new_birno,
