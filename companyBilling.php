@@ -217,22 +217,27 @@ function validator(){
 
                 $bill_date = date("F j, Y",strtotime($field['bill_date']));
                 $img_link = "<a href='edit_company.php?eventId=$eventId&orgId=$orgId&bir_no=$bir_no&billing_no=$billing_no&uid=$uid' onclick=\"window.open(this.href,'edit_company.php?eventId=$eventId&orgId=$orgId&bir_no=$bir_no&billing_no=$billing_no&uid=$uid','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=900,height=900');return false;\"><img src='images/edit_bill.png'></a>";
-		$print_link = $bir_no == NULL ? '' : "<img src='printer-icon.png' width='30' height='30'></a>";
+		$print_link = $bir_no == NULL ? '' : "<a href='BIRForm/print_bir_company.php?orgId=$orgId&event_id=$eventId&bir_no=$bir_no&billing_no=$billing_no&uid=$uid' target='_blank'><img src='printer-icon.png' width='30' height='30'></a>";
+                $print_link = $field['edit_bill'] == 0 ? '' : $print_link;
+
+                //strike for cancelled billings
+                $strike = $field['is_cancelled'] == 1 ? '<strike>' : '';
+                $endstrike = $field['is_cancelled'] == 1 ? '</endstrike>' : '';
                 
 		$display = $display."<tr>"
 			 . "<td><input type='checkbox' name='ids[]' value='$orgId' disabled>".$orgName."</td>"
-			 . "<td><font color='$color'>$bill_total</font></td>"
-			 . "<td><font color='$color'>$total_fee</font></td>"
-			 . "<td><font color='$color'>".number_format($field['subtotal'],2)."</font></td>"
-			 . "<td><font color='$color'>".number_format($field['vat'],2)."</font></td>"
-			 . "<td><a href='#'><a href='BIRForm/print_company.php?orgId=$orgId&event_id=$eventId&bir_no=$bir_no&billing_no=$billing_no&uid=$uid' target='_blank'><img src='images/preview.png' width='30' height='30'></a>"
-                         . "$print_link</td>"
-			 . "<td>".number_format($field['amount_paid'],2)."</td>"
-			 . "<td>$billing_no</td>"
-			 . "<td>".$atp_no."</td>"
-			 . "<td>".$bill_date."</td>"
-			 . "<td>".$notes."</td>"
-			 . "<td>".$img_link."</td>"
+			 . "<td>$strike<font color='$color'>$bill_total</font>$endstrike</td>"
+			 . "<td>$strike<font color='$color'>$total_fee</font>$endstrike</td>"
+			 . "<td>$strike<font color='$color'>".number_format($field['subtotal'],2)."</font>$endstrike</td>"
+			 . "<td>$strike<font color='$color'>".number_format($field['vat'],2)."</font>$endstrike</td>"
+			 . "<td>$strike<a href='BIRForm/print_company.php?orgId=$orgId&event_id=$eventId&bir_no=$bir_no&billing_no=$billing_no&uid=$uid' target='_blank'><img src='images/preview.png' width='30' height='30'></a>"
+                         . "$print_link$endsrike</td>"
+			 . "<td>$strike".number_format($field['amount_paid'],2)."$endstrike</td>"
+			 . "<td>$strike".$billing_no."$endstrike</td>"
+			 . "<td>$strike".$atp_no."$endstrike</td>"
+			 . "<td>$strike".$bill_date."$endstrike</td>"
+			 . "<td>$strike".$notes."$endstrike</td>"
+			 . "<td>$strike".$img_link."$endstrike</td>"
 			 . "</tr>"; 
            }
         }else{

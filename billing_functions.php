@@ -200,7 +200,7 @@ function getIndividualBillingAddress(PDO $dbh, $participantId, $eventId){
 
 function checkCompanyBillGenerated($orgContactId,$eventId){
 
-  $stmt = civicrmDB("SELECT billing_no,total_amount, subtotal, vat, amount_paid, bir_no, bill_date, notes_id
+  $stmt = civicrmDB("SELECT billing_no,total_amount, subtotal, vat, amount_paid, bir_no, bill_date, notes_id, edit_bill, is_cancelled
                     FROM billing_company
                     WHERE org_contact_id = ?
                     AND event_id = ?
