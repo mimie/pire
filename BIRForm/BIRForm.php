@@ -535,11 +535,13 @@ x:publishsource="Excel">
   <td align=left valign=top>
 	  
    
-   <![if !vml]><span style='mso-ignore:vglayout;
-  position:absolute;z-index:3;margin-left:0px;margin-top:1px;width:439px;
-  height:120px'><img width=439 height=120
-  src="IIAP%20Billing%20Form%20(rev2_2014%20ATP)_files/IIAP%20Billing%20Form%20(rev2_2014%20ATP)_2552_image006.gif"
-  v:shapes="TextBox_x0020_3"></span><![endif]><span style='mso-ignore:vglayout2'>
+   <![if !vml]><span style='mso-ignore:vglayout;position:absolute;z-index:3;margin-left:0px;margin-top:1px;width:439px;height:120px'>
+
+<?php if($bir_no != NULL) { ?>
+<img width=439 height=120 src="IIAP%20Billing%20Form%20(rev2_2014%20ATP)_files/IIAP%20Billing%20Form%20(rev2_2014%20ATP)_2552_image006.gif" v:shapes="TextBox_x0020_3">
+<?php } ?>
+
+</span><![endif]><span style='mso-ignore:vglayout2'>
   <table cellpadding=0 cellspacing=0>
    <tr>
     <td height=22 class=xl1142552 width=81 style='height:16.5pt;width:61pt'>&nbsp;</td>
