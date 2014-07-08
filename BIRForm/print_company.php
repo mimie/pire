@@ -251,7 +251,7 @@ x:publishsource="Excel">
   <?php
        echo $bill["event_name"]."<br/>";
        if($bill["start_date"] != $bill["end_date"]){
-		$date_range = "On ".date("F j,Y",strtotime($bill["start_date"]))."to ".date("F j,Y",strtotime($bill["end_date"]));
+		$date_range = "On ".date("F j,Y",strtotime($bill["start_date"]))." to ".date("F j,Y",strtotime($bill["end_date"]));
        }
 
        else{
