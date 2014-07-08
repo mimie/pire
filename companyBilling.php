@@ -151,7 +151,7 @@ function validator(){
    $display = "<table width='100%' id='billings'>" 
             . "<thead>"
             . "<tr>"
-            . "<td colspan='13'>"
+            . "<td colspan='13'><a href='#' onclick='reloadPage()' id='reload'><img src='images/reload.png'></a></br>"
             . "Account Receivable Type: <input type='radio' name='vat' value='vatable' checked='checked'>VATABLE  "
             . "<input type='radio' name='vat' value='vat_exempt'>VAT-EXEMPT "
             . "<input type='radio' name='vat' value='vat_zero'>VAT-ZERO "
@@ -191,7 +191,7 @@ function validator(){
    $totals = array();
 
    foreach($comp_participants as $orgId => $participants){
-        $total_fee = 0.0;
+        $total_fee = 0;
 	foreach($participants as $key=>$field){
 		$total_fee = $total_fee + $field['fee_amount'];
         }
