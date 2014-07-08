@@ -197,11 +197,12 @@ p.issuedby{
 ?>
        <?=$date_range?></br>
        <?=$location?></br></br>
-       Billing of the ff. participants:
+       &nbsp;&nbsp;&nbsp;Billing of the ff. participants:</br></br>
 <?php
         $amounts = array();
 	foreach($participants as $participant_id=>$field){
 		$amounts[] = $field["fee_amount"];
+                echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
                 echo $field["participant_name"]." / Participant No. ".$participant_id."</br>";
         }
 
@@ -210,13 +211,14 @@ p.issuedby{
 <p class="notes">
 <?php
 	$notes = getNoteById($dbh,$bill['notes_id']);
-     if($notes != NULL){
+        if($notes != NULL){
 	     echo "<b><font color='#0A0A2A'><i>Notes: </i>".$notes['notes']."</font></b>";
 	     echo "</br>";
-     }
+        }
 ?>
 </p>
 <p class="myamount">
+</br></br></br></br></br></br>
 <?php
 	foreach($amounts as $fee){
                 if($nonvatable_type != NULL){
