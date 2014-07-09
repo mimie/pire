@@ -238,7 +238,7 @@ p.issuedby{
 <p class="vatexempt"><?=$subtotal = $nonvatable_type=='vat_exempt' ? number_format($bill['subtotal'],2) : ''?></p>
 <p class="vatzero"><?=$subtotal = $nonvatable_type=='vat_zero' ? number_format($bill['subtotal'],2) : ''?></p>
 <p class="vatamount"><?=number_format($bill['vat'],2)?></p>
-<p class="totalamount"><?=number_format($bill['total_amount'],2)?></p>
+<p class="totalamount"><?=number_format($bill['total_amount'],2)?>&nbsp;PHP</p>
 <p class="issuedby"><?=$generator?></p>
 
 </body>

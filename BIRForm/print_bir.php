@@ -210,7 +210,7 @@ if($bill['start_date']==$bill['end_date']){
 <p class="vatexempt"><?=$subtotal = $nonvatable_type == 'vat_exempt' ? $bill_subtotal : ''?></p>
 <p class="vatzero"><?=$subtotal = $nonvatable_type == 'vat_zero' ? $bill_subtotal : ''?></p>
 <p class="vatamount"><?=number_format($bill['vat'],2)?></p>
-<p class="totalamount"><?=number_format($bill['fee_amount'],2)?></p>
+<p class="totalamount"><?=number_format($bill['fee_amount'],2)?>&nbsp;PHP</p>
 <p class="issuedby"><?=$generator?></p>
 
 </body>

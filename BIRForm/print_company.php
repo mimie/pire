@@ -552,7 +552,7 @@ x:publishsource="Excel">
   <td colspan=6 class=xl1312552>THANK YOU FOR YOUR BUSINESS!</td>
   <td class=xl1112552>&nbsp;</td>
   <td class=xl1122552 style='border-top:none'>TOTAL AMOUNT DUE</td>
-  <td class=xl1122552 style='border-top:none'><?=number_format($bill['total_amount'],2)?></td>
+  <td class=xl1122552 style='border-top:none'><?=number_format($bill['total_amount'],2)?>&nbsp;PHP</td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
  </tr>
