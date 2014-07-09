@@ -100,17 +100,21 @@
     $categoryId = $_POST["billingType"];
     $noteId = $_POST["note_id"];
 
-    $sql = $dbh->prepare("UPDATE billing_notes
-                          SET notes_category_id = ?,
-                          notes = ?,
-                          WHERE notes_id = ?
-                         ");
+    try{
+	    $sql = $dbh->prepare("UPDATE billing_notes
+				  SET notes_category_id = ?,
+				  notes = ?
+				  WHERE notes_id = ?
+				 ");
+	    $sql->bindValue(1,$categoryId,PDO::PARAM_INT);
+	    $sql->bindValue(2,$note,PDO::PARAM_STR);
+	    $sql->bindValue(3,$noteId,PDO::PARAM_INT);
 
-    $sql->bindValue(1,$categoryId,PDO::PARAM_INT);
-    $sql->bindValue(2,$note,PDO::PARAM_STR);
-    $sql->bindValue(3,$noteId,PDO::PARAM_INT);
-
-    $sql->execute();
+	    $sql->execute();
+    }
+    catch(PDOException $error){
+	echo $error->getMessage();
+    }
     header("Location:notes.php");
   
   }
@@ -134,7 +138,7 @@
     $note = $details["notes"];
 
     echo "<tr>"
-         ."<td><input type='checkbox' name=id value='$id'></td>"
+         ."<td><input type='checkbox' name='id' value='$id'></td>"
          ."<td>$billingType</td>"
          ."<td>$note</td>"
          ."</tr>";

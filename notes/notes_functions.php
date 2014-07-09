@@ -66,7 +66,7 @@ function displayBillingNote($dbh,array $billingNote){
  
     $selected = $categoryId == $id ? "selected" : "";
 
-    $html = $html."<option value=$id $selected>$category</option>";
+    $html = $html."<option value='$id' $selected>$category</option>";
   }
         
   $html = $html. "</select></td></tr>"
