@@ -217,7 +217,7 @@ p.issuedby{
 <?php
 	$notes = getNoteById($dbh,$bill['notes_id']);
         if($notes != NULL){
-	     echo "<b><font color='#0A0A2A'><i>Notes: </i>".$notes['notes']."</font></b>";
+	     echo "<b><font color='#0A0A2A'><i>Notes: </i>".wordwrap($notes['notes'],94,"<br>\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",TRUE)."</font></b>";
 	     echo "</br>";
         }
 ?>

@@ -155,9 +155,9 @@ x:publishsource="Excel">
   <td class=xl655352552></td>
   <td colspan=9 class=xl1652552>TIN No. 001-772-403-000<span
   style='mso-spacerun:yes'>  </span>:<span style='mso-spacerun:yes'>  </span><font
-  class="font62552">'</font><font class="font52552"> (+632) 940-9551 /
+  class="font62552"></font><font class="font52552"> (+632) 940-9551 /
   940-9554<span style='mso-spacerun:yes'>   </span>:<span
-  style='mso-spacerun:yes'>  </span></font><font class="font72552">:</font><font
+  style='mso-spacerun:yes'>  </span></font><font class="font72552"></font><font
   class="font52552"> Fax (+632) 325-0414<span style='mso-spacerun:yes'> 
   </span>: www.iia-p.org</font></td>
   <td class=xl655352552></td>
@@ -454,8 +454,8 @@ x:publishsource="Excel">
   <?php
      
      if($bill["notes"] != NULL){
-	     echo "<div style='border: 1px solid #0B2161; padding: 4px 4px 4px 4px;background-color:#A9BCF5;' align='center'>";
-	     echo "<b><font color='#0A0A2A'><i>Notes: </i>".$bill['notes']."</font></b>";
+	     echo "<div style='border: 1px solid #0B2161; padding: 4px 4px 4px 4px;background-color:#A9BCF5;'>";
+	     echo "<b><font color='#0A0A2A'><i>Notes: </i>".wordwrap($bill['notes'],94,"<br>\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",TRUE)."</font></b>";
 	     echo "</div></br>";
      }
   ?>
