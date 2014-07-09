@@ -244,11 +244,6 @@ p.issuedby{
 </body>
 
 </html>
-
-
 <script>
- function printTkt(){
- //window.print();
-
-}
+  window.print();
 </script>

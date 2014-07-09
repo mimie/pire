@@ -752,4 +752,6 @@ x:publishsource="Excel">
 </body>
 
 </html>
-
+<script>
+  window.print();
+</script>

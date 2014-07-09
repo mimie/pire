@@ -216,11 +216,6 @@ if($bill['start_date']==$bill['end_date']){
 </body>
 
 </html>
-
-
 <script>
- function printTkt(){
- //window.print();
-
-}
+  window.print();
 </script>
