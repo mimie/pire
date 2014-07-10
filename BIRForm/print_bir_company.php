@@ -169,7 +169,7 @@ p.issuedby{
   $bill = getCurrentCompanyBillByEvent($orgId,$eventId,$bir_no,$billing_no);
   $ref_no = $bir_no != NULL ? "BS-".$bir_no."/".$billing_no : $billing_no;
   $address = getCompanyAddress($dbh,$orgId);
-  $complete_address = $address["street_address"]." ".$adress["city"];
+  $complete_address = $address["street_address"]." ".$address["city"];
   $nonvatable_type = $bill["nonvatable_type"];
 
   $participants = getCompanyBilledParticipants($dbh,$billing_no,$eventId);
