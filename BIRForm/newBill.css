@@ -1,4 +1,4 @@
-<style id="IIAP Billing Form (rev2_2014 ATP)_2552_Styles"><!--table
+</br><style id="IIAP Billing Form (rev2_2014 ATP)_2552_Styles"><!--table
 	{mso-displayed-decimal-separator:"\.";
 	mso-displayed-thousand-separator:"\,";}
 .font52552
@@ -585,7 +585,7 @@
 	font-family:Arial, sans-serif;
 	mso-font-charset:0;
 	mso-number-format:"\0022$\0022\#\,\#\#0\.00_\)\;\\\(\0022$\0022\#\,\#\#0\.00\\\)";
-	text-align:center;
+	text-align:right;
 	vertical-align:bottom;
 	border-top:none;
 	border-right:.5pt solid black;
@@ -1347,4 +1347,12 @@
 	mso-pattern:auto;
 	mso-protection:unlocked visible;
 	white-space:nowrap;}
+
+.notes{
+	border: 2px solid #0B2161; 
+        padding: 4px 4px 4px 4px;
+        background-color:#A9BCF5; 
+        width:70%; 
+        text-align:left;'
+}
 --></style>

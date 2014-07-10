@@ -285,9 +285,7 @@ x:publishsource="Excel">
   </td>
   <td class=xl1582552 style='border-right:.5pt solid black'>
   </br></br></br></br>
-    <div style="width: 100%; overflow: hidden;">
-          <div style="width: 30%; float: left;"></div>
-          <div style="margin-left: 20%;">
+  <div style='text-align:right'>
 <?php
 	foreach($amounts as $fee){
                 if($nonvatable_type != NULL){
@@ -297,8 +295,7 @@ x:publishsource="Excel">
         }
 
 ?>
-          </div>
-       </div>
+  </div>
   </td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
@@ -434,16 +431,30 @@ x:publishsource="Excel">
  <tr height=26 style='mso-height-source:userset;height:20.1pt'>
   <td height=26 class=xl655352552 style='height:20.1pt'></td>
   <td class=xl655352552></td>
-  <td colspan=8 class=xl1572552 style='border-right:.5pt solid black'>&nbsp;</td>
-  <td class=xl1282552>&nbsp;</td>
-  <td class=xl655352552></td>
+  <td colspan=8 class=xl1572552 style='border-right:.5pt solid black'>
+  <?php
+     
+     if($bill["notes"] != NULL){
+             echo "<div align='center'>";
+	     echo "<div class='notes'>";
+	     echo "<b><font color='#0A0A2A'><i>Notes: </i>".wordwrap($bill['notes'],67,"<br>\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",TRUE)."</font></b>";
+	     echo "</div></br></div>";
+     }
+  ?>
+  </td>
+  <td class=xl1282552>
+  </td>
+  <td class=xl655352552>
+  </td>
   <td class=xl655352552></td>
  </tr>
  <tr height=26 style='mso-height-source:userset;height:20.1pt'>
   <td height=26 class=xl655352552 style='height:20.1pt'></td>
   <td class=xl655352552></td>
-  <td colspan=8 class=xl1572552 style='border-right:.5pt solid black'>&nbsp;</td>
-  <td class=xl1282552>&nbsp;</td>
+  <td colspan=8 class=xl1572552 style='border-right:.5pt solid black'>
+  </td>
+  <td class=xl1282552>
+  </td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
  </tr>
@@ -451,14 +462,6 @@ x:publishsource="Excel">
   <td height=26 class=xl655352552 style='height:20.1pt'></td>
   <td class=xl655352552></td>
   <td colspan=8 class=xl1572552 style='border-right:.5pt solid black'>&nbsp;
-  <?php
-     
-     if($bill["notes"] != NULL){
-	     echo "<div style='border: 1px solid #0B2161; padding: 4px 4px 4px 4px;background-color:#A9BCF5;'>";
-	     echo "<b><font color='#0A0A2A'><i>Notes: </i>".wordwrap($bill['notes'],94,"<br>\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",TRUE)."</font></b>";
-	     echo "</div></br>";
-     }
-  ?>
 
   </td>
   <td class=xl1282552>&nbsp;</td>
@@ -552,7 +555,7 @@ x:publishsource="Excel">
   <td colspan=6 class=xl1312552>THANK YOU FOR YOUR BUSINESS!</td>
   <td class=xl1112552>&nbsp;</td>
   <td class=xl1122552 style='border-top:none'>TOTAL AMOUNT DUE</td>
-  <td class=xl1122552 style='border-top:none'><?=number_format($bill['total_amount'],2)?>&nbsp;PHP</td>
+  <td class=xl1122552 style='border-top:none'>PHP&nbsp;<?=number_format($bill['total_amount'],2)?></td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
  </tr>
@@ -596,7 +599,7 @@ x:publishsource="Excel">
   <td class=xl655352552></td>
   <td class=xl1172552>&nbsp;</td>
   <td class=xl992552>&nbsp;</td>
-  <td colspan=2 class=xl1632552>&nbsp;<b><font size='3'><?=$generator?></font></b></td>
+  <td colspan=2 class=xl1632552>&nbsp;<b><font size='3'></br></br><?=$generator?></font></b></td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
  </tr>
