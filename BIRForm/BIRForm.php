@@ -199,7 +199,7 @@ x:publishsource="Excel">
   <td class=xl655352552></td>
   <td class=xl1012552>Address</td>
   <td class=xl992552>:</td>
-  <td colspan=5 class=xl1632552>&nbsp;<?=$address?></td>
+  <td colspan=5 class=xl1632552>&nbsp;<?=wordwrap($address,58,"<br>\n",TRUE)?></td>
   <td class=xl1022552>BILLING DATE</td>
   <td class=xl1242552>&nbsp;<?=date("F j,Y",strtotime($bill['bill_date']))?></td>
   <td class=xl655352552></td>
