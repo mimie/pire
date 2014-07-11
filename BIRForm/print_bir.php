@@ -10,24 +10,24 @@
 <style>
 p.myname{
   position:fixed;
-  top:65px;
-  left:66px;
+  top:81px;
+  left:30px;
   font-size: 10pt;
   font-family: Calibri;
 }
 
 p.myaddress{
   position:fixed;
-  top:70px;
-  left:65px;
+  top:86px;
+  left:30px;
   font-size: 10pt;
   font-family: Calibri;
 }
 
 p.mytin{
   position:fixed;
-  top:90px;
-  left:65px;
+  top:106px;
+  left:30px;
   font-size: 10pt;
   font-family: Calibri;
 }
@@ -35,8 +35,8 @@ p.mytin{
 
 p.lbltxn{
   position:fixed;
-  top:63px;
-  left:750px;
+  top:71px;
+  left:365px;
   font-size: 10pt;
   font-family: Calibri;
 }
@@ -44,8 +44,8 @@ p.lbltxn{
 
 p.myrefno{
   position:fixed;
-  top:63px;
-  left:870px;
+  top:71px;
+  left:427px;
   font-size: 10pt;
   font-family: Calibri;
 }
@@ -53,16 +53,16 @@ p.myrefno{
 
 p.mybilldate{
   position:fixed;
-  top:80px;
-  left:870px;
+  top:88px;
+  left:427px;
   font-size: 10pt;
   font-family: Calibri;
 }
 
 p.myduedate{
   position:fixed;
-  top:100px;
-  left:870px;
+  top:108px;
+  left:427px;
   font-size: 10pt;
   font-family: Calibri;
 }
@@ -71,7 +71,7 @@ p.myduedate{
 p.myparticulars{
   position:fixed;
   top:150px;
-  left:10px;
+  left:1px;
   font-size: 10pt;
   font-family: Calibri;
 }
@@ -90,7 +90,7 @@ p.notes{
 p.myamount{
   position:fixed;
   top:150px;
-  left:870px;
+  left:427px;
   font-size: 10pt;
   font-family: Calibri;
 }
@@ -98,47 +98,47 @@ p.myamount{
 
 p.vatsales{
   position:fixed;
-  top:560px;
-  left:870px;
+  top:578px;
+  left:427px;
   font-size: 10pt;
   font-family: Calibri;
 }
 
 p.vatexempt{
   position:fixed;
-  top:600px;
-  left:870px;
+  top:618px;
+  left:427px;
   font-size: 9pt;
   font-family: Calibri;
 }
 p.vatzero{
   position:fixed;
-  top:630px;
-  left:870px;
+  top:648px;
+  left:427px;
   font-size: 10pt;
   font-family: Calibri;
 }
 
 p.vatamount{
   position:fixed;
-  top:660px;
-  left:870px;
+  top:678px;
+  left:427px;
   font-size: 10pt;
   font-family: Calibri;
 }
 
 p.totalamount{
   position:fixed;
-  top:690px;
-  left:870px;
+  top:708px;
+  left:427px;
   font-size: 10pt;
   font-family: Calibri;
 }
 
 p.issuedby{
   position:fixed;
-  top:720px;
-  left:870px;
+  top:738px;
+  left:427px;
   font-size: 10pt;
   font-family: Calibri;
 }
