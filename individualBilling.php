@@ -309,7 +309,6 @@ function validator(){
       $bs_no = $bs_no == NULL ? '' : $bs_no++;
      }
 
-     echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully generated bill.</div>";
    }
 ?>
 </body>
