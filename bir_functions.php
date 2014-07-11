@@ -188,6 +188,24 @@ function getInfoByBillingNo($billing_id){
 
 }
 
+function checkDuplicateIndividualBIRNo($bir_no){
+
+   try{
+
+	$stmt = civicrmDB("SELECT * FROM billing_details WHERE bir_no=? AND (billing_type = 'Individual' OR billing_type='Company')");
+        $stmt->bindValue(1,$bir_no,PDO::PARAM_STR);
+        $stmt->execute();
+
+        $result = $stmt->fetchAll();
+        $count = count($result);
+
+        return $count;
+
+      }catch(PDOException $error){
+            echo $error->getMessage();
+       }
+}
+
 /*
  * this will generate an individual bill
  * @participant_id
@@ -209,7 +227,9 @@ function generateIndividualBill($participant_id,array $details){
     $billing_type = $details['billing_type'];
     $billing_id = $details['billing_id'];
 
+    $is_birExist = checkDuplicateIndividualBIRNo($bs_no);
 
+    if($is_birExist == 0){
 		try{
 
 			$stmt = civicrmDB("INSERT INTO billing_details (participant_id,contact_id,event_id,event_type,event_name,participant_name,email, bill_address,organization_name,
@@ -257,11 +277,17 @@ function generateIndividualBill($participant_id,array $details){
 			$stmt->bindValue(22,$nonvatable_type,PDO::PARAM_STR);
 
 			$stmt->execute();
+     			echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully generated bill.</div>";
 	       }
 
 	       catch(PDOException $error){
-			echo $error->getMessage();
+			echo "<div id='confirmation'><img src='images/error.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;".$error->getMessage()."</div>";
 	       }
+	}
+
+        else{
+             echo "<div id='confirmation'><img src='images/error.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;You have entered an existing BS No. Billing cannot be generated.</div>";
+        }
 }
 
 /*
@@ -461,4 +487,5 @@ function updateAmountCancelledBill($billing_no,$participant_id){
         $stmt->bindValue(1,$billing_no,PDO::PARAM_STR);
      	$stmt->execute();
 }
+
 ?>
