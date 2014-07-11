@@ -293,7 +293,6 @@ $(function() {
 
 	if(isset($_POST['update']) && $update_action == 'update amount'){
                 $new_birno = $_POST['new_birno'] == NULL ? '' : formatBSNo($_POST['new_birno']);
-                var_dump($new_birno);
 		$participant_ids = $_POST['ids'];
     		$notes_id = $_POST['notes_id'];
     		$vatable = $_POST['vat'] == 'vatable' ? 1 : 0;
