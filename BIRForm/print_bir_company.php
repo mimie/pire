@@ -181,7 +181,7 @@ p.issuedby{
 
 ?>
 <p class="myname"><?=$bill['organization_name']?></p>
-<p class="myaddress"><?=$complete_address?></p>
+<p class="myaddress"><?=wordwrap($complete_address,57,"<br>\n",TRUE)?></p>
 <p class="mytin"></p>
 <p class="lbltxn">Txn. No:</p>
 <p class="myrefno"><?=$ref_no?></p>

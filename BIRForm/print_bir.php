@@ -174,7 +174,7 @@ p.issuedby{
 
 ?>
 <p class="myname"><?=$bill['sort_name']?></p>
-<p class="myaddress"><?=$address?></p>
+<p class="myaddress"><?=wordwrap($address,58,"<br>\n",TRUE)?></p>
 <p class="mytin">Tin</p>
 <p class="lbltxn">Txn. No:</p>
 <p class="myrefno"><?=$reference_no = $bill['bir_no'] == NULL ? $billing_no : "BS-".$bill['bir_no']."/".$billing_no?></p>
