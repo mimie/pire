@@ -262,7 +262,7 @@ $(function() {
                 <input type='radio' name='vat' value='vatable' <?=$is_vatable?>>VATABLE
                 <input type='radio' name='vat' value='vat_exempt' <?=$is_exempt?>>VAT-EXEMPT
                 <input type='radio' name='vat' value='vat_zero' <?=$is_zero?>>VAT-ZERO
-                </br>BS. No. : <input type='text' id='bs_no' name='bs_no' placeholder='Enter BS No. start number...' required>
+                </br>BS. No. : <input type='text' id='bs_no' name='bs_no' placeholder='Enter BS No. start number...'>
                 <SELECT name='notes_id'><option value='select'>- Select optional billing notes -</option><option>-----------------</option>
 <?php
                 $options = '';
