@@ -192,7 +192,7 @@ function checkDuplicateIndividualBIRNo($bir_no){
 
    try{
 
-	$stmt = civicrmDB("SELECT * FROM billing_details WHERE bir_no=? AND (billing_type = 'Individual' OR billing_type='Company')");
+	$stmt = civicrmDB("SELECT * FROM billing_details WHERE bir_no=? AND (billing_type = 'Individual' OR billing_type='Company') AND bir_no <> NULL");
         $stmt->bindValue(1,$bir_no,PDO::PARAM_STR);
         $stmt->execute();
 
