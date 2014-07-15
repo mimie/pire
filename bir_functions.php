@@ -488,4 +488,13 @@ function updateAmountCancelledBill($billing_no,$participant_id){
      	$stmt->execute();
 }
 
+function getTIN($orgId){
+
+	$stmt = civicrmDB("SELECT tin_no__54 as tin FROM civicrm_value_tin_no__20 WHERE entity_id=?");
+        $stmt->bindValue(1,$orgId,PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+	return $result["tin"];
+}
 ?>
