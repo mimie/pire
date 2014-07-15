@@ -299,7 +299,7 @@ function generateIndividualBill($participant_id,array $details){
  * @notes_id - notes of the bill
  * @package_id - package of the bill
  */
-function generatePackageBill($contact_id,$details,$bs_no,$vatable,$notes_id,$package_id){
+function generatePackageBill($contact_id,$details,$bs_no,$vatable,$notes_id,$package_id,$nonvatable_type){
 
 	$generator_uid = $_GET["uid"];
         $total_amount = 0;
@@ -308,8 +308,8 @@ function generatePackageBill($contact_id,$details,$bs_no,$vatable,$notes_id,$pac
 
         try{
 	       $stmt = civicrmDB("INSERT INTO billing_details (participant_id,contact_id,event_id,event_type,event_name,participant_name,email, bill_address,organization_name,
-			          org_contact_id,billing_type,fee_amount,billing_no,generated_bill,view_bill,participant_status,generator_uid,bir_no,notes_id,is_package)
-				   VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+			          org_contact_id,billing_type,fee_amount,billing_no,generated_bill,view_bill,participant_status,generator_uid,bir_no,notes_id,is_package,nonvatable_type)
+				   VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
 		$bill_address = $info["street_address"]." ".$info["city_address"];
                 $total_amount = $total_amount + $info["fee_amount"];
@@ -335,6 +335,7 @@ function generatePackageBill($contact_id,$details,$bs_no,$vatable,$notes_id,$pac
 		$stmt->bindValue(18,$bs_no,PDO::PARAM_STR);
 		$stmt->bindValue(19,$notes_id,PDO::PARAM_INT);
                 $stmt->bindValue(20,$package_id,PDO::PARAM_INT);
+                $stmt->bindValue(21,$nonvatable_type,PDO::PARAM_STR);
 
 		$stmt->execute();}
 
@@ -342,6 +343,8 @@ function generatePackageBill($contact_id,$details,$bs_no,$vatable,$notes_id,$pac
             echo $error->getMessage();
           }
         }
+
+        $total_amount = $nonvatable_type == 'vatable' ? $total_amount : round($total_amount/1.12,2);
 	$subtotal = $vatable == 1 ? round($total_amount/1.12,2) : $total_amount;
 	$vat = $total_amount - $subtotal;
 

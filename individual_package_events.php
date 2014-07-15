@@ -144,8 +144,9 @@ function validator(){
   $display = $display."<table id='packages' align='center'>"
            . "<thead>"
            . "<tr><td colspan='4'>Account Receivable Type : "
-           . "<input type='radio' name='vat' value='1' checked='checked'>VATABLE"
-           . "<input type='radio' name='vat' value='2'>NON-VATABLE</br>"
+           . "<input type='radio' name='vat' value='vatable' checked='checked'>VATABLE"
+           . "<input type='radio' name='vat' value='vat_exempt'>VAT-EXEMPT</br>"
+           . "<input type='radio' name='vat' value='vat_zero'>VAT-ZERO"
            . "BS No. : <input name='bs_no' id='bs_no' type='text' placeholder='Enter BS No. start number'>";
     $notes_opt = getNotesByCategory("Individual Event Billing");
     $notes_collection = array();
@@ -195,13 +196,14 @@ function validator(){
   if($_POST['generate']){
     $contact_ids = $_POST['ids'];
     $bs_no = $_POST["bs_no"];
-    $is_vatable = $_POST["vat"];
+    $is_vatable = $_POST["vat"] == 'vatable' ? 1 : 0 ;
+    $nonvatable_type = $_POST["vat"] == 'vatable' ? NULL : $_POST['vat'];
     $note_id = $_POST["notes"] == 'select' ? NULL : $_POST["notes"];
 
     foreach($contact_ids as $contact_id){
-      $bir_no = formatBSNo($bs_no);
+      $bir_no = $bs_no == NULL ? $bs_no : formatBSNo($bs_no);
       $details = $participants[$contact_id];
-      generatePackageBill($contact_id,$details,$bir_no,$is_vatable,$note_id,$pid);
+      generatePackageBill($contact_id,$details,$bir_no,$is_vatable,$note_id,$pid,$nonvatable_type);
       $bs_no++;
     }
     echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully generated bill.</div>";
