@@ -103,43 +103,14 @@ x:publishsource="Excel">
   <td class=xl655352552></td>
   <td class=xl655352552></td>
  </tr>
- <tr height=30 style='mso-height-source:userset;height:23.1pt'>
-  <td height=30 class=xl655352552 style='height:23.1pt'></td>
+ <tr>
+  <td height=30 class=xl655352552 style='height:22pt'></td>
   <td class=xl655352552></td>
-  <td colspan=6 height=30 width=476 style='height:23.1pt;width:358pt'
-	  align=left valign=top>
-	  
-	  
-   
-   
-   <![if !vml]><span style='mso-ignore:vglayout;
-  position:absolute;z-index:2;margin-left:2px;margin-top:2px;width:50px;
-  height:44px'><img width=50 height=44
-  src="IIAP%20Billing%20Form%20(rev2_2014%20ATP)_files/IIAP%20Billing%20Form%20(rev2_2014%20ATP)_2552_image004.gif"
-  alt=IIA v:shapes="Picture_x0020_2"></span><![endif]><span style='mso-ignore:
-  vglayout2'>
-  <table cellpadding=0 cellspacing=0>
-   <tr>
-    <td colspan=6 height=30 class=xl1672552 width=476 style='height:23.1pt;
-    width:358pt'>Institute of Internal Auditors Philippines Inc.</td>
-   </tr>
-  </table>
-  </span></td>
-  <td class=xl962552></td>
-  <td class=xl972552></td>
-  <td rowspan=2 class=xl1512552></td>
-  <td class=xl655352552></td>
-  <td class=xl655352552></td>
- </tr>
- <tr height=18 style='mso-height-source:userset;height:14.1pt'>
-  <td height=18 class=xl655352552 style='height:14.1pt'></td>
-  <td class=xl655352552></td>
-  <td colspan=6 class=xl1662552><span style='mso-spacerun:yes'> </span>Unit 702
-  Corporate Center, 139 Valero St., Salcedo Village, Makati City 1227</td>
-  <td class=xl962552></td>
-  <td class=xl972552></td>
-  <td class=xl655352552></td>
-  <td class=xl655352552></td>
+  <td style='width:65;align:right;'><img src='../images/iiap_logo.png' style='width:65;height:50'></td>
+  <td colspan='12'>
+     <font class=xl1672552><b>Institute of Internal Auditors Philippines Inc.</b></font></br>
+     <font class=xl1662552><b>Unit 702 Corporate Center, 139 Valero St., Salcedo Village, Makati City 1227</b></font>
+  </td>
  </tr>
  <tr height=20 style='mso-height-source:userset;height:15.0pt'>
   <td height=20 class=xl655352552 style='height:15.0pt'></td>
