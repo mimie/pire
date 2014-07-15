@@ -178,11 +178,12 @@ p.issuedby{
   $stmt = civicrmDB("UPDATE billing_company SET edit_bill = '0' WHERE billing_no=?");
   $stmt->bindValue(1,$billing_no,PDO::PARAM_STR);
   $stmt->execute();
+  $tin = getTin($orgId);
 
 ?>
 <p class="myname"><?=$bill['organization_name']?></p>
 <p class="myaddress"><?=wordwrap($complete_address,57,"<br>\n<font color='white'>",FALSE)?></font></p>
-<p class="mytin"></p>
+<p class="mytin"><?=$tin?></p>
 <p class="lbltxn">Txn. No:</p>
 <p class="myrefno"><?=$ref_no?></p>
 <p class="mybilldate"><?=date("F j, Y",strtotime($bill['bill_date']))?></p>
