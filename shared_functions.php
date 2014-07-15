@@ -17,4 +17,10 @@ function getContactName($contact_id){
         return $name;
 }
 
+function wrapAddress($address){
+
+	$address = explode("<br>\n", wordwrap($address,58, "<br>\n",TRUE) );
+        return $address[0];
+}
+
 ?>
