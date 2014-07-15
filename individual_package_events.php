@@ -67,13 +67,10 @@ function isCheck(elem, helperMsg){
 function validator(){
 
         var checkbox = document.getElementsByName('ids[]');
-        var bs_no = document.getElementById('bs_no');
 
-        if(isNumeric(bs_no,"Please enter a valid number for BS No. field.")){
            if(isCheck(checkbox,"Please select a participant name.")){
              return true;
            }
-        }
 
         return false;
 }
