@@ -146,7 +146,7 @@ function validator(){
            . "<tr><td colspan='4'>Account Receivable Type : "
            . "<input type='radio' name='vat' value='1' checked='checked'>VATABLE"
            . "<input type='radio' name='vat' value='2'>NON-VATABLE</br>"
-           . "BS No. : <input name='bs_no' id='bs_no' type='text' placeholder='Enter BS No. start number' required>";
+           . "BS No. : <input name='bs_no' id='bs_no' type='text' placeholder='Enter BS No. start number'>";
     $notes_opt = getNotesByCategory("Individual Event Billing");
     $notes_collection = array();
     $display = $display."<SELECT name='notes'><option value='select'>- Select optional billing notes -</option><option>-----------------</option>";
