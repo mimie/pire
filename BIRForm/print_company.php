@@ -39,6 +39,7 @@ href="IIAP%20Billing%20Form%20(rev2_2014%20ATP)_files/filelist.xml">
   $nonvatable_type = $bill["nonvatable_type"];
 
   $participants = getCompanyBilledParticipants($dbh,$billing_no,$eventId);
+  $tin = getTin($orgId);
 
 ?>
 
@@ -216,7 +217,7 @@ x:publishsource="Excel">
   <td class=xl655352552></td>
   <td class=xl1012552>TIN#</td>
   <td class=xl992552>:</td>
-  <td colspan=5 class=xl1632552>&nbsp;</td>
+  <td colspan=5 class=xl1632552><?=$tin?></td>
   <td class=xl1022552>DUE DATE</td>
   <td class=xl1242552>&nbsp;<?=date("F j, Y",strtotime($bill['start_date']))?></td>
   <td class=xl655352552></td>
