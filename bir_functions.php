@@ -353,7 +353,7 @@ function generatePackageBill($contact_id,$details,$bs_no,$vatable,$notes_id,$pac
 
         try{
 		$sql_bir = civicrmDB("INSERT INTO billing_details_package(bir_no,contact_id,subtotal,vat,total_amount,pid,notes_id,billing_no) 
-                                      VALUES(:bs_no,:contact_id,:subtotal,:vat,:total_amount,:package_id,:notes_id,:billing_no)");
+                                      VALUES(:bs_no,:contact_id,:subtotal,:vat,:total_amount,:package_id,:notes_id,:billing_no,:generator_uid)");
 		$sql_bir->bindParam(':bs_no',$bs_no);
 		$sql_bir->bindParam(':contact_id',$contact_id);
 		$sql_bir->bindParam(':subtotal',$subtotal);
@@ -362,8 +362,9 @@ function generatePackageBill($contact_id,$details,$bs_no,$vatable,$notes_id,$pac
 		$sql_bir->bindParam(':package_id',$package_id);
 		$sql_bir->bindParam(':notes_id',$notes_id);
 		$sql_bir->bindParam(':billing_no',$billing_no);
+                $sql_bir->bindParam(':generator_uid',$generator_uid);
 		$sql_bir->execute();
-		//echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully generated bill.</div>";
+		echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully generated bill.</div>";
         }
 
         catch (PDOException $error){
