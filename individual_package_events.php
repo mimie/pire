@@ -31,8 +31,7 @@ $(function() {
       modal: true,
       buttons: {
         "OK": function() {
-          $( this ).dialog( "close" );
-          reloadPage();
+         reloadPage();
         }
       }
     });
@@ -87,6 +86,7 @@ function validator(){
   include 'packages/packagebill_functions.php';
   include 'packages/package_functions.php';
   include 'notes/notes_functions.php';
+  include 'billing_functions.php';
 
   $dbh = civicrmConnect();
   $menu = logoutDiv($dbh);
@@ -136,14 +136,15 @@ function validator(){
 
   $display = $display."</table></br></br>";
 
-  echo "<form action='individual_package_events.php?pid=$pid&uid=$uid' method='POST' onsubmit=\"return validator()\">";
+  echo "<form action='' method='POST' onsubmit=\"return validator()\">";
 
-  $display = $display."<table id='packages' align='center'>"
+  $display = $display."<table id='packages' align='center' style='width:60%;'>"
            . "<thead>"
            . "<tr><td colspan='4'>Account Receivable Type : "
            . "<input type='radio' name='vat' value='vatable' checked='checked'>VATABLE"
-           . "<input type='radio' name='vat' value='vat_exempt'>VAT-EXEMPT</br>"
+           . "<input type='radio' name='vat' value='vat_exempt'>VAT-EXEMPT"
            . "<input type='radio' name='vat' value='vat_zero'>VAT-ZERO"
+           . "</br>"
            . "BS No. : <input name='bs_no' id='bs_no' type='text' placeholder='Enter BS No. start number'>";
     $notes_opt = getNotesByCategory("Individual Event Billing");
     $notes_collection = array();
@@ -199,11 +200,20 @@ function validator(){
 
     foreach($contact_ids as $contact_id){
       $bir_no = $bs_no == NULL ? $bs_no : formatBSNo($bs_no);
-      $details = $participants[$contact_id];
-      generatePackageBill($contact_id,$details,$bir_no,$is_vatable,$note_id,$pid,$nonvatable_type);
-      $bs_no++;
+      $birno_exist = $bir_no == NULL ? 0 : checkDuplicateIndividualBIRNo($bir_no);
+
+      if($birno_exist == 0){
+
+	      $details = $participants[$contact_id];
+	      generatePackageBill($contact_id,$details,$bir_no,$is_vatable,$note_id,$pid,$nonvatable_type);
+	      $bs_no = $bs_no == NULL ? '' : $bs_no++;
+      }
+
+       else{
+              echo "<div id='confirmation'><img src='images/error.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;You have entered an existing BS No. Billing cannot be generated.</div>";
+       }
     }
-    echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully generated bill.</div>";
+
   }
 
 ?>
