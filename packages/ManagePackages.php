@@ -11,6 +11,9 @@
   <script src="../js/jquery.tablesorter.js"></script>
 
 <script>
+function reloadPage(){
+    window.location=window.location;
+}
 $(function() {
         $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
         $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
@@ -30,7 +33,7 @@ $(function() {
     buttons: {
        "OK": function(){
            //$( this ).dialog("close");
-           location.reload();
+           reloadPage();
        }
     }
     
