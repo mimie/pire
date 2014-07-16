@@ -71,17 +71,6 @@ function getEventCategory(){
    return $result;
 }
 
-function getEventTypeName($eventTypeId){
-
-  $stmt = civicrmDB("SELECT label FROM civicrm_option_value WHERE option_group_id='14' AND value = ?");
-  $stmt->bindValue(1,$eventTypeId,PDO::PARAM_INT);
-  $stmt->execute();
-  $result = $stmt->fetch(PDO::FETCH_ASSOC);
-  $eventType = $result["label"];
-
-  return $eventType;
-}
-
 function getEventsForPackages($eventTypeId,$eventName,$packageId){
 
    $stmt = civicrmDB("SELECT ce.id as event_id, ce.title as event_name,ce.event_type_id,ce.start_date,ce.end_date
