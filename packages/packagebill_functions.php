@@ -72,14 +72,14 @@ function getBillDetailsByBIRNo($bir_no){
 
 }
 
-function getEventBillDetailsByBIRNo($bir_no){
+function getEventBillDetailsByBillingNo($billing_no){
 
 	$stmt = civicrmDB("SELECT bd.event_id, bd.fee_amount,ce.title as event_name, ce.start_date, ce.end_date
                            FROM billing_details bd, civicrm_event ce
                            WHERE bd.event_id = ce.id
-                           AND bir_no = ?
+                           AND billing_no = ?
                           ");
-        $stmt->bindValue(1,$bir_no,PDO::PARAM_STR);
+        $stmt->bindValue(1,$billing_no,PDO::PARAM_STR);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
