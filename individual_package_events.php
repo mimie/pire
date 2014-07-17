@@ -100,6 +100,8 @@ function validator(){
   $participants = getParticipantsPerPackage($pid);
 
    echo "<table width='100%'>";
+   echo "<tr><th colspan='2'>INDIVIDUAL PACKAGE BILL</th></tr>";
+   echo "<tr><td colspan='2' bgcolor='#2EFEF7'></td></tr>";
    echo "<tr>";
    echo "<td align='center'><a href='individual_package_events.php?pid=".$pid."&uid=".$uid."'>GENERATE PACKAGE BILL</a></td>";
    echo "<td align='center' bgcolor='#084B8A'><a href='view_individual_package_events.php?pid=".$pid."&uid=".$uid."'>VIEW PACKAGE BILLS</td>";
