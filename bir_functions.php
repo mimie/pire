@@ -343,7 +343,8 @@ function generatePackageBill($contact_id,$details,$bs_no,$vatable,$notes_id,$pac
 		  }
 
 		  catch (PDOException $error) {
-		    echo $error->getMessage();
+			echo "<div id='confirmation'><img src='images/error.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Error in inserting billing_details</br>"
+                             . $error->getMessage()."</div>";
 		  }
         }
 
