@@ -172,6 +172,11 @@ p.issuedby{
   $infobill = getEventBillDetailsByBillingNo($billing_no);
   $due_date = date_standard($infobill[0]['start_date']);
 
+  //update edit bill
+  $update_stmt = civicrmDB("UPDATE billing_details_package SET edit_bill= '0' WHERE billing_no=?");
+  $update_stmt->bindValue(1,$billing_no,PDO::PARAM_STR);
+  $update_stmt->execute();
+
 ?>
 <p class="myname"><?=$bill['sort_name']?></p>
 <p class="myaddress"><?=wrapAddress($address)?></font></p>
