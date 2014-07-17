@@ -27,9 +27,11 @@ href="IIAP%20Billing%20Form%20(rev2_2014%20ATP)_files/filelist.xml">
 
   @$uid = $_GET["uid"];
   $generator = getGeneratorName($uid);
-  @$bir_no = $_GET["bir_no"];
-  $bill = getBillDetailsByBIRNo($bir_no);
+  @$billing_no = $_GET["billing_no"];
+  $bill = getBillDetailsByBillingNo($billing_no);
   $address = $bill['street_address']." ".$bill['city_address'];
+
+  $ref_no = $bill['bir_no'] == NULL ? $billing_no : "BS-".$bill['bir_no']."/".$billing_no;
 
 ?>
 
@@ -158,7 +160,7 @@ x:publishsource="Excel">
   <td class=xl992552>:</td>
   <td colspan=5 class=xl1632552>&nbsp;<?=$bill['sort_name']?></td>
   <td class=xl1022552>REFERENCE NO.</td>
-  <td class=xl1242552>BS-<?=$bir_no?></td>
+  <td class=xl1242552><?=$ref_no?></td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
  </tr>
@@ -211,7 +213,7 @@ x:publishsource="Excel">
   <td class=xl655352552></td>
   <td colspan=8 class=xl1582552 style='border-right:.5pt solid black'>
   <?php
-      $infobill = getEventBillDetailsByBIRNo($bir_no);
+      $infobill = getEventBillDetailsByBillingNo($billing_no);
       $amounts = array();
       foreach($infobill as $key=>$field){
            echo $field['event_name']."</br>";
