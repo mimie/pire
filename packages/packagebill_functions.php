@@ -55,16 +55,16 @@ function getBillByPackageId($packageId){
  * Return contact details of the bill with package
  * @bir_no = BS No. in the voucher
  */
-function getBillDetailsByBIRNo($bir_no){
+function getBillDetailsByBillingNo($billing_no){
 
-	$stmt = civicrmDB("SELECT cc.sort_name, bdp.subtotal,bdp.vat, bdp.total_amount, bn.notes, bdp.bill_date, bd.street_address__company__3 as street_address,bd.city__company__5 as city_address
+	$stmt = civicrmDB("SELECT cc.sort_name, bdp.subtotal,bdp.vat, bdp.total_amount, bdp.bir_no,bn.notes, bdp.bill_date, bd.street_address__company__3 as street_address,bd.city__company__5 as city_address
                            FROM civicrm_contact cc, billing_details_package bdp
                            LEFT JOIN billing_notes bn ON bdp.notes_id = bn.notes_id
                            LEFT JOIN civicrm_value_business_data_1 bd ON bdp.contact_id = bd.entity_id
                            WHERE cc.id = bdp.contact_id
-                           AND bdp.bir_no = ?
+                           AND bdp.billing_no = ?
                           ");
-        $stmt->bindValue(1,$bir_no,PDO::PARAM_STR);
+        $stmt->bindValue(1,$billing_no,PDO::PARAM_STR);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
