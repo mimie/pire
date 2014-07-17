@@ -41,10 +41,8 @@ $(function() {
   $dbh = civicrmConnect();
   @$uid = $_GET["uid"];
 
-  echo "<div align='center' style='padding:16px;'>";  
   $logout = logoutDiv($dbh);
   echo $logout;
-  echo "</div>";
 
 ?>
 <center>
