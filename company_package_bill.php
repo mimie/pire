@@ -71,7 +71,7 @@ $(function() {
            . "</thead><tbody>";
 
   foreach($packages as $pid=>$package_name){
-  	$display = $display."<tr><td  bgcolor='#084B8A' colspan=3><button onclick=\"javascript=window.location='individual_package_events.php?pid=$pid&uid=$uid'\">$package_name</a></button></td></tr>";
+  	$display = $display."<tr><td  bgcolor='#084B8A' colspan=3><button onclick=\"javascript=window.location='company_package_events.php?pid=$pid&uid=$uid'\">$package_name</a></button></td></tr>";
         $info = $events[$pid];
         $count = count($info);
         $display = $count ?  $display."<tr><td>Event</td><td>Start Date</td><td>End Date</td></tr>" : $display;
