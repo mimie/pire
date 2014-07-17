@@ -158,7 +158,7 @@ function validator(){
 
          $bir_no = $field['bir_no'];
          $billing_no = $field['billing_no'];
-	 $print_img = $bir_no == NULL || $field['edit_bill'] == 0 ? '' : "<a href='BIRForm/print_package_individual.php?billing_no=".$billing_no."&uid=".$uid."' targer='_blank'><img src='printer-icon.png' width='30' height='30'></a>";
+	 $print_img = $bir_no == NULL || $field['edit_bill'] == 0 ? '' : "<a href='BIRForm/print_package_individual.php?billing_no=".$billing_no."&uid=".$uid."' target='_blank'><img src='printer-icon.png' width='30' height='30'></a>";
    	 $display = $display."<tr>"
                   . "<td>".$field['sort_name']."</td>"
                   . "<td>".$field['organization_name']."</td>"
