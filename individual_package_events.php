@@ -102,7 +102,7 @@ function validator(){
    echo "<table width='100%'>";
    echo "<tr>";
    echo "<td align='center'><a href='individual_package_events.php?pid=".$pid."&uid=".$uid."'>GENERATE PACKAGE BILL</a></td>";
-   echo "<td align='center' bgcolor='#084B8A'><a href='view_individual_package.php?pid=".$pid."&uid=".$uid."'>VIEW PACKAGE BILLS</td>";
+   echo "<td align='center' bgcolor='#084B8A'><a href='view_individual_package_events.php?pid=".$pid."&uid=".$uid."'>VIEW PACKAGE BILLS</td>";
    echo "</tr>";
    echo "</table></br>"; 
 
