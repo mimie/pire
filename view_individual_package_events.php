@@ -143,7 +143,8 @@ function validator(){
            . "<th>12% VAT</th>"
            . "<th>Print Bill</th>"
            . "<th>Amount Paid</th>"
-           . "<th>BS No.</th>"
+           . "<th>Registration No.</th>"
+           . "<th>ATP</th>"
            . "<th>Billing Date</th>"
            . "<th>Notes</th>"
            . "</tr></thead><tbody>";
@@ -161,6 +162,7 @@ function validator(){
                   . "<td><a href='BIRForm/birform_package.php?billing_no=".$field['billing_no']."&uid=".$uid."' target='_blank'>$preview_img</a>"
                   . "</td>"
                   . "<td>".number_format($field['amount_paid'],2)."</td>"
+                  . "<td>".$field['billing_no']."</td>"
                   . "<td>".$field['bir_no']."</td>"
                   . "<td>".date("F j, Y",strtotime($field['bill_date']))."</td>"
                   . "<td>".$field['notes']."</td>"
