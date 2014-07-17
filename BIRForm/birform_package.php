@@ -35,6 +35,8 @@ href="IIAP%20Billing%20Form%20(rev2_2014%20ATP)_files/filelist.xml">
   $nonvatable_type = $bill['nonvatable_type'];
   $bir_no = $bill['bir_no'];
   $ref_no = $bir_no == NULL ? $billing_no : "BS-".$bir_no."/".$billing_no;
+  $infobill = getEventBillDetailsByBillingNo($billing_no);
+  $due_date = date_standard($infobill[0]['start_date']);
 
 ?>
 
@@ -185,7 +187,7 @@ x:publishsource="Excel">
   <td class=xl992552>:</td>
   <td colspan=5 class=xl1632552>&nbsp;</td>
   <td class=xl1022552>DUE DATE</td>
-  <td class=xl1242552>&nbsp;<?=date("F j, Y",strtotime($bill['start_date']))?></td>
+  <td class=xl1242552>&nbsp;<?=$due_date?></td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
  </tr>
@@ -216,34 +218,37 @@ x:publishsource="Excel">
   <td class=xl655352552></td>
   <td colspan=8 class=xl1582552 style='border-right:.5pt solid black'>
   <?php
-      $infobill = getEventBillDetailsByBillingNo($billing_no);
       $amounts = array();
       foreach($infobill as $key=>$field){
            echo $field['event_name']."</br>";
            if($field['end_date']){
-           	echo "On ".date("F j,Y",strtotime($field['start_date']))." to ".date("F j, Y",strtotime($field['end_date']))."</br>"; 
+           	echo "On ".date_standard($field['start_date'])." to ".date_standard($field['end_date'])."</br>"; 
            }else{
-		echo "On ".date("F j,Y",strtotime($field['start_date']))."</br>";
+		echo "On ".date_standard($field['start_date'])."</br>";
 	    }
 
            $location = formatEventLocation(getEventLocation($dbh,$eventId));
+
+           $fee_amount = $nonvatable_type == NULL ? $field['fee_amount'] : round($field['fee_amount']/1.12,2);
   
            if($location){
               echo "At ".$location."<br>";
-              $amounts[] = "</br></br>".number_format($field['fee_amount'],2);
+              $amounts[] = "</br></br>".number_format($fee_amount,2);
            }else{
-              $amounts[] = "</br>".number_format($field['fee_amount'],2);
+              $amounts[] = "</br>".number_format($fee_amount,2);
             }
            echo "</br></br>";      
       }
   ?>
   </td>
   <td class=xl1582552 style='border-right:.5pt solid black'>
+  <div style='text-align:right'>
   <?php
       foreach($amounts as $display_amount){
         echo $display_amount."</br></br></br>";
       }
   ?>
+  </div>
   </td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
