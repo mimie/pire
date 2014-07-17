@@ -23,9 +23,9 @@
 
   $dbh = civicrmConnect();
   $notes = getAllNotes($dbh);
-/**  $logout = logoutDiv($dbh);
-  echo $logout;**/
-  echo "<a href='../events2.php'>Event List</a>";
+
+  $menu = logoutDiv($dbh);
+  echo $menu;
   echo "<br>";
 
 ?>
