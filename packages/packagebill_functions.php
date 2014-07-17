@@ -38,17 +38,25 @@ function searchPackageName($packageName){
 
 function getBillByPackageId($packageId){
 
-	$stmt = civicrmDB("SELECT bdp.bir_no, bdp.billing_no,bdp.contact_id, bdp.subtotal, bdp.vat, bdp.total_amount, bdp.amount_paid,bdp.bill_date,
-                           bn.notes, cc.sort_name, cc.organization_name
-                           FROM civicrm_contact cc,billing_details_package bdp
-                           LEFT JOIN billing_notes bn ON bdp.notes_id = bn.notes_id
-                           WHERE cc.id = bdp.contact_id
-                           AND bdp.pid = ?
-                            ");
-       $stmt->bindValue(1,$packageId,PDO::PARAM_INT);
-       $stmt->execute();
-       $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-       return $result;
+        try{
+		$stmt = civicrmDB("SELECT bdp.bir_no, bdp.billing_no,bdp.contact_id, bdp.subtotal, bdp.vat, bdp.total_amount, bdp.amount_paid,bdp.bill_date,bdp.edit_bill,
+				   bn.notes, cc.sort_name, cc.organization_name
+				   FROM civicrm_contact cc,billing_details_package bdp
+				   LEFT JOIN billing_notes bn ON bdp.notes_id = bn.notes_id
+				   WHERE cc.id = bdp.contact_id
+				   AND bdp.pid = ?
+				    ");
+	       $stmt->bindValue(1,$packageId,PDO::PARAM_INT);
+	       $stmt->execute();
+	       $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	       return $result;
+       }
+
+       catch(PDOException $error){
+		echo "<div id='confirmation'><img src='images/error.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Error function getBillByPackageId()</br>"
+                     . $error->getMessage()."</div>";
+
+       }
 }
 
 /*
