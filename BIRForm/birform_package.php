@@ -21,6 +21,7 @@ href="IIAP%20Billing%20Form%20(rev2_2014%20ATP)_files/filelist.xml">
   include '../notes/notes_functions.php';
   include '../packages/packagebill_functions.php';
   include '../billing_functions.php';
+  include '../shared_functions.php';
 
   $dbh = civicrmConnect();
   @$eventId = $_GET["event_id"];
@@ -31,7 +32,9 @@ href="IIAP%20Billing%20Form%20(rev2_2014%20ATP)_files/filelist.xml">
   $bill = getBillDetailsByBillingNo($billing_no);
   $address = $bill['street_address']." ".$bill['city_address'];
 
-  $ref_no = $bill['bir_no'] == NULL ? $billing_no : "BS-".$bill['bir_no']."/".$billing_no;
+  $nonvatable_type = $bill['nonvatable_type'];
+  $bir_no = $bill['bir_no'];
+  $ref_no = $bir_no == NULL ? $billing_no : "BS-".$bir_no."/".$billing_no;
 
 ?>
 
@@ -169,7 +172,7 @@ x:publishsource="Excel">
   <td class=xl655352552></td>
   <td class=xl1012552>Address</td>
   <td class=xl992552>:</td>
-  <td colspan=5 class=xl1632552>&nbsp;<?=$address?></td>
+  <td colspan=5 class=xl1632552>&nbsp;<?=wrapAddress($address)?></td>
   <td class=xl1022552>BILLING DATE</td>
   <td class=xl1242552>&nbsp;<?=date("F j,Y",strtotime($bill['bill_date']))?></td>
   <td class=xl655352552></td>
@@ -412,7 +415,7 @@ x:publishsource="Excel">
   <td class=xl1052552>&nbsp;</td>
   <td class=xl1062552>&nbsp;</td>
   <td rowspan=2 class=xl1562552>VAT-ABLE SALES</td>
-  <td rowspan=2 class=xl1422552 style='border-bottom:.5pt solid black'>&nbsp;<?=number_format($bill['subtotal'],2)?></td>
+  <td rowspan=2 class=xl1422552 style='border-bottom:.5pt solid black'>&nbsp;<?=$subtotal = $nonvatable_type == NULL ? number_format($bill['subtotal'],2) : ''?></td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
  </tr>
@@ -434,8 +437,9 @@ x:publishsource="Excel">
   <td colspan=6 class=xl1382552>INSTITUTE OF INTERNAL AUDITORS PHILIPPINES INC.</td>
   <td class=xl1102552>&nbsp;</td>
   <td rowspan=2 class=xl1402552>VAT-EXEMPT SALES</td>
-  <td rowspan=2 class=xl1422552 style='border-bottom:.5pt solid black;
-  border-top:none'>&nbsp;</td>
+  <td rowspan=2 class=xl1422552 style='border-bottom:.5pt solid black;border-top:none'>
+     &nbsp;<?=$subtotal = $nonvatable_type == 'vat_exempt' ? number_format($bill['subtotal'],2) : ''?>
+  </td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
  </tr>
@@ -455,8 +459,9 @@ x:publishsource="Excel">
   PAYMENT CENTER, pls. indicate BS reference number in the payment slip.</td>
   <td class=xl1102552>&nbsp;</td>
   <td rowspan=2 class=xl1402552>VAT-ZERO RATED SALES</td>
-  <td rowspan=2 class=xl1422552 style='border-bottom:.5pt solid black;
-  border-top:none'>&nbsp;</td>
+  <td rowspan=2 class=xl1422552 style='border-bottom:.5pt solid black;border-top:none'>
+      &nbsp;<?=$subtotal = $nonvatable_type == 'vat_zero' ? number_format($bill['subtotal'],2) : ''?>
+  </td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
  </tr>
@@ -517,11 +522,12 @@ x:publishsource="Excel">
   <td align=left valign=top>
 	  
    
-   <![if !vml]><span style='mso-ignore:vglayout;
-  position:absolute;z-index:3;margin-left:0px;margin-top:1px;width:439px;
-  height:120px'><img width=439 height=120
-  src="IIAP%20Billing%20Form%20(rev2_2014%20ATP)_files/IIAP%20Billing%20Form%20(rev2_2014%20ATP)_2552_image006.gif"
-  v:shapes="TextBox_x0020_3"></span><![endif]><span style='mso-ignore:vglayout2'>
+   <![if !vml]><span style='mso-ignore:vglayout; position:absolute;z-index:3;margin-left:0px;margin-top:1px;width:439px; height:120px'>
+<?php if($bir_no != NULL){ ?>
+  <img width=439 height=120 src="IIAP%20Billing%20Form%20(rev2_2014%20ATP)_files/IIAP%20Billing%20Form%20(rev2_2014%20ATP)_2552_image006.gif" v:shapes="TextBox_x0020_3">
+<?php } ?>
+   </span>
+   <![endif]><span style='mso-ignore:vglayout2'>
   <table cellpadding=0 cellspacing=0>
    <tr>
     <td height=22 class=xl1142552 width=81 style='height:16.5pt;width:61pt'>&nbsp;</td>
@@ -576,7 +582,7 @@ x:publishsource="Excel">
   <td class=xl1142552>&nbsp;</td>
   <td class=xl1142552>&nbsp;</td>
   <td class=xl1142552>&nbsp;</td>
-  <td rowspan=2 class=xl1342552>BS No.</td>
+  <td rowspan=2 class=xl1342552><?=$label = $bir_no == NULL ? '' : "BS No."?></td>
   <td rowspan=2 class=xl1352552><?=$bir_no?></td>
   <td class=xl1142552>&nbsp;</td>
   <td class=xl655352552></td>
@@ -612,16 +618,14 @@ x:publishsource="Excel">
  <tr height=18 style='mso-height-source:userset;height:14.1pt'>
   <td height=18 class=xl655352552 style='height:14.1pt'></td>
   <td class=xl655352552></td>
-  <td colspan=9 class=xl1362552>THIS DOCUMENT IS NOT VALID FOR CLAIMING INPUT
-  TAXES&quot;</td>
+  <td colspan=9 class=xl1362552><?=$disclaimer = $bir_no == NULL ? '' : "THIS DOCUMENT IS NOT VALID FOR CLAIMING INPUT TAXES"?></td>
   <td class=xl1082552>&nbsp;</td>
   <td class=xl655352552></td>
  </tr>
  <tr height=18 style='mso-height-source:userset;height:14.1pt'>
   <td height=18 class=xl655352552 style='height:14.1pt'></td>
   <td class=xl655352552></td>
-  <td colspan=9 class=xl1372552>&quot;THIS BILLING STATEMENT SHALL BE VALID FOR
-  (5) YEARS FROM THE DATE OF ATP&quot;</td>
+  <td colspan=9 class=xl1372552><?=$disclaimers = $bir_no == NULL ? '' : "THIS BILLING STATEMENT SHALL BE VALID FOR (5) YEARS FROM THE DATE OF ATP"?></td>
   <td class=xl1082552>&nbsp;</td>
   <td class=xl655352552></td>
  </tr>
