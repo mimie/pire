@@ -135,8 +135,11 @@ function logoutDiv($dbh){
      $notes_dir = file_exists($notes_dir) ? $notes_dir : '../notes/notes.php';
      $notes_dir = file_exists($notes_dir) ? $notes_dir : basename($_SERVER['PHP_SELF']);
 
-     $package_dir = 'package_bill.php';
-     $package_dir = file_exists($package_dir) ? $package_dir: '../package_bill.php';
+     $package_dir = 'individual_package_bill.php';
+     $package_dir = file_exists($package_dir) ? $package_dir: '../individual_package_bill.php';
+
+     $comp_package_dir = 'company_package_bill.php';
+     $comp_package_dir = file_exists($comp_package_dir) ? $comp_package_dir: '../company_package_bill.php';
      
 
      $html = "<div width='100%' style='background-color:black; padding:1px;'>"
@@ -153,7 +156,11 @@ function logoutDiv($dbh){
            . "</ul>"
            . "</li>"
            . "<li><a href='#'>Package Events</a>"
-           . "<ul><li><a href='".$ciafile_dir."?uid=$uid'>Manage Package Events</a></li><li><a href='".$package_dir."?uid=$uid'>Generate Package Bill</a></li></ul>"
+           . "<ul>"
+           . "<li><a href='".$ciafile_dir."?uid=$uid'>Manage Package Events</a></li>"
+           . "<li><a href='".$package_dir."?uid=$uid'>Individual Package Bill</a></li>"
+           . "<li><a href='".$comp_package_dir."?uid=$uid'>Company Package Bill</a></li>"
+           . "</ul>"
            . "</li>"
            . "</ul><br><br>"
            . "</div>";
