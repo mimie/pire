@@ -147,12 +147,15 @@ function validator(){
            . "<th>ATP</th>"
            . "<th>Billing Date</th>"
            . "<th>Notes</th>"
+           . "<th>Edit</th>"
            . "</tr></thead><tbody>";
 
    $preview_img = "<img src='images/preview.png' height='30' width='30'>";
-   $print_img = "<img src='printer-icon.png' width='30' height='30'>";
 
    foreach($bills as $key=>$field){
+
+         $bir_no = $field['bir_no'];
+	 $print_img = $bir_no == NULL || $field['edit_bill'] == 0 ? '' : "<img src='printer-icon.png' width='30' height='30'>";
    	 $display = $display."<tr>"
                   . "<td>".$field['sort_name']."</td>"
                   . "<td>".$field['organization_name']."</td>"
@@ -160,12 +163,14 @@ function validator(){
                   . "<td>".number_format($field['subtotal'],2)."</td>"
                   . "<td>".number_format($field['vat'],2)."</td>"
                   . "<td><a href='BIRForm/birform_package.php?billing_no=".$field['billing_no']."&uid=".$uid."' target='_blank'>$preview_img</a>"
+                  . "$print_img"
                   . "</td>"
                   . "<td>".number_format($field['amount_paid'],2)."</td>"
                   . "<td>".$field['billing_no']."</td>"
-                  . "<td>".$field['bir_no']."</td>"
+                  . "<td>".$bir_no."</td>"
                   . "<td>".date("F j, Y",strtotime($field['bill_date']))."</td>"
                   . "<td>".$field['notes']."</td>"
+                  . "<td><img src='images/edit_bill.png'></td>"
                   . "</tr>";
    }
            
