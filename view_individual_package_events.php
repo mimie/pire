@@ -164,7 +164,7 @@ function validator(){
                   . "<td>".number_format($field['total_amount'],2)."</td>"
                   . "<td>".number_format($field['subtotal'],2)."</td>"
                   . "<td>".number_format($field['vat'],2)."</td>"
-                  . "<td><a href='BIRForm/birform_package.php?billing_no=".$field['billing_no']."&uid=".$uid."' target='_blank'>$preview_img</a>"
+                  . "<td><a href='BIRForm/birform_package_individual.php?billing_no=".$field['billing_no']."&uid=".$uid."' target='_blank'>$preview_img</a>"
                   . "$print_img"
                   . "</td>"
                   . "<td>".number_format($field['amount_paid'],2)."</td>"
