@@ -398,7 +398,12 @@ x:publishsource="Excel">
   <td colspan=8 class=xl1572552 style='border-right:.5pt solid black'>&nbsp;
   <?php
      
-     echo $bill['notes'];
+     if($bill["notes"] != NULL){
+             echo "<div align='center'>";
+	     echo "<div class='notes'>";
+	     echo "<b><font color='#0A0A2A'><i>Notes: </i>".wordwrap($bill['notes'],67,"<br>\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",TRUE)."</font></b>";
+	     echo "</div></br></div>";
+     }
   ?>
 
   </td>
