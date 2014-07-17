@@ -18,7 +18,7 @@ $(function() {
         $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
         $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
         $('#packages').jPaginate({
-                'max': 20,
+                'max': 15,
                 'page': 1,
                 'links': 'buttons'
         });
@@ -98,6 +98,7 @@ function validator(){
   $events = getEventsPerPackage($pid);
   $package_name = getPackageName($pid);
   $participants = getParticipantsPerPackage($pid);
+  $comp_names = getCompanyNames();
 
    echo "<table width='100%'>";
    echo "<tr><th colspan='2'>COMPANY PACKAGE BILL</th></tr>";
@@ -124,103 +125,76 @@ function validator(){
         $eventIds[] = $field['event_id'];
   }
   echo "</div>";
+  $display = $display."</table></br></br>";
+  echo $display;
 ?>
 
-<div align='center'>
-  <form action='' method='POST'>
-    <input type='text' name='searchtext' placeholder='Type name here...' />
-    <input type='submit' name='search' value='SEARCH PARTICIPANT'>
-  </form>
-</div>
+<?php
+  $companies = getParticipantsPackageCompanyByPackageId($pid);
+?>
 
 <?php
-  $participants = $_POST['search'] ? searchParticipantsPerPackage($pid,$_POST['searchtext']) : getParticipantsPackageCompanyByPackageId($pid);
-  echo "<pre>";
-  print_r($participants);
-  echo "</pre>";
-
-  $display = $display."</table></br></br>";
 
   echo "<form action='' method='POST' onsubmit=\"return validator()\">";
 
-  $display = $display."<table id='packages' align='center' style='width:60%;'>"
-           . "<thead>"
-           . "<tr><td colspan='4'>Account Receivable Type : "
-           . "<input type='radio' name='vat' value='vatable' checked='checked'>VATABLE"
-           . "<input type='radio' name='vat' value='vat_exempt'>VAT-EXEMPT"
-           . "<input type='radio' name='vat' value='vat_zero'>VAT-ZERO"
-           . "</br>"
-           . "BS No. : <input name='bs_no' id='bs_no' type='text' placeholder='Enter BS No. start number'>";
-    $notes_opt = getNotesByCategory("Individual Event Billing");
-    $notes_collection = array();
-    $display = $display."</br>Notes : <SELECT name='notes'><option value='select'>- Select optional billing notes -</option><option>-----------------</option>";
+  echo "<table align='center' style='width:60%;'>"
+       . "<thead>"
+       . "<tr><td>Account Receivable Type : "
+       . "<input type='radio' name='vat' value='vatable' checked='checked'>VATABLE"
+       . "<input type='radio' name='vat' value='vat_exempt'>VAT-EXEMPT"
+       . "<input type='radio' name='vat' value='vat_zero'>VAT-ZERO"
+       . "</br>"
+       . "BS No. : <input name='bs_no' id='bs_no' type='text' placeholder='Enter BS No. start number'>";
+    $notes_opt = getNotesByCategory("Company Event Billing");
+    echo "</br>Notes : <SELECT name='notes'><option value='select'>- Select optional billing notes -</option><option>-----------------</option>";
     foreach($notes_opt as $key=>$field){
         $id = $field["notes_id"];
         $notes = $field["notes"];
-    	$display = $display."<option value='$id'>$notes</option>";
+    	echo "<option value='$id'>$notes</option>";
         //stores notes in an array for reference display of notes in the table
-        $notes_collection[$id] = $notes;
     }
 
 
-  $display = $display."</SELECT></br><input type='submit' name='generate' value='GENERATE BILL'/></td></tr>";
-  $display = $display. "<tr><td colspan='4' bgcolor='05123E'>LIST OF PARTICIPANTS</td></tr></thead><tbody>";
+  echo "</SELECT></br><input type='submit' name='generate' value='GENERATE BILL'/></td></tr>";
+  echo "<tr><td bgcolor='05123E'>LIST OF COMPANIES</td></tr></thead><tbody>";
+?>
 
-  //billing details for package events
-  foreach($participants as $contact_id=>$details){
-     $name = getContactName($contact_id);
-     $display = $display."<tr><th colspan='13'><input type='checkbox' value='$contact_id' name='ids[]'>$name</th></tr>"
-              . "<th>Participant Id</th>"
-              . "<th>Event Name</th>"
-              . "<th>Status</th>"
-              . "<th>Fee</th>";
-     $total = 0;
-     foreach($details as $key=>$field){
-        $participant_id = $field['participant_id'];
-     	      $display = $display."<tr>"
-                   . "<td>".$field['participant_id']."</td>"
-                   . "<td>".$field['event_name']."</td>"
-                   . "<td>".$field['status']."</td>"
-                   . "<td>".$field['fee_amount']."</td>";
-                   $total = $total + $field['fee_amount'];
-                   $organization = $field['organization_name'];
+<?php
+  foreach($companies as $orgId=>$indexes){
+       echo "<tr><td>";
+       echo "<table style='width:100%;'>";
+       $orgname = $comp_names[$orgId];
 
-     }
+       echo "<tr><th colspan='5'><input type='checkbox' name='orgId' value='$orgId'>$orgname</th></tr>";
+	       echo "<tr>";
+	       echo "<td bgcolor='#0B2161'>Participant Id</td>";
+	       echo "<td bgcolor='#0B2161'>Name</td>";
+	       echo "<td bgcolor='#0B2161'>Event Name</td>";
+	       echo "<td bgcolor='#0B2161'>Status</td>";
+	       echo "<td bgcolor='#0B2161'>Fee</td>";
+	       echo "</tr>";
 
-     $display = $display. "<tr><td colspan='3'>Total</td><td>".number_format($total,2)."</td></tr>"
-              . "<tr><td>Organization</td><td colspan='3'>".htmlspecialchars($organization)."</td></tr>";
+       foreach($indexes as $key=>$participants){
 
-  }
-
-  $display = $display."</tbody></table>";
-  echo $display;
-  echo "</form>";
-
-  if($_POST['generate']){
-    $contact_ids = $_POST['ids'];
-    $bs_no = $_POST["bs_no"];
-    $is_vatable = $_POST["vat"] == 'vatable' ? 1 : 0 ;
-    $nonvatable_type = $_POST["vat"] == 'vatable' ? NULL : $_POST['vat'];
-    $note_id = $_POST["notes"] == 'select' ? NULL : $_POST["notes"];
-
-    foreach($contact_ids as $contact_id){
-      $bir_no = $bs_no == NULL ? $bs_no : formatBSNo($bs_no);
-      $birno_exist = $bir_no == NULL ? 0 : checkDuplicateIndividualBIRNo($bir_no);
-
-      if($birno_exist == 0){
-
-	      $details = $participants[$contact_id];
-	      generatePackageBill($contact_id,$details,$bir_no,$is_vatable,$note_id,$pid,$nonvatable_type);
-	      $bs_no = $bs_no == NULL ? '' : $bs_no++;
-      }
-
-       else{
-              echo "<div id='confirmation'><img src='images/error.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;You have entered an existing BS No. Billing cannot be generated.</div>";
+	       echo "<tr>";
+	       echo "<td><input type='checkbox' name='participantIds[]' value='".$participants['participant_id']."'>".$participants['participant_id']."</td>";
+	       echo "<td>".$participants['sort_name']."</td>";
+	       echo "<td>".$participants['event_name']."</td>";
+	       echo "<td>".$participants['status']."</td>";
+	       echo "<td>".$participants['fee_amount']."</td>";
+	       echo "</tr>";
        }
-    }
 
+       echo "</table>";
+       echo "</td></tr>";
+       echo "<tr><td bgcolor='#2EFEF7'></td></tr>";
   }
+?>
+
+<?php
+  echo "</tbody></table>";
 
 ?>
+
 </body>
 </html>
