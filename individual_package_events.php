@@ -148,7 +148,7 @@ function validator(){
            . "BS No. : <input name='bs_no' id='bs_no' type='text' placeholder='Enter BS No. start number'>";
     $notes_opt = getNotesByCategory("Individual Event Billing");
     $notes_collection = array();
-    $display = $display."<SELECT name='notes'><option value='select'>- Select optional billing notes -</option><option>-----------------</option>";
+    $display = $display."</br>Notes : <SELECT name='notes'><option value='select'>- Select optional billing notes -</option><option>-----------------</option>";
     foreach($notes_opt as $key=>$field){
         $id = $field["notes_id"];
         $notes = $field["notes"];
@@ -158,7 +158,7 @@ function validator(){
     }
 
 
-  $display = $display."</SELECT><input type='submit' name='generate' value='GENERATE BILL'/></td></tr>";
+  $display = $display."</SELECT></br><input type='submit' name='generate' value='GENERATE BILL'/></td></tr>";
   $display = $display. "<tr><td colspan='4' bgcolor='05123E'>LIST OF PARTICIPANTS</td></tr></thead><tbody>";
 
   //billing details for package events
