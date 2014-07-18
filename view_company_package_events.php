@@ -111,10 +111,6 @@ function validator(){
    echo "</table></br>"; 
 ?>
   <div align='center'>
-  <form action='' method='POST'>
-    <input type='text' name='searchtext' placeholder='Type name here...' />
-    <input type='submit' name='search' value='SEARCH PARTICIPANT'>
-  </form></br>
 
 <?php
   $display = "<table align='center'>"
@@ -134,11 +130,10 @@ function validator(){
 
   $display = $display."</table></div><br><br>";
 
-  $bills = getBillByPackageId($pid);
+  $bills = getBillByPackageId($pid,"Company");
   $display = $display."<table width='100%' align='center' id='packages'>"
            . "<thead>"
            . "<tr>"
-           . "<th>Name</th>"
            . "<th>Organization</th>"
            . "<th>Fee</th>"
            . "<th>Subtotal</th>"
@@ -160,7 +155,6 @@ function validator(){
          $billing_no = $field['billing_no'];
 	 $print_img = $bir_no == NULL || $field['edit_bill'] == 0 ? '' : "<a href='BIRForm/print_package_individual.php?billing_no=".$billing_no."&uid=".$uid."' target='_blank'><img src='printer-icon.png' width='30' height='30'></a>";
    	 $display = $display."<tr>"
-                  . "<td>".$field['sort_name']."</td>"
                   . "<td>".$field['organization_name']."</td>"
                   . "<td>".number_format($field['total_amount'],2)."</td>"
                   . "<td>".number_format($field['subtotal'],2)."</td>"
