@@ -20,6 +20,7 @@ href="IIAP%20Billing%20Form%20(rev2_2014%20ATP)_files/filelist.xml">
   include '../bir_functions.php';
   include '../notes/notes_functions.php';
   include '../packages/packagebill_functions.php';
+  include '../packages/package_functions.php';
   include '../billing_functions.php';
   include '../shared_functions.php';
   include '../company_functions.php';
@@ -34,9 +35,9 @@ href="IIAP%20Billing%20Form%20(rev2_2014%20ATP)_files/filelist.xml">
 
   $orgId = $bill['contact_id'];
   $address = getCompanyAddress($dbh,$orgId);
-  
   $complete_address = $address['street_address']." ".$address['city_address'];
   $tin = getTin($orgId);
+  $package_name = getPackageName($bill['pid']);
 
   $nonvatable_type = $bill['nonvatable_type'];
   $bir_no = $bill['bir_no'];
@@ -224,6 +225,7 @@ x:publishsource="Excel">
   <td class=xl655352552></td>
   <td colspan=8 class=xl1582552 style='border-right:.5pt solid black'>
   <?php
+      echo $package_name."</br>";
       $amounts = array();
       foreach($infobill as $key=>$field){
            echo $field['event_name']."</br>";
