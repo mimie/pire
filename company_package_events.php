@@ -133,7 +133,7 @@ function validator(){
 
   $companies = getParticipantsPackageCompanyByPackageId($pid);
 
-  echo "<form action='' method='POST' onsubmit=\"return validator()\">";
+  echo "<form action='' method='POST'>";
 
   echo "<table align='center' style='width:60%;'>"
        . "<thead>"
@@ -199,6 +199,21 @@ function validator(){
 
 <?php
   echo "</tbody></table>";
+  echo "</form>";
+
+  if($_POST['generate']){
+     $billingInfo = array();
+     $orgId = $_POST['orgId'];
+     $participantIds = $_POST['participantIds'];
+
+     foreach($participantIds as $id){
+        if($comp_package[$orgId][$id]){
+     	   $billingInfo[] = $comp_package[$orgId][$id];
+        }
+        
+     }
+     
+  }
 
 ?>
 

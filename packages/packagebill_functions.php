@@ -36,7 +36,7 @@ function searchPackageName($packageName){
         return $result;
 }
 
-function getBillByPackageId($packageId){
+function getBillByPackageId($packageId,$billing_type){
 
         try{
 		$stmt = civicrmDB("SELECT bdp.bir_no, bdp.billing_no,bdp.contact_id, bdp.subtotal, bdp.vat, bdp.total_amount, bdp.amount_paid,bdp.bill_date,bdp.edit_bill,
@@ -45,8 +45,10 @@ function getBillByPackageId($packageId){
 				   LEFT JOIN billing_notes bn ON bdp.notes_id = bn.notes_id
 				   WHERE cc.id = bdp.contact_id
 				   AND bdp.pid = ?
+                                   AND bdp.billing_type = ?
 				    ");
 	       $stmt->bindValue(1,$packageId,PDO::PARAM_INT);
+               $stmt->bindValue(2,$billing_type,PDO::PARAM_STR);
 	       $stmt->execute();
 	       $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	       return $result;
