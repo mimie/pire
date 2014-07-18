@@ -206,11 +206,29 @@ function validator(){
      $orgId = $_POST['orgId'];
      $participantIds = $_POST['participantIds'];
 
+     $bs_no = $_POST["bs_no"];
+     $bir_no = $bs_no == NULL ? $bs_no : formatBSNo($bs_no);
+     $birno_exist = $bir_no == NULL ? 0 : checkDuplicateIndividualBIRNo($bir_no);
+
+     $is_vatable = $_POST["vat"] == 'vatable' ? 1 : 0 ;
+     $note_id = $_POST["notes"] == 'select' ? NULL : $_POST["notes"];
+     $nonvatable_type = $_POST["vat"] == 'vatable' ? NULL : $_POST['vat'];
+ 
+     
+
      foreach($participantIds as $id){
         if($comp_package[$orgId][$id]){
      	   $billingInfo[] = $comp_package[$orgId][$id];
         }
         
+     }
+
+     if($birno_exist == 0){
+	    generatePackageBill($orgId,$billingInfo,$bir_no,$is_vatable,$note_id,$pid,$nonvatable_type,"Company");
+     }
+
+     else{
+            echo "<div id='confirmation'><img src='images/error.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;You have entered an existing BS No. Billing cannot be generated.</div>";
      }
      
   }

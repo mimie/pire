@@ -314,7 +314,7 @@ function generatePackageBill($contact_id,$details,$bs_no,$vatable,$notes_id,$pac
 
 			$bill_address = $info["street_address"]." ".$info["city_address"];
 			$total_amount = $total_amount + $info["fee_amount"];
-		       
+
 			$billing_no = $key == 0 ? $info["event_type"]."-".date("y")."-".formatBillingNo($info["participant_id"]) : $billing_no;
 
 			$stmt->bindValue(1,$info["participant_id"],PDO::PARAM_INT);
