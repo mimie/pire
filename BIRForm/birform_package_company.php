@@ -44,6 +44,9 @@ href="IIAP%20Billing%20Form%20(rev2_2014%20ATP)_files/filelist.xml">
   $ref_no = $bir_no == NULL ? $billing_no : "BS-".$bir_no."/".$billing_no;
   $infobill = getEventBillDetailsByBillingNo($billing_no);
   $due_date = date_standard($infobill[0]['start_date']);
+  echo "<pre>";
+  print_r($infobill);
+  echo "</pre>";
 
 ?>
 
@@ -225,29 +228,28 @@ x:publishsource="Excel">
   <td class=xl655352552></td>
   <td colspan=8 class=xl1582552 style='border-right:.5pt solid black'>
   <?php
-      echo $package_name."</br>";
-      $amounts = array();
-      foreach($infobill as $key=>$field){
-           echo $field['event_name']."</br>";
-           if($field['end_date']){
-           	echo "On ".date_standard($field['start_date'])." to ".date_standard($field['end_date'])."</br>"; 
-           }else{
-		echo "On ".date_standard($field['start_date'])."</br>";
-	    }
-
-           $location = formatEventLocation(getEventLocation($dbh,$eventId));
-
-           $fee_amount = $nonvatable_type == NULL ? $field['fee_amount'] : round($field['fee_amount']/1.12,2);
-  
-           if($location){
-              echo "At ".$location."<br>";
-              $amounts[] = "</br></br>".number_format($fee_amount,2);
-           }else{
-              $amounts[] = "</br>".number_format($fee_amount,2);
-            }
-           echo "</br></br>";      
-      }
+      echo $package_name."</br></br>";
   ?>
+       <div style="width: 100%; overflow: hidden;">
+          <div style="width: 30%; float: left;"></div>
+          <div style="margin-left: 5%;">Billing of the ff. participants:</div>
+       </div></br>
+       <div style="width: 100%; overflow: hidden;">
+          <div style="width: 30%; float: left;"></div>
+          <div style="margin-left: 10%;">
+<?php
+      $amounts = array();
+      foreach($infobill as $contact_id=>$details){
+              $name = getContactName($contact_id);
+              echo $name;
+	      foreach($details as $key=>$field){
+	      }
+       }
+?>
+
+         </div>
+      </div>
+
   </td>
   <td class=xl1582552 style='border-right:.5pt solid black'>
   <div style='text-align:right'>
