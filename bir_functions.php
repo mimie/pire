@@ -348,8 +348,8 @@ function generatePackageBill($contact_id,$details,$bs_no,$vatable,$notes_id,$pac
 		  }
         }
 
-        $total_amount = $nonvatable_type == 'vatable' ? $total_amount : round($total_amount/1.12,2);
-	$subtotal = $vatable == 1 ? round($total_amount/1.12,2) : $total_amount;
+        $total_amount = $nonvatable_type == NULL ? $total_amount : round(($total_amount/1.12),2);
+	$subtotal = $vatable == 1 ? round(($total_amount/1.12),2) : $total_amount;
 	$vat = $total_amount - $subtotal;
 
         try{
