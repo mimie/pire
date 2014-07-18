@@ -134,7 +134,7 @@ function validator(){
 
   $display = $display."</table></div><br><br>";
 
-  $bills = getBillByPackageId($pid);
+  $bills = getBillByPackageId($pid,"Individual");
   $display = $display."<table width='100%' align='center' id='packages'>"
            . "<thead>"
            . "<tr>"
