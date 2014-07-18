@@ -207,7 +207,7 @@ function validator(){
       if($birno_exist == 0){
 
 	      $details = $participants[$contact_id];
-	      generatePackageBill($contact_id,$details,$bir_no,$is_vatable,$note_id,$pid,$nonvatable_type);
+	      generatePackageBill($contact_id,$details,$bir_no,$is_vatable,$note_id,$pid,$nonvatable_type,"Individual");
 	      $bs_no = $bs_no == NULL ? '' : $bs_no++;
       }
 

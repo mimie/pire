@@ -299,7 +299,7 @@ function generateIndividualBill($participant_id,array $details){
  * @notes_id - notes of the bill
  * @package_id - package of the bill
  */
-function generatePackageBill($contact_id,$details,$bs_no,$vatable,$notes_id,$package_id,$nonvatable_type){
+function generatePackageBill($contact_id,$details,$bs_no,$vatable,$notes_id,$package_id,$nonvatable_type,$billing_type){
 
 	$generator_uid = $_GET["uid"];
         $total_amount = 0;
@@ -327,7 +327,7 @@ function generatePackageBill($contact_id,$details,$bs_no,$vatable,$notes_id,$pac
 			$stmt->bindValue(8,$bill_address,PDO::PARAM_STR);
 			$stmt->bindValue(9,$info["organization_name"],PDO::PARAM_STR);
 			$stmt->bindValue(10,$info["employer_id"],PDO::PARAM_INT);
-			$stmt->bindValue(11,"Individual",PDO::PARAM_STR);
+			$stmt->bindValue(11,$billing_type,PDO::PARAM_STR);
 			$stmt->bindValue(12,$info["fee_amount"],PDO::PARAM_INT);
 			$stmt->bindValue(13,$billing_no,PDO::PARAM_STR);
 			$stmt->bindValue(14,1,PDO::PARAM_INT);
@@ -353,8 +353,8 @@ function generatePackageBill($contact_id,$details,$bs_no,$vatable,$notes_id,$pac
 	$vat = $total_amount - $subtotal;
 
         try{
-		$sql_bir = civicrmDB("INSERT INTO billing_details_package(bir_no,contact_id,subtotal,vat,total_amount,pid,notes_id,billing_no,generator_uid,nonvatable_type) 
-                                      VALUES(:bs_no,:contact_id,:subtotal,:vat,:total_amount,:package_id,:notes_id,:billing_no,:generator_uid,:nonvatable_type)");
+		$sql_bir = civicrmDB("INSERT INTO billing_details_package(bir_no,contact_id,subtotal,vat,total_amount,pid,notes_id,billing_no,generator_uid,nonvatable_type,billing_type) 
+                                      VALUES(:bs_no,:contact_id,:subtotal,:vat,:total_amount,:package_id,:notes_id,:billing_no,:generator_uid,:nonvatable_type,:billing_type)");
 		$sql_bir->bindParam(':bs_no',$bs_no);
 		$sql_bir->bindParam(':contact_id',$contact_id);
 		$sql_bir->bindParam(':subtotal',$subtotal);
@@ -365,6 +365,7 @@ function generatePackageBill($contact_id,$details,$bs_no,$vatable,$notes_id,$pac
 		$sql_bir->bindParam(':billing_no',$billing_no);
                 $sql_bir->bindParam(':generator_uid',$generator_uid);
                 $sql_bir->bindParam(':nonvatable_type',$nonvatable_type);
+                $sql_bir->bindParam(':billing_type',$billing_type);
 		$sql_bir->execute();
 		echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully generated bill.</div>";
         }
