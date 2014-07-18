@@ -187,7 +187,7 @@ x:publishsource="Excel">
  <tr height=24 style='mso-height-source:userset;height:18.0pt'>
   <td height=24 class=xl655352552 style='height:18.0pt'></td>
   <td class=xl655352552></td>
-  <td class=xl1012552>TIN#</td>
+  <td class=xl1012552>TIN No.</td>
   <td class=xl992552>:</td>
   <td colspan=5 class=xl1632552><?=$tin?></td>
   <td class=xl1022552>DUE DATE</td>
