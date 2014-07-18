@@ -22,6 +22,7 @@ href="IIAP%20Billing%20Form%20(rev2_2014%20ATP)_files/filelist.xml">
   include '../packages/packagebill_functions.php';
   include '../billing_functions.php';
   include '../shared_functions.php';
+  include '../company_functions.php';
 
   $dbh = civicrmConnect();
   @$eventId = $_GET["event_id"];
@@ -30,7 +31,12 @@ href="IIAP%20Billing%20Form%20(rev2_2014%20ATP)_files/filelist.xml">
   $generator = getGeneratorName($uid);
   @$billing_no = $_GET["billing_no"];
   $bill = getBillDetailsByBillingNo($billing_no);
-  $address = $bill['street_address']." ".$bill['city_address'];
+
+  $orgId = $bill['contact_id'];
+  $address = getCompanyAddress($dbh,$orgId);
+  
+  $complete_address = $address['street_address']." ".$address['city_address'];
+  $tin = getTin($orgId);
 
   $nonvatable_type = $bill['nonvatable_type'];
   $bir_no = $bill['bir_no'];
@@ -174,7 +180,7 @@ x:publishsource="Excel">
   <td class=xl655352552></td>
   <td class=xl1012552>Address</td>
   <td class=xl992552>:</td>
-  <td colspan=5 class=xl1632552>&nbsp;<?=wrapAddress($address)?></td>
+  <td colspan=5 class=xl1632552>&nbsp;<?=wrapAddress($complete_address)?></td>
   <td class=xl1022552>BILLING DATE</td>
   <td class=xl1242552>&nbsp;<?=date_standard($bill['bill_date'])?></td>
   <td class=xl655352552></td>
@@ -183,9 +189,9 @@ x:publishsource="Excel">
  <tr height=24 style='mso-height-source:userset;height:18.0pt'>
   <td height=24 class=xl655352552 style='height:18.0pt'></td>
   <td class=xl655352552></td>
-  <td class=xl1012552>TIN#</td>
+  <td class=xl1012552>TIN No.</td>
   <td class=xl992552>:</td>
-  <td colspan=5 class=xl1632552>&nbsp;</td>
+  <td colspan=5 class=xl1632552><?=$tin?></td>
   <td class=xl1022552>DUE DATE</td>
   <td class=xl1242552>&nbsp;<?=$due_date?></td>
   <td class=xl655352552></td>
