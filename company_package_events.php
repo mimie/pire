@@ -130,10 +130,8 @@ function validator(){
 ?>
 
 <?php
-  $companies = getParticipantsPackageCompanyByPackageId($pid);
-?>
 
-<?php
+  $companies = getParticipantsPackageCompanyByPackageId($pid);
 
   echo "<form action='' method='POST' onsubmit=\"return validator()\">";
 
@@ -157,37 +155,45 @@ function validator(){
 
   echo "</SELECT></br><input type='submit' name='generate' value='GENERATE BILL'/></td></tr>";
   echo "<tr><td bgcolor='05123E'>LIST OF COMPANIES</td></tr></thead><tbody>";
-?>
 
-<?php
+  $comp_package = array();
+
   foreach($companies as $orgId=>$indexes){
+
+       $info_participant = array();
        echo "<tr><td>";
        echo "<table style='width:100%;'>";
        $orgname = $comp_names[$orgId];
 
        echo "<tr><th colspan='5'><input type='checkbox' name='orgId' value='$orgId'>$orgname</th></tr>";
-	       echo "<tr>";
-	       echo "<td bgcolor='#0B2161'>Participant Id</td>";
-	       echo "<td bgcolor='#0B2161'>Name</td>";
-	       echo "<td bgcolor='#0B2161'>Event Name</td>";
-	       echo "<td bgcolor='#0B2161'>Status</td>";
-	       echo "<td bgcolor='#0B2161'>Fee</td>";
-	       echo "</tr>";
+       echo "<tr>";
+       echo "<td bgcolor='#0B2161'>Participant Id</td>";
+       echo "<td bgcolor='#0B2161'>Name</td>";
+       echo "<td bgcolor='#0B2161'>Event Name</td>";
+       echo "<td bgcolor='#0B2161'>Status</td>";
+       echo "<td bgcolor='#0B2161'>Fee</td>";
+       echo "</tr>";
 
        foreach($indexes as $key=>$participants){
 
+               $participant_id = $participants['participant_id'];
+
 	       echo "<tr>";
-	       echo "<td><input type='checkbox' name='participantIds[]' value='".$participants['participant_id']."'>".$participants['participant_id']."</td>";
+	       echo "<td><input type='checkbox' name='participantIds[]' value='".$participant_id."'>".$participant_id."</td>";
 	       echo "<td>".$participants['sort_name']."</td>";
 	       echo "<td>".$participants['event_name']."</td>";
 	       echo "<td>".$participants['status']."</td>";
 	       echo "<td>".$participants['fee_amount']."</td>";
 	       echo "</tr>";
+               
+               $info_participant[$participant_id] = $participants;
        }
 
        echo "</table>";
        echo "</td></tr>";
        echo "<tr><td bgcolor='#2EFEF7'></td></tr>";
+
+       $comp_package[$orgId] = $info_participant;
   }
 ?>
 
