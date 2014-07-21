@@ -257,6 +257,7 @@ x:publishsource="Excel">
   <div style='text-align:right'>
   <?php
       foreach($amounts as $display_amount){
+        $display_amount = $nonvatable_type == NULL ? $display_amount : round(($display_amount/1.12),2);
         echo number_format($display_amount,2)."</br>";
       }
   ?>
