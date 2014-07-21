@@ -44,12 +44,12 @@ $(function() {
   include 'pdo_conn.php';
   include 'login_functions.php';
   include 'bir_functions.php';
-  include 'notes/notes_functions.php';
   include 'packages/packagebill_functions.php';
   include 'packages/package_functions.php';
   include 'billing_functions.php';
   include 'shared_functions.php';
   include 'company_functions.php';
+  include 'notes/notes_functions.php';
 
   @$billing_no = $_GET['billing_no'];
   @$bir_no = $_GET['bir_no'];
@@ -59,6 +59,7 @@ $(function() {
 
   $events = getEventsPerPackage($pid);
   $package_name = getPackageName($pid);
+  $notes_opt = getNotesByCategory("Individual Event Billing");
 
 ?>
 	<div align='center'>
@@ -150,9 +151,21 @@ $(function() {
 <?php
                 }
         }
+
+        $nonvatable_type = $infobill['nonvatable_type'];
+        $vatable = $nonvatable_type == NULL ? "checked='checked'" : "";
+        $vat_exempt = $nonvatable == 'vat_exempt' ? "checked='checked'" : "";
+        $vat_zero = $nonvatable_type == 'vat_zero' ? "checked='checked'" : "";
 ?>
+                        <tr>
+                                <td colspan='5'>Account Receivable Type: 
+                                                <input type='radio' name='vat' value='vatable' <?=$vatable?>>VATABLE
+                                                <input type='radio' name='vat' value='vat_exempt' <?=$vat_exempt?>>VAT-EXEMPT
+                                                <input type='radio' name='vat' value='vat_zero' <?=$vat_zero?>>VAT-ZERO</br>
+                                                BS No. : <input type='text' name='bs_no' value=<?=$bir_no?>>
+                                </td>
+                        </tr>
               </table> 
-                </table>
 	</div>
 </body>
 </html>
