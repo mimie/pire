@@ -67,7 +67,7 @@ function getBillByPackageId($packageId,$billing_type){
  */
 function getBillDetailsByBillingNo($billing_no){
 
-	$stmt = civicrmDB("SELECT cc.id as contact_id,cc.sort_name, bdp.subtotal,bdp.vat, bdp.total_amount, bdp.bir_no,bn.notes, bdp.bill_date,bdp.nonvatable_type, bdp.pid,bd.street_address__company__3 as street_address,bd.city__company__5 as city_address
+	$stmt = civicrmDB("SELECT cc.id as contact_id,cc.sort_name, bdp.subtotal,bdp.vat, bdp.total_amount, bdp.bir_no,bn.notes, bdp.notes_id,bdp.bill_date,bdp.nonvatable_type, bdp.pid,bd.street_address__company__3 as street_address,bd.city__company__5 as city_address
                            FROM civicrm_contact cc, billing_details_package bdp
                            LEFT JOIN billing_notes bn ON bdp.notes_id = bn.notes_id
                            LEFT JOIN civicrm_value_business_data_1 bd ON bdp.contact_id = bd.entity_id
