@@ -175,7 +175,7 @@ $(function() {
                }
 
                echo $options;
-               echo "</SELECT><input type='submit' name='update' value='UPDATE BILL'></td></tr?";
+               echo "</SELECT><input type='submit' name='update' value='UPDATE BILL'></td></tr>";
                $update_action = 'update amount';
 
         }elseif($status !='Cancelled' && $current_amount!=$civicrm_amount && $isEdit == 0 && $is_cancelled != 1){
