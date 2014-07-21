@@ -84,7 +84,7 @@ function getBillDetailsByBillingNo($billing_no){
 
 function getEventBillDetailsByBillingNo($billing_no){
 
-	$stmt = civicrmDB("SELECT bd.contact_id,bd.participant_id,bd.participant_name,bd.event_id, bd.fee_amount,ce.title as event_name, ce.start_date, ce.end_date, cp.fee_amount as civicrm_amount,cps.label as status
+	$stmt = civicrmDB("SELECT bd.contact_id,bd.participant_id,bd.participant_name,bd.event_id, bd.fee_amount,ce.title as event_name, ce.start_date, ce.end_date, cp.fee_amount as civicrm_amount,cps.label as status,bd.nonvatable_type,bd.notes_id
                            FROM billing_details bd, civicrm_event ce, civicrm_participant cp, civicrm_participant_status_type cps
                            WHERE bd.event_id = ce.id
                            AND cp.id = bd.participant_id
