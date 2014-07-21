@@ -84,9 +84,11 @@ function getBillDetailsByBillingNo($billing_no){
 
 function getEventBillDetailsByBillingNo($billing_no){
 
-	$stmt = civicrmDB("SELECT bd.contact_id,bd.participant_name,bd.event_id, bd.fee_amount,ce.title as event_name, ce.start_date, ce.end_date
-                           FROM billing_details bd, civicrm_event ce
+	$stmt = civicrmDB("SELECT bd.contact_id,bd.participant_id,bd.participant_name,bd.event_id, bd.fee_amount,ce.title as event_name, ce.start_date, ce.end_date, cp.fee_amount as civicrm_amount,cps.label as status
+                           FROM billing_details bd, civicrm_event ce, civicrm_participant cp, civicrm_participant_status_type cps
                            WHERE bd.event_id = ce.id
+                           AND cp.id = bd.participant_id
+                           AND cps.id = cp.status_id
                            AND billing_no = ?
                           ");
         $stmt->bindValue(1,$billing_no,PDO::PARAM_STR);
