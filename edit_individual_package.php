@@ -162,7 +162,21 @@ $(function() {
                                                 <input type='radio' name='vat' value='vatable' <?=$vatable?>>VATABLE
                                                 <input type='radio' name='vat' value='vat_exempt' <?=$vat_exempt?>>VAT-EXEMPT
                                                 <input type='radio' name='vat' value='vat_zero' <?=$vat_zero?>>VAT-ZERO</br>
-                                                BS No. : <input type='text' name='bs_no' value=<?=$bir_no?>>
+                                                BS No. : <input type='text' name='bs_no' value=<?=$bir_no?>></br>
+                                                <SELECT name='notes_id'><option value='select'>- Select optional billing notes -</option><option>-----------------</option>
+<?php
+               $options = '';
+
+	       foreach($notes_opt as $key=>$field){
+    			$id = $field["notes_id"];
+    			$notes = $field["notes"];
+                        $selected = $bill['notes_id'] == $id ? 'selected' : '';
+    			$options = $options."<option value='$id' $selected>$notes</option>";
+               }
+
+               echo $options;
+               echo "</SELECT><input type='submit' name='update' value='UPDATE BILL'>";
+?>
                                 </td>
                         </tr>
               </table> 
