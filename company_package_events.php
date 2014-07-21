@@ -97,7 +97,6 @@ function validator(){
 
   $events = getEventsPerPackage($pid);
   $package_name = getPackageName($pid);
-  $participants = getParticipantsPerPackage($pid);
   $comp_names = getCompanyNames();
 
    echo "<table width='100%'>";
