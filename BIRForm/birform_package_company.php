@@ -44,9 +44,6 @@ href="IIAP%20Billing%20Form%20(rev2_2014%20ATP)_files/filelist.xml">
   $ref_no = $bir_no == NULL ? $billing_no : "BS-".$bir_no."/".$billing_no;
   $infobill = getEventBillDetailsByBillingNo($billing_no);
   $due_date = date_standard($infobill[0]['start_date']);
-  echo "<pre>";
-  print_r($infobill);
-  echo "</pre>";
 
 ?>
 
@@ -240,10 +237,14 @@ x:publishsource="Excel">
 <?php
       $amounts = array();
       foreach($infobill as $contact_id=>$details){
+              $fee_amount = 0;
               $name = getContactName($contact_id);
-              echo $name;
+              echo $name."</br>";
 	      foreach($details as $key=>$field){
+              		$fee_amount = $fee_amount + $field["fee_amount"];
 	      }
+
+              $amounts[] = $fee_amount;
        }
 ?>
 
@@ -255,7 +256,7 @@ x:publishsource="Excel">
   <div style='text-align:right'>
   <?php
       foreach($amounts as $display_amount){
-        echo $display_amount."</br></br></br>";
+        echo number_format($display_amount,2)."</br>";
       }
   ?>
   </div>
@@ -434,7 +435,7 @@ x:publishsource="Excel">
   <td class=xl1052552>&nbsp;</td>
   <td class=xl1052552>&nbsp;</td>
   <td class=xl1062552>&nbsp;</td>
-  <td rowspan=2 class=xl1562552>VAT-ABLE SALES</td>
+  <td rowspan=2 class=xl1562552>VATABLE SALES</td>
   <td rowspan=2 class=xl1422552 style='border-bottom:.5pt solid black'>&nbsp;<?=$subtotal = $nonvatable_type == NULL ? number_format($bill['subtotal'],2) : ''?></td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
@@ -501,7 +502,7 @@ x:publishsource="Excel">
   <td class=xl655352552></td>
   <td rowspan=2 class=xl1402552 style='border-bottom:.5pt solid black'>VAT-AMOUNT</td>
   <td rowspan=2 class=xl1422552 style='border-bottom:.5pt solid black;
-  border-top:none'>&nbsp;<?=number_format($bill['vat'],2)?></td>
+  border-top:none'>PHP&nbsp;<?=number_format($bill['vat'],2)?></td>
   <td class=xl655352552></td>
   <td class=xl655352552></td>
  </tr>
