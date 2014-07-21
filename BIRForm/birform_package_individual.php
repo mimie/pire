@@ -36,7 +36,9 @@ href="IIAP%20Billing%20Form%20(rev2_2014%20ATP)_files/filelist.xml">
   $bir_no = $bill['bir_no'];
   $ref_no = $bir_no == NULL ? $billing_no : "BS-".$bir_no."/".$billing_no;
   $infobill = getEventBillDetailsByBillingNo($billing_no);
-  $due_date = date_standard($infobill[0]['start_date']);
+
+  $firstkey = array_keys($infobill)[0];
+  $due_date = date_standard($infobill[$firstkey][0]['start_date']);
 
 ?>
 
@@ -219,7 +221,7 @@ x:publishsource="Excel">
   <td colspan=8 class=xl1582552 style='border-right:.5pt solid black'>
   <?php
       $amounts = array();
-      foreach($infobill as $details){
+      foreach($infobill as $key=>$details){
 	      foreach($details as $key=>$field){
 		   echo $field['event_name']."</br>";
 		   if($field['end_date']){

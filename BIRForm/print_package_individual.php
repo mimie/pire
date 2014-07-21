@@ -170,7 +170,8 @@ p.issuedby{
   $bir_no = $bill['bir_no'];
   $ref_no = $bir_no == NULL ? $billing_no : "BS-".$bir_no."/".$billing_no;
   $infobill = getEventBillDetailsByBillingNo($billing_no);
-  $due_date = date_standard($infobill[0]['start_date']);
+  $firstkey = array_keys($infobill)[0];
+  $due_date = date_standard($infobill[$firstkey]['0']['start_date']);
 
   //update edit bill
   $update_stmt = civicrmDB("UPDATE billing_details_package SET edit_bill= '0' WHERE billing_no=?");
