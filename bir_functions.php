@@ -305,6 +305,11 @@ function generatePackageBill($contact_id,$details,$bs_no,$vatable,$notes_id,$pac
         $total_amount = 0;
         $billing_no = '';
 
+        if($billing_type == 'Company'){
+		$orgId = $contact_id;
+        }
+
+
         foreach($details as $key=>$info){
 
 		try{
@@ -316,6 +321,7 @@ function generatePackageBill($contact_id,$details,$bs_no,$vatable,$notes_id,$pac
 			$total_amount = $total_amount + $info["fee_amount"];
 
 			$billing_no = $key == 0 ? $info["event_type"]."-".date("y")."-".formatBillingNo($info["participant_id"]) : $billing_no;
+                        $contact_id = $billing_type == 'Individual' ? $contact_id : $info["contact_id"];
 
 			$stmt->bindValue(1,$info["participant_id"],PDO::PARAM_INT);
 			$stmt->bindValue(2,$contact_id,PDO::PARAM_INT);
@@ -351,6 +357,10 @@ function generatePackageBill($contact_id,$details,$bs_no,$vatable,$notes_id,$pac
         $total_amount = $nonvatable_type == NULL ? $total_amount : round(($total_amount/1.12),2);
 	$subtotal = $vatable == 1 ? round(($total_amount/1.12),2) : $total_amount;
 	$vat = $total_amount - $subtotal;
+
+        if($billing_type == 'Company'){
+             $contact_id = $orgId;
+        }
 
         try{
 		$sql_bir = civicrmDB("INSERT INTO billing_details_package(bir_no,contact_id,subtotal,vat,total_amount,pid,notes_id,billing_no,generator_uid,nonvatable_type,billing_type) 
@@ -404,7 +414,7 @@ function formatBSNo($bs_no){
 
 function getParticipantsPerPackage($packageId){
 
-	$stmt = civicrmDB("SELECT cc.id as contact_id,pac.pid as package_id,pac.package_name,cp.status_id,cc.sort_name,cc.organization_name, cc.employer_id,cp.fee_amount,cp.id as participant_id,cp.event_id,
+	$stmt = civicrmDB("SELECT cp.contact_id,cc.id as civicrm_id,pac.pid as package_id,pac.package_name,cp.status_id,cc.sort_name,cc.organization_name, cc.employer_id,cp.fee_amount,cp.id as participant_id,cp.event_id,
                            ce.title as event_name,cov.label as event_type,billing_type.billing_45 as bill_type,cps.label as status,
                            bd. street_address__company__3 as street_address, city__company__5 as city_address
                            FROM billing_package pac,billing_package_events pac_events, civicrm_event ce, civicrm_option_value cov,
