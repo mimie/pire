@@ -51,6 +51,7 @@ $(function() {
    include '../login_functions.php';
    include '../pdo_conn.php';
    include 'package_functions.php';
+   include '../billing_functions.php';
 
    $dbh = civicrmConnect();
    $menu = logoutDiv($dbh);
@@ -65,6 +66,7 @@ $(function() {
 <?php
    $eventTypes = getEventCategory();
 
+   echo "<option value='all'>ALL EVENT TYPES</option>";
    foreach($eventTypes as $field => $key){
       $type = $key["label"];
       $type_id = $key["value"];
@@ -88,8 +90,6 @@ $(function() {
      $eventTypeId = $_POST["eventTypeId"];
      $eventName = $_POST["event"];
      $eventPackages = getEventsForPackages($eventTypeId,$eventName,$pid);
-     $eventType = getEventTypeName($eventTypeId);
-     echo "<div align='center'>$eventType</div>";
      $display = displayEventPackages($eventPackages);
      echo $display;
 
@@ -104,8 +104,6 @@ $(function() {
 
   else{
     $eventPackages = getEventsForPackages(2,"",$pid);
-    $eventType = getEventTypeName(2);
-    echo "<div align='center' style='padding: 8px 8px 8px 8px;'>".$eventType." EVENT TYPE</div>";
     $display = displayEventPackages($eventPackages);
     echo $display;
   }
