@@ -20,7 +20,8 @@ function updateIndividualPackage($nonvatable_type,$amounts,$notes_id,$billing_no
 	     }
 	   
 	   catch(PDOException $error){
-		echo $error->getMessage();
+	        echo "<div id='confirmation'><img src='images/error.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Error in updating billing_details</br>"
+                . $error->getMessage()."</div>";
 	   }
 
 	}
@@ -62,11 +63,13 @@ function updateIndividualPackage($nonvatable_type,$amounts,$notes_id,$billing_no
         $update_package->bindValue(6,$nonvatable_type,PDO::PARAM_STR);
         $update_package->bindValue(7,$billing_no,PDO::PARAM_STR);
         $update_package->execute();
+        echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully updated bill.</div>";
 
         }
 
         catch(PDOException $error){
-	      echo $error->getMessage();
+	        echo "<div id='confirmation'><img src='images/error.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Error in updating billing_details_package</br>"
+                . $error->getMessage()."</div>";
         }
 }
 
