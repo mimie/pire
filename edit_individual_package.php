@@ -50,6 +50,7 @@ $(function() {
   include 'shared_functions.php';
   include 'company_functions.php';
   include 'notes/notes_functions.php';
+  include 'packages/update_package_functions.php';
 
   @$billing_no = $_GET['billing_no'];
   @$bir_no = $_GET['bir_no'];
@@ -120,6 +121,8 @@ $(function() {
 			    <th>Notes</th><td><?=$bill['notes']?></td>
                 	</tr>
                 </table></br></br>
+
+<form action='' method='POST'>
                 <table align='center'>
                 	<tr>
 				<th colspan='5' >LIST OF EVENTS</th>
@@ -164,7 +167,7 @@ $(function() {
 ?>
                         <tr>
                                 <td colspan='5'>Account Receivable Type: 
-                                                <input type='radio' name='vat' value='vatable' <?=$vatable?>>VATABLE
+                                                <input type='radio' name='vat' value='' <?=$vatable?>>VATABLE
                                                 <input type='radio' name='vat' value='vat_exempt' <?=$vat_exempt?>>VAT-EXEMPT
                                                 <input type='radio' name='vat' value='vat_zero' <?=$vat_zero?>>VAT-ZERO</br>
                                                 BS No. : <input type='text' name='bs_no' value=<?=$bir_no?>></br>
@@ -188,10 +191,22 @@ $(function() {
 	</div>
 <?php
 
-  echo "<pre>";
-  print_r($event_amounts);
-  echo "</pre>";
 
+	if($_POST['update']){
+
+		$participantIds = $_POST['participantIds'];
+                $amounts = array();
+		foreach($participantIds as $id){
+			$amounts[$id] = $event_amounts[$id];
+                }
+
+                $nonvatable_type = $_POST['vat'];
+                $notes_id = $_POST['notes_id'];
+                $bir_no = $_POST['bs_no'] == NULL ? '' : formatBSNo($_POST['bs_no']);
+                updateIndividualPackage($nonvatable_type,$amounts,$notes_id,$billing_no,$bir_no);
+
+        }
 ?>
+</form>
 </body>
 </html>
