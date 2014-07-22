@@ -133,22 +133,27 @@ $(function() {
                         </tr>
 <?php
 
+        $event_amounts = array();
 	foreach($infobill as $key=>$details){
 		foreach($details as $key=>$field){
 
                      $fee_amount = $field['fee_amount'];
                      $civicrm_amount = $field['civicrm_amount'];
                      $status = $field['status'];
+                     $civicrm_amount = $status == 'Cancelled' ? 0 : $civicrm_amount;
                      $disabled = $fee_amount == $civicrm_amount ? 'disabled' : '';
+                     $color = $fee_amount != $civicrm_amount ? 'red' : '';
+                     $participant_id = $field['participant_id'];
 ?>
 			<tr>
-				<td><input type='checkbox' value='<?=$field['participant_id']?>' name='participantIds[]' <?=$disabled?>><?=$field['participant_id']?></td>
+				<td><input type='checkbox' value='<?=$participant_id?>' name='participantIds[]' <?=$disabled?>><?=$participant_id?></td>
                                 <td><?=$field['event_name']?></td>
                                 <td><?=$field['status']?></td>
-                                <td><?=number_format($fee_amount,2)?></td>
-                                <td><?=number_format($civicrm_amount,2)?></td>
+                                <td><font color='<?=$color?>'><?=number_format($fee_amount,2)?></font></td>
+                                <td><font color='<?=$color?>'><?=number_format($civicrm_amount,2)?></font></td>
 			</tr>
 <?php
+                        $event_amounts[$participant_id] = $civicrm_amount;
                 }
         }
 
@@ -181,5 +186,12 @@ $(function() {
                         </tr>
               </table> 
 	</div>
+<?php
+
+  echo "<pre>";
+  print_r($event_amounts);
+  echo "</pre>";
+
+?>
 </body>
 </html>
