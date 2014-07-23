@@ -188,7 +188,12 @@ function validator(){
             . "</thead><tbody>";
 
    $comp_participants = getCompanyParticipantsByEventId($eventId);
+   $org_participants = getOrganizationParticipantsByEventId($eventId);
    $totals = array();
+
+   foreach($org_participants as $key=>$info){
+          $comp_participants[$key] = $info;
+   }
 
    foreach($comp_participants as $orgId => $participants){
         $total_fee = 0;
