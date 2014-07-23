@@ -38,6 +38,7 @@ function getCompanyParticipantsByEventId($eventId){
                      AND cp.fee_amount <> 0
                      AND cp.status_id NOT IN(15,17,7,4)
                      AND cc.is_deleted = '0'
+                     AND cc.contact_type = 'Individual'
                      ORDER BY sort_name");
 	$stmt->bindValue(1,$eventId,PDO::PARAM_INT);
         $stmt->execute();
@@ -47,6 +48,33 @@ function getCompanyParticipantsByEventId($eventId){
 	return $result;
 
 }
+
+function getOrganizationParticipantsByEventId($eventId){
+
+	$stmt = civicrmDB("SELECT cc.id as employer_id,cp.contact_id,cp.status_id,cc.sort_name,cc.organization_name, cp.fee_amount,cp.id as participant_id,
+                     billing_type.billing_45 as bill_type,cps.label as status,
+                     bd. street_address__company__3 as street_address, city__company__5 as city_address
+                     FROM civicrm_participant cp, civicrm_value_billing_17 as billing_type, civicrm_participant_status_type cps, civicrm_contact cc
+                     LEFT JOIN civicrm_value_business_data_1 bd ON bd.entity_id = cc.id
+                     WHERE cp.contact_id = cc.id
+                     AND billing_type.entity_id = cp.id
+                     AND cp.event_id = ?
+                     AND billing_type.billing_45 = 'Company'
+                     AND cps.id = cp.status_id
+                     AND cp.fee_amount <> 0
+                     AND cp.status_id NOT IN(15,17,7,4)
+                     AND cc.is_deleted = '0'
+                     AND cc.contact_type = 'Organization'
+                     ORDER BY sort_name");
+	$stmt->bindValue(1,$eventId,PDO::PARAM_INT);
+        $stmt->execute();
+
+	$result = $stmt->fetchAll(PDO::FETCH_GROUP);
+
+	return $result;
+
+}
+
 
 function getCompanyParticipantsByOrgId($eventId,$orgId){
 
