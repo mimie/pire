@@ -195,21 +195,33 @@ p.issuedby{
 <p class="myduedate"><?=$due_date?></p>
 <p class="myparticulars">
   <?php
+      $events = getEventsPerPackage($bill['pid']);
       echo $package_name."</br></br>";
+      $print_br = "";
+	foreach($events as $key=>$field){
+                
+        	echo "Event ".$field['event_id']." - ".$field['event_name']."</br>";
+                $print_br = $print_br."</br>";
+        }
+        echo "</br>";
   ?>
        &nbsp;&nbsp;&nbsp;Billing of the ff. participants:</br></br>
 <?php
       $amounts = array();
       foreach($infobill as $contact_id=>$details){
               $fee_amount = 0;
+              $eventIds = "";
               $name = getContactName($contact_id);
               echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-              echo $name."</br>";
 	      foreach($details as $key=>$field){
               		$fee_amount = $fee_amount + $field["fee_amount"];
+                        $eventIds = $eventIds." Event ".$field['event_id'].",";
 	      }
 
               $amounts[] = $fee_amount;
+              echo $name." - ";
+              echo substr($eventIds,0,-1);
+              echo "</br>";
        }
 ?>
 </p>
@@ -222,8 +234,9 @@ p.issuedby{
   ?>
 </p>
 <p class="myamount">
-  </br></br></br></br>
+  </br></br></br></br></br>
   <?php
+      echo $print_br;
       foreach($amounts as $display_amount){
         $display_amount = $nonvatable_type == NULL ? $display_amount : round(($display_amount/1.12),2);
         echo number_format($display_amount,2)."</br>";

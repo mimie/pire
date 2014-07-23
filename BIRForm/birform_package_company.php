@@ -46,6 +46,8 @@ href="IIAP%20Billing%20Form%20(rev2_2014%20ATP)_files/filelist.xml">
   $firstkey = array_keys($infobill)[0];
   $due_date = date_standard($infobill[$firstkey][0]['start_date']);
 
+  $events = getEventsPerPackage($bill['pid']);
+
 ?>
 
 <div id="IIAP Billing Form (rev2_2014 ATP)_2552" align=center
@@ -230,7 +232,23 @@ x:publishsource="Excel">
   ?>
        <div style="width: 100%; overflow: hidden;">
           <div style="width: 30%; float: left;"></div>
-          <div style="margin-left: 5%;">Billing of the ff. participants:</div>
+          <div style="margin-left: 5%;">
+<?php
+
+	foreach($events as $key=>$field){
+                $start_date = date_standard($field['start_date']);
+                $end_date = date_standard($field['end_date']);
+                
+        	echo "Event ".$field['event_id']." - ".$field['event_name']." on ".$start_date;
+                if($start_date != $end_date || $end_date !=NULL){
+                	echo " to ".$end_date."</br>";
+                }
+        
+        }
+
+?>
+
+       </br>Billing of the ff. participants:</div>
        </div></br>
        <div style="width: 100%; overflow: hidden;">
           <div style="width: 30%; float: left;"></div>
@@ -239,13 +257,17 @@ x:publishsource="Excel">
       $amounts = array();
       foreach($infobill as $contact_id=>$details){
               $fee_amount = 0;
+              $eventIds = "";
               $name = getContactName($contact_id);
-              echo $name."</br>";
 	      foreach($details as $key=>$field){
               		$fee_amount = $fee_amount + $field["fee_amount"];
+                        $eventIds = $eventIds." Event ".$field['event_id'].",";
 	      }
 
               $amounts[] = $fee_amount;
+              echo $name." - ";
+              echo substr($eventIds,0,-1);
+              echo "</br>";
        }
 ?>
 
