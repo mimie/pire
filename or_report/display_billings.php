@@ -27,6 +27,7 @@ $( "#tabs" ).tabs();
 		<li><a href="#event_billing">Event Billing</a></li>
 		<li><a href="#membership_billing">Membership Billing</a></li>
 		<li><a href="#payment">Payment Transactions</a></li>
+                <li><a href='display_contacts.php'>Contacts</a></li>
 	</ul>
 	<div id="event_billing">
 		<h3><?=$name?></h3>
@@ -108,7 +109,7 @@ $( "#tabs" ).tabs();
                         $amount_paid = $info['ovamount'] * (-1);
                 	echo "<tr>";
                         echo "<td>".date_standard($info['trandate'])."</td>";
-                        echo "<td><".number_format($amount_paid,2)."</td>";
+                        echo "<td>".number_format($amount_paid,2)."</td>";
                         echo "<td>".$info['invtext']."</td>";
                         echo "<td>OR-".$info['voucherno']."</td>";
                         echo "</tr>";

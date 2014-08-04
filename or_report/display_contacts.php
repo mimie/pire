@@ -44,8 +44,8 @@ $(function() {
 
 	foreach($contacts as $contact_id=>$info){
         	echo "<tr>";
-                echo "<td><a href='display_billings.php?contact_id=$contact_id'>".$info['sort_name']."</a></td>"; 
-                echo "<td>".$info['organization_name']."</td>";
+                echo "<td><a href='display_billings.php?contact_id=$contact_id'>".mb_convert_encoding($info['sort_name'],"UTF-8")."</a></td>"; 
+                echo "<td>".mb_convert_encoding($info['organization_name'],"UTF-8")."</td>";
                 echo "</tr>";
 	}
       
