@@ -30,7 +30,7 @@ $(function() {
 		<input type='submit' name='search' value='SEARCH'>
         </form>
 
-<?      
+<?php      
         if(isset($_POST['search'])){
                 $searchValue = $_POST['search_contact'];
 		$contacts = displayContactsWithEvents($searchValue);
