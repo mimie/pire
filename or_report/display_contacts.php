@@ -44,7 +44,7 @@ $(function() {
 
 	foreach($contacts as $contact_id=>$info){
         	echo "<tr>";
-                echo "<td>".$info['sort_name']."</td>"; 
+                echo "<td><a href='display_billings.php?contact_id=$contact_id'>".$info['sort_name']."</a></td>"; 
                 echo "<td>".$info['organization_name']."</td>";
                 echo "</tr>";
 	}
