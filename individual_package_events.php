@@ -97,7 +97,7 @@ function validator(){
 
   $events = getEventsPerPackage($pid);
   $package_name = getPackageName($pid);
-  $participants = getParticipantsPerPackage($pid);
+  $participants = searchParticipantsPerPackage($pid,"");
 
    echo "<table width='100%'>";
    echo "<tr><th colspan='2'>INDIVIDUAL PACKAGE BILL</th></tr>";
@@ -134,7 +134,7 @@ function validator(){
 </div>
 
 <?php
-  $participants = $_POST['search'] ? searchParticipantsPerPackage($pid,$_POST['searchtext']) : getParticipantsPerPackage($pid);
+  $participants = $_POST['search'] ? searchParticipantsPerPackage($pid,$_POST['searchtext']) : searchParticipantsPerPackage($pid,"");
 
   $display = $display."</table></br></br>";
 
