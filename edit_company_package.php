@@ -89,9 +89,6 @@ $(function() {
   echo "</table></br></br>";
 
   $bill = getBillDetailsByBillingNo($billing_no);
-  echo "<pre>";
-  print_r($bill);
-  echo "</pre>";
   $address = $bill['street_address']." ".$bill['city_address'];
   $infobill = getEventBillDetailsByBillingNo($billing_no);
 ?>
