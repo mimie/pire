@@ -153,8 +153,9 @@ function validator(){
 
          $bir_no = $field['bir_no'];
          $billing_no = $field['billing_no'];
+         $orgId = $field['contact_id'];
 	 $print_img = $bir_no == NULL || $field['edit_bill'] == 0 ? '' : "<a href='BIRForm/print_package_company.php?billing_no=".$billing_no."&uid=".$uid."' target='_blank'><img src='printer-icon.png' width='30' height='30'></a>";
-        $img_link = "<a href='edit_company_package.php?pid=$pid&billing_no=$billing_no&billing_id=$billing_id&bir_no=$bir_no&uid=$uid' onclick=\"window.open(this.href,'edit_company_package.php?pid=$pid&billing_no=$billing_no&billing_id=$billing_id&bir_no=$bir_no&uid=$uid','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=900,height=900');return false;\"><img src='images/edit_bill.png'></a>";
+        $img_link = "<a href='edit_company_package.php?pid=$pid&billing_no=$billing_no&billing_id=$billing_id&bir_no=$bir_no&uid=$uid&orgId=$orgId' onclick=\"window.open(this.href,'edit_company_package.php?pid=$pid&billing_no=$billing_no&billing_id=$billing_id&bir_no=$bir_no&uid=$uid&orgId=$orgId','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=900,height=900');return false;\"><img src='images/edit_bill.png'></a>";
    	 $display = $display."<tr>"
                   . "<td>".$field['organization_name']."</td>"
                   . "<td>".number_format($field['total_amount'],2)."</td>"
