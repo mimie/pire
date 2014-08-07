@@ -57,6 +57,7 @@ $(function() {
   @$billing_id = $_GET['billing_id'];
   @$uid = $_GET['uid'];
   @$pid = $_GET['pid'];
+  @$billing_id = $_GET['billing_id'];
 
   $events = getEventsPerPackage($pid);
   $package_name = getPackageName($pid);
@@ -250,8 +251,10 @@ $(function() {
               $participantIds = $_POST['add_ids'];
               foreach($participantIds as $key=>$id){
               	     $participant_info = $additional_participants[$id];
+                     updatePackageAdditionalParticipants($participant_info,$id,$bir_no,$billing_no);
 
               }
+		updateTotalPackageAmount($billing_id,$billing_no,$nonvatable_type);
 
         }
 ?>
