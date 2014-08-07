@@ -88,6 +88,9 @@ $(function() {
   echo "</table></br></br>";
 
   $bill = getBillDetailsByBillingNo($billing_no);
+  echo "<pre>";
+  print_r($bill);
+  echo "</pre>";
   $address = $bill['street_address']." ".$bill['city_address'];
   $infobill = getEventBillDetailsByBillingNo($billing_no);
 ?>
@@ -193,30 +196,35 @@ $(function() {
               </table><br><br>
 <?php
 	$additional_participants = getAdditionalCompanyParticipantsByPackageId($pid,$_GET['orgId']);
-	$tbl_html = "<table width='100%'>"
-		  . "<tr><th colspan='5'>Additional Participants</th></tr>"
-		  . "<tr>"
-		  . "<th>Participant Id</th>"
-                  . "<th>Participant Name</th>"
-		  . "<th>Event Name</th>"
-		  . "<th>Status</th>"
-		  . "<th>Civicrm Amount</th>"
-		  . "</tr>";
+        if(count($additional_participants) != 0){
+		echo "<form action='' method='POST'>";
+		$tbl_html = "<table width='100%'>"
+			  . "<tr><th colspan='5'>Additional Participants</th></tr>"
+			  . "<tr>"
+			  . "<th>Participant Id</th>"
+			  . "<th>Participant Name</th>"
+			  . "<th>Event Name</th>"
+			  . "<th>Status</th>"
+			  . "<th>Civicrm Amount</th>"
+			  . "</tr>";
 
-        foreach($additional_participants as $key=>$info){
+		foreach($additional_participants as $participant_id=>$info){
 
-        	$tbl_html = $tbl_html."<tr>"
-                          . "<td><input type='checkbox' value='".$info['participant_id']."'>".$info['participant_id']."</td>"
-                          . "<td>".$info['sort_name']."</td>"
-                          . "<td>".$info['event_name']."</td>"
-                          . "<td>".$info['status']."</td>"
-                          . "<td>".$info['fee_amount']."</td>"
-                          . "</tr>";        
+			$tbl_html = $tbl_html."<tr>"
+				  . "<td><input type='checkbox' name='add_ids[]' value='".$participant_id."'>".$participant_id."</td>"
+				  . "<td>".$info['sort_name']."</td>"
+				  . "<td>".$info['event_name']."</td>"
+				  . "<td>".$info['status']."</td>"
+				  . "<td>".$info['fee_amount']."</td>"
+				  . "</tr>";        
 
-        }
+		}
+		 
+		 $tbl_html = $tbl_html."<tr><td colspan='5'><input type='submit' name='add' value='ADD PARTICIPANTS'></td></tr></table>";
+		 echo $tbl_html;
+		 echo "</form>";
 
-	 $tbl_html = $tbl_html."</table>";
-         echo $tbl_html;
+         }
 ?> 
 	</div>
 <?php
@@ -234,6 +242,16 @@ $(function() {
                 $notes_id = $_POST['notes_id'];
                 $bir_no = $_POST['bs_no'] == NULL ? '' : formatBSNo($_POST['bs_no']);
                 updateIndividualPackage($nonvatable_type,$amounts,$notes_id,$billing_no,$bir_no);
+
+        }
+
+        elseif($_POST['add']){
+             
+              $participantIds = $_POST['add_ids'];
+              foreach($participantIds as $key=>$id){
+              	     $participant_info = $additional_participants[$id];
+
+              }
 
         }
 ?>
