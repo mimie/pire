@@ -60,7 +60,7 @@ $(function() {
 
   $events = getEventsPerPackage($pid);
   $package_name = getPackageName($pid);
-  $notes_opt = getNotesByCategory("Individual Event Billing");
+  $notes_opt = getNotesByCategory("Company Event Billing");
 
 ?>
 	<div align='center'>
