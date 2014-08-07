@@ -176,6 +176,8 @@ function updateTotalPackageAmount($billing_id,$billing_no,$nonvatable_type){
            $stmt->bindValue(4,$billing_id,PDO::PARAM_INT);
            $stmt->bindValue(5,$billing_no,PDO::PARAM_STR);
            $stmt->execute();
+
+           echo "<div id='confirmation'><img src='images/confirm.png' style='float:left;' height='28' width='28'>&nbsp;&nbsp;Successfully updated package bill amount.</div>";
         }
 
         catch(PDOException $error){
