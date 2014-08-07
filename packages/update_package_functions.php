@@ -102,7 +102,7 @@ function getAdditionalCompanyParticipantsByPackageId($packageId,$employer_id){
          $stmt->bindValue(1,$packageId,PDO::PARAM_INT);
          $stmt->bindValue(2,$employer_id,PDO::PARAM_INT);
          $stmt->execute();
-         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+         $result = $stmt->fetchAll(PDO::FETCH_UNIQUE);
 
          return $result;
 }
