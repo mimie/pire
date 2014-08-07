@@ -151,6 +151,7 @@ function validator(){
 
    foreach($bills as $key=>$field){
 
+         $billing_id = $field['bid'];
          $bir_no = $field['bir_no'];
          $billing_no = $field['billing_no'];
          $orgId = $field['contact_id'];
