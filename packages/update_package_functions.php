@@ -73,4 +73,39 @@ function updateIndividualPackage($nonvatable_type,$amounts,$notes_id,$billing_no
         }
 }
 
+function getAdditionalCompanyParticipantsByPackageId($packageId,$employer_id){
+
+        $stmt = civicrmDB("SELECT cp.id as participant_id,bp.pid as package_id,cc.id as contact_id, cc.sort_name, cc.organization_name, 
+                           bp.package_name, cp.status_id, cps.label as status, cp.fee_amount,cp.event_id,
+                           ce.title as event_name, cov.label as event_type, billing_type.billing_45 as bill_type,
+                           bd. street_address__company__3 as street_address, city__company__5 as city_address
+                           FROM  civicrm_participant cp, billing_package_events bpe, billing_package bp, civicrm_participant_status_type cps, 
+                           civicrm_event ce, civicrm_option_value cov, civicrm_value_billing_17 as billing_type,civicrm_contact cc
+                           LEFT JOIN civicrm_value_business_data_1 bd ON bd.entity_id = cc.id
+                           WHERE cc.id = cp.contact_id
+                           AND cp.event_id = bpe.event_id
+                           AND bpe.pid = bp.pid
+                           AND bpe.pid = ?
+                           AND cc.employer_id = ?
+                           AND cps.label <> 'status'
+                           AND cp.fee_amount <> '0'
+                           AND cp.status_id = cps.id
+                           AND ce.id = cp.event_id
+                           AND cov.option_group_id = '14'
+                           AND ce.event_type_id = cov.value
+                           AND billing_type.billing_45 = 'Company'
+                           AND billing_type.entity_id = cp.id
+                           AND cc.is_deleted = '0'
+                           AND NOT EXISTS (SELECT participant_id FROM billing_details WHERE billing_details.participant_id = cp.id)
+                           ORDER BY sort_name,cp.event_id
+");
+         $stmt->bindValue(1,$packageId,PDO::PARAM_INT);
+         $stmt->bindValue(2,$employer_id,PDO::PARAM_INT);
+         $stmt->execute();
+         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+         return $result;
+}
+
+
 ?>

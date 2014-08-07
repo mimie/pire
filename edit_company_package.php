@@ -125,10 +125,11 @@ $(function() {
 <form action='' method='POST'>
                 <table align='center'>
                 	<tr>
-				<th colspan='5' >LIST OF EVENTS</th>
+				<th colspan='6' >LIST OF EVENTS</th>
                 	</tr>
                         <tr>
 				<th>Participant Id</th>
+                                <th>Participant Name</th>
 				<th>Event Name</th>
 				<th>Status</th>
 				<th>Current Amount</th>
@@ -147,9 +148,11 @@ $(function() {
                      $disabled = $fee_amount == $civicrm_amount ? 'disabled' : '';
                      $color = $fee_amount != $civicrm_amount ? 'red' : '';
                      $participant_id = $field['participant_id'];
+                     $name = $field['participant_name'];
 ?>
 			<tr>
 				<td><input type='checkbox' value='<?=$participant_id?>' name='participantIds[]' <?=$disabled?>><?=$participant_id?></td>
+                                <td><?=$name?></td>
                                 <td><?=$field['event_name']?></td>
                                 <td><?=$field['status']?></td>
                                 <td><font color='<?=$color?>'><?=number_format($fee_amount,2)?></font></td>
@@ -166,7 +169,7 @@ $(function() {
         $vat_zero = $nonvatable_type == 'vat_zero' ? "checked='checked'" : "";
 ?>
                         <tr>
-                                <td colspan='5'>Account Receivable Type: 
+                                <td colspan='6'>Account Receivable Type: 
                                                 <input type='radio' name='vat' value='' <?=$vatable?>>VATABLE
                                                 <input type='radio' name='vat' value='vat_exempt' <?=$vat_exempt?>>VAT-EXEMPT
                                                 <input type='radio' name='vat' value='vat_zero' <?=$vat_zero?>>VAT-ZERO</br>
@@ -187,7 +190,34 @@ $(function() {
 ?>
                                 </td>
                         </tr>
-              </table> 
+              </table><br><br>
+<?php
+	$additional_participants = getAdditionalCompanyParticipantsByPackageId($pid,$_GET['orgId']);
+	$tbl_html = "<table width='100%'>"
+		  . "<tr><th colspan='5'>Additional Participants</th></tr>"
+		  . "<tr>"
+		  . "<th>Participant Id</th>"
+                  . "<th>Participant Name</th>"
+		  . "<th>Event Name</th>"
+		  . "<th>Status</th>"
+		  . "<th>Civicrm Amount</th>"
+		  . "</tr>";
+
+        foreach($additional_participants as $key=>$info){
+
+        	$tbl_html = $tbl_html."<tr>"
+                          . "<td><input type='checkbox' value='".$info['participant_id']."'>".$info['participant_id']."</td>"
+                          . "<td>".$info['sort_name']."</td>"
+                          . "<td>".$info['event_name']."</td>"
+                          . "<td>".$info['status']."</td>"
+                          . "<td>".$info['fee_amount']."</td>"
+                          . "</tr>";        
+
+        }
+
+	 $tbl_html = $tbl_html."</table>";
+         echo $tbl_html;
+?> 
 	</div>
 <?php
 
