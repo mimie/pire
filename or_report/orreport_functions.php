@@ -16,6 +16,21 @@ function displayContactsWithEvents($searchValue){
         return $result;
 }
 
+function displayOrganizationWithEvents($searchValue){
+
+	$sql = civicrmDB("SELECT cc.id as contact_id, cc.sort_name, cc.organization_name
+                          FROM civicrm_contact cc
+                          WHERE cc.contact_type = 'Organization'
+                          AND cc.sort_name LIKE ?
+                          AND cc.is_deleted = '0'
+                          ORDER BY cc.sort_name");
+        $sql->bindValue(1,"%".$searchValue."%",PDO::PARAM_STR);
+        $sql->execute();
+        $result = $sql->fetchAll(PDO::FETCH_UNIQUE);
+ 
+        return $result;
+}
+
 function getContactEvents($contact_id){
 
 	$sql = civicrmDB("SELECT bd.participant_id,bd.event_id,ce.title as event_name,bd.organization_name,bd.billing_type,bd.fee_amount,bd.amount_paid,bd.billing_no,bd.bill_date
