@@ -23,6 +23,13 @@ $(function() {
 <?php
 	include '../pdo_conn.php';
         include 'orreport_functions.php';
+
+	 echo "<table width='100%'>";
+	 echo "<tr>";
+	 echo "<td align='center'><a href='display_contacts.php'>INDIVIDUAL CONTACTS</a></td>";
+	 echo "<td align='center' bgcolor='#084B8A'><a href='display_organization.php'>ORGANIZATION</td>";
+	 echo "</tr>";
+	 echo "</table></br>";
 ?>
      <div align='center'>
 	<form method='POST' action='display_contacts.php'>
