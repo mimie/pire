@@ -50,7 +50,7 @@ $(function() {
 
 	foreach($contacts as $contact_id=>$info){
         	echo "<tr>";
-                echo "<td><a href='display_billings.php?contact_id=$contact_id'>".mb_convert_encoding($info['sort_name'],"UTF-8")."</a></td>"; 
+                echo "<td><a href='display_orgbillings.php?contact_id=$contact_id'>".mb_convert_encoding($info['sort_name'],"UTF-8")."</a></td>"; 
                 echo "</tr>";
 	}
       
