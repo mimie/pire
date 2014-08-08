@@ -33,12 +33,11 @@ function displayOrganizationWithEvents($searchValue){
 
 function getContactEvents($contact_id){
 
-	$sql = civicrmDB("SELECT bd.participant_id,bd.event_id,ce.title as event_name,bd.organization_name,bd.billing_type,bd.fee_amount,bd.amount_paid,bd.billing_no,bd.bill_date
-                FROM billing_details bd, civicrm_event ce
-                WHERE bd.contact_id = ?
-                AND bd.event_id = ce.id
-                AND bd.fee_amount != '0'
-                AND bd.is_cancelled = '0'");
+	$sql = civicrmDB("SELECT bd.participant_id,bd.event_id,ce.title as event_name,bd.organization_name,bd.billing_type,bd.bir_no,bd.fee_amount,bd.amount_paid,
+                          bd.billing_no,bd.bill_date,bd.nonvatable_type,bd.bir_no
+                          FROM billing_details bd, civicrm_event ce
+                          WHERE bd.contact_id = ?
+                          AND bd.event_id = ce.id");
         $sql->bindValue(1,$contact_id,PDO::PARAM_INT);
         $sql->execute();
         $result = $sql->fetchAll(PDO::FETCH_UNIQUE);
@@ -51,8 +50,7 @@ function getOrganizationEvents($contact_id){
 	$sql = civicrmDB("SELECT bc.org_contact_id,bc.bir_no,bc.event_id,ce.title as event_name,bc.organization_name,bc.total_amount,bc.amount_paid,bc.billing_no,bc.bill_date,nonvatable_type
                 FROM billing_company bc, civicrm_event ce
                 WHERE bc.org_contact_id = ?
-                AND bc.event_id = ce.id
-                AND bc.is_cancelled = '0'");
+                AND bc.event_id = ce.id");
         $sql->bindValue(1,$contact_id,PDO::PARAM_INT);
         $sql->execute();
         $result = $sql->fetchAll(PDO::FETCH_ASSOC);
