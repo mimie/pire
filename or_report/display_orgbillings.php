@@ -41,9 +41,11 @@ $( "#tabs" ).tabs();
                 echo "<th>Transaction Date</th>";
                 echo "<th>Total Amount</th>";
                 echo "<th>Amount Paid</th>";
+                echo "<th>Balance</th>";
                 echo "</tr>";
                 
                 foreach($contact_events as $key=>$info){
+                        $balance = $info['total_amount'] - $info['amount_paid'];
                 	echo "<tr>";
                         echo "<td>".$info['event_id']."</td>";                        
                         echo "<td>".$info['event_name']."</td>";                        
@@ -52,6 +54,7 @@ $( "#tabs" ).tabs();
                         echo "<td>".date_standard($info['bill_date'])."</td>";                        
                         echo "<td>".number_format($info['total_amount'],2)."</td>";          
                         echo "<td>".number_format($info['amount_paid'],2)."</td>";             
+                        echo "<td>".number_format($balance,2)."</td>";             
                         echo "</tr>";                 
                 }
 
