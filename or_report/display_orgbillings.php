@@ -42,10 +42,13 @@ $( "#tabs" ).tabs();
                 echo "<th>Total Amount</th>";
                 echo "<th>Amount Paid</th>";
                 echo "<th>Balance</th>";
+                echo "<th>Participants</th>";
                 echo "</tr>";
+
                 
                 foreach($contact_events as $key=>$info){
                         $balance = $info['total_amount'] - $info['amount_paid'];
+                        $img_link = "<a href='../edit_company.php?eventId=".$info['event_id']."&orgId=$contact_id&bir_no=".$info['bir_no']."&billing_no=".$info['billing_no']."' onclick=\"window.open(this.href,'edit_company.php?eventId=".$info['event_id']."&orgId=$contact_id&bir_no=".$info['bir_no']."&billing_no=".$info['billing_no']."','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=900,height=900');return false;\"><img src='../images/edit_bill.png'></a>";
                 	echo "<tr>";
                         echo "<td>".$info['event_id']."</td>";                        
                         echo "<td>".$info['event_name']."</td>";                        
@@ -55,6 +58,7 @@ $( "#tabs" ).tabs();
                         echo "<td>".number_format($info['total_amount'],2)."</td>";          
                         echo "<td>".number_format($info['amount_paid'],2)."</td>";             
                         echo "<td>".number_format($balance,2)."</td>";             
+                        echo "<td>$img_link</td>";
                         echo "</tr>";                 
                 }
 
