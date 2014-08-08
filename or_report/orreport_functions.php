@@ -46,6 +46,20 @@ function getContactEvents($contact_id){
 	return $result;
 }
 
+function getOrganizationEvents($contact_id){
+
+	$sql = civicrmDB("SELECT bc.org_contact_id,bc.bir_no,bc.event_id,ce.title as event_name,bc.organization_name,bc.total_amount,bc.amount_paid,bc.billing_no,bc.bill_date,nonvatable_type
+                FROM billing_company bc, civicrm_event ce
+                WHERE bc.org_contact_id = ?
+                AND bc.event_id = ce.id
+                AND bc.is_cancelled = '0'");
+        $sql->bindValue(1,$contact_id,PDO::PARAM_INT);
+        $sql->execute();
+        $result = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+	return $result;
+}
+
 function getContactMembershipBillings($contact_id){
 
 	$sql = civicrmDB("SELECT membership_id,organization_name,membership_type,billing_no,billing_type,fee_amount,bill_date,year,amount_paid
