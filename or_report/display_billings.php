@@ -39,22 +39,29 @@ $( "#tabs" ).tabs();
                 echo "<th>Organization Name</th>";
                 echo "<th>Event Name</th>";
                 echo "<th>Reference No.</th>";
+                echo "<th>ATP</th>";
                 echo "<th>Billing Type</th>";
                 echo "<th>Transaction Date</th>";
                 echo "<th>Fee Amount</th>";
                 echo "<th>Amount Paid</th>";
+                echo "<th>Balance</th>";
                 echo "</tr>";
                 
                 foreach($contact_events as $participant_id=>$info){
+
+                        $balance = $info['fee_amount'] - $info['amount_paid'];
+
                 	echo "<tr>";
                         echo "<td>".$participant_id."</td>";                        
                         echo "<td>".$info['organization_name']."</td>";                        
                         echo "<td>".$info['event_name']."</td>";                        
                         echo "<td>".$info["billing_no"]."</td>";         
+                        echo "<td>".$info["bir_no"]."</td>";         
                         echo "<td>".$info['billing_type']."</td>";               
                         echo "<td>".date_standard($info['bill_date'])."</td>";                        
                         echo "<td>".number_format($info['fee_amount'],2)."</td>";          
-                        echo "<td>".number_format($info['amount_paid'],2)."</td>";             
+                        echo "<td>".number_format($info['amount_paid'],2)."</td>"; 
+                        echo "<td>".number_format($balance,2)."</td>";            
                         echo "</tr>";                 
                 }
 
@@ -74,10 +81,12 @@ $( "#tabs" ).tabs();
                 echo "<th>Transaction Date</th>";
                 echo "<th>Fee Amount</th>";
                 echo "<th>Amount Paid</th>";
+                echo "<th>Balance</th>";
                 echo "</tr>";
        
 		$membership = getContactMembershipBillings($contact_id);
                 foreach($membership as $key=>$info){
+                        $balance = $info['fee_amount'] - $info['amount_paid'];
  			echo "<tr>";
                         echo "<td>".$info['membership_id']."</td>";
                         echo "<td>".$info['membership_type']."</td>";
@@ -87,6 +96,7 @@ $( "#tabs" ).tabs();
                         echo "<td>".date_standard($info['bill_date'])."</td>";
                         echo "<td>".number_format($info['fee_amount'],2)."</td>";
                         echo "<td>".number_format($info['amount_paid'],2)."</td>";
+                        echo "<td>".number_format($balance,2)."</td>";
                 }
                 echo "</table>";
 ?>
