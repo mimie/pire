@@ -292,8 +292,8 @@ function validator(){
 		$billing_id = formatBillingNo($max_stmt->fetchColumn(0) + 1);
 		$current_year = date("y");
 		$billing_no = $eventTypeName."-".$current_year."-".$billing_id;
-                $total_bill = $vatable == 1 ? $totals[$id] : round($totals[$id]/1.12,2);
-                $subtotal = $vatable == 1 ? $total_bill/1.12 : $total_bill;
+                $total_bill = $vatable == 1 ? $totals[$id] : number_format($totals[$id]/1.12,2,'.','');
+                $subtotal = $vatable == 1 ? number_format($total_bill/1.12,2,'.','') : $total_bill;
                 $vat = $total_bill - $subtotal;
                 $subtotal = number_format($subtotal, 2, '.', '');
                 $vat = number_format($vat, 2, '.', ''); 

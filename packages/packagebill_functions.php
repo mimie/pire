@@ -39,7 +39,7 @@ function searchPackageName($packageName){
 function getBillByPackageId($packageId,$billing_type){
 
         try{
-		$stmt = civicrmDB("SELECT bdp.bid,bdp.bir_no, bdp.billing_no,bdp.contact_id, bdp.subtotal, bdp.vat, bdp.total_amount, bdp.amount_paid,bdp.bill_date,bdp.edit_bill,
+		$stmt = civicrmDB("SELECT bdp.bid,bdp.bir_no, bdp.billing_no,bdp.contact_id, bdp.subtotal, bdp.vat, bdp.total_amount, bdp.amount_paid,bdp.bill_date,bdp.edit_bill,bdp.post_bill,
 				   bn.notes, cc.sort_name, cc.organization_name
 				   FROM civicrm_contact cc,billing_details_package bdp
 				   LEFT JOIN billing_notes bn ON bdp.notes_id = bn.notes_id
